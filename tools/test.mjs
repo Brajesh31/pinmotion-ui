@@ -106,6 +106,16 @@ const fired = (k) => ev(`__n[${JSON.stringify(k)}] || 0`);
 // put the gallery's grid inside a form, once, to read what a form would send (the controls are form-associated)
 await ev(`(() => { const f = document.createElement('form'); f.id = 'f'; const g = document.getElementById('grid'); g.before(f); f.appendChild(g); for (const t of ['toggle', 'slider', 'stepper', 'targets']) document.querySelector('pinball-' + t).setAttribute('name', t); })()`); await sleep(600);
 const formValue = (n) => ev(`new FormData(document.getElementById('f')).get(${JSON.stringify(n)})`);
+await ev(`window.__formDefaults = {
+  toggle: document.querySelector('pinball-toggle').checked,
+  slider: document.querySelector('pinball-slider').value,
+  stepper: document.querySelector('pinball-stepper').value,
+  targets: document.querySelector('pinball-targets').checked,
+  checkbox: document.querySelector('pinball-checkbox').checked,
+  radio: document.querySelector('pinball-radio-group').value,
+  segmented: document.querySelector('pinball-segmented').value,
+  textField: document.querySelector('pinball-text-field').value
+}`);
 let fails = 0;
 const check = (name, ok, got) => { if (!ok) fails++; console.log(`${ok ? 'ok  ' : 'FAIL'} ${name}${got !== undefined ? `  ->  ${got}` : ''}`); };
 check('gallery: all 29 component cards render on first load', galleryBootReport.cardCount === 29, galleryBootReport.cardCount);
@@ -337,6 +347,47 @@ check('color picker: hex value and readout stay synchronized', await prop('color
  const validity = JSON.parse(nativeValidity);
  check('phase 2 forms: required text field exposes native valueMissing validity',
    validity.valueMissing && validity.invalid, JSON.stringify(validity));
+
+ await ev("document.getElementById('f').reset()"); await sleep(120);
+ const resetState = JSON.parse(await ev(`JSON.stringify({
+   toggle: document.querySelector('pinball-toggle').checked,
+   slider: document.querySelector('pinball-slider').value,
+   stepper: document.querySelector('pinball-stepper').value,
+   targets: document.querySelector('pinball-targets').checked,
+   checkbox: document.querySelector('pinball-checkbox').checked,
+   radio: document.querySelector('pinball-radio-group').value,
+   segmented: document.querySelector('pinball-segmented').value,
+   textField: document.querySelector('pinball-text-field').value
+ })`));
+ check('phase 2 forms: reset restores original PinballKit control defaults',
+   resetState.toggle === __formDefaults.toggle && resetState.slider === __formDefaults.slider &&
+   resetState.stepper === __formDefaults.stepper && JSON.stringify(resetState.targets) === JSON.stringify(__formDefaults.targets),
+   JSON.stringify(resetState));
+ check('phase 2 forms: reset restores utility control defaults',
+   resetState.checkbox === __formDefaults.checkbox && resetState.radio === __formDefaults.radio &&
+   resetState.segmented === __formDefaults.segmented && resetState.textField === __formDefaults.textField,
+   JSON.stringify(resetState));
+
+ await ev(`document.querySelector('pinball-toggle').formStateRestoreCallback(JSON.stringify({checked:true}), 'restore')`);
+ check('phase 2 forms: state restoration restores checked state',
+   await prop('toggle','checked') === true && await formValue('toggle') === 'on', await prop('toggle','checked'));
+ await ev(`document.querySelector('pinball-slider').formStateRestoreCallback(JSON.stringify({value:37}), 'restore')`);
+ check('phase 2 forms: state restoration restores scalar values',
+   await prop('slider','value') === 37 && await formValue('slider') === '37', await prop('slider','value'));
+
+ await ev(`(() => {
+   const fieldset=document.createElement('fieldset'); fieldset.disabled=true;
+   const control=document.createElement('pinball-toggle'); control.setAttribute('checked',''); control.setAttribute('name','fieldset-toggle');
+   fieldset.append(control); document.getElementById('f').append(fieldset); window.__fieldsetControl=control; window.__fieldset=fieldset;
+ })()`); await sleep(100);
+ check('phase 2 forms: disabled fieldset disables original custom controls',
+   await ev('__fieldsetControl.inert') === true && await formValue('fieldset-toggle') === null,
+   `${await ev('__fieldsetControl.inert')} / ${await formValue('fieldset-toggle')}`);
+ await ev('__fieldset.disabled=false'); await sleep(100);
+ check('phase 2 forms: enabling fieldset restores control participation',
+   await ev('__fieldsetControl.inert') === false && await formValue('fieldset-toggle') === 'on',
+   `${await ev('__fieldsetControl.inert')} / ${await formValue('fieldset-toggle')}`);
+
 
 // disabled
 await ev(`${E('toggle')}.setAttribute('disabled', '')`); await sleep(50);
