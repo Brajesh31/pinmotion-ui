@@ -19,6 +19,7 @@ const chrome = spawn(process.env.CHROME || 'chromium', [
   '--enable-unsafe-swiftshader',
   `--remote-debugging-port=${PORT}`,
   '--remote-debugging-address=127.0.0.1',
+  '--remote-allow-origins=*',
   `--user-data-dir=${PROFILE}`,
   '--no-first-run',
   '--disable-extensions',
@@ -56,7 +57,18 @@ if (!pageTarget?.webSocketDebuggerUrl) {
   ].join('\\n'));
 }
 const ws = new WebSocket(pageTarget.webSocketDebuggerUrl);
-await new Promise((r) => ws.addEventListener('open', r, { once: true }));
+try {
+  await new Promise((resolve, reject) => {
+    const timeout = setTimeout(() => reject(new Error('Chrome DevTools WebSocket did not open within 15 seconds.')), 15000);
+    ws.addEventListener('open', () => { clearTimeout(timeout); resolve(); }, { once: true });
+    ws.addEventListener('error', () => { clearTimeout(timeout); reject(new Error('Chrome DevTools WebSocket connection failed.')); }, { once: true });
+    ws.addEventListener('close', () => { clearTimeout(timeout); reject(new Error('Chrome closed the DevTools WebSocket before it opened.')); }, { once: true });
+  });
+} catch (error) {
+  chrome.kill('SIGTERM');
+  rmSync(PROFILE, { recursive: true, force: true });
+  throw new Error(`${error.message}\\nRecent Chrome output:\\n${chromeOutput.slice(-25).join('\\n')}`);
+}
 let id = 0; const pending = new Map(); const logs = [];
 ws.addEventListener('message', (e) => { const m = JSON.parse(e.data); if (m.id && pending.has(m.id)) { pending.get(m.id)(m); pending.delete(m.id); } if (m.method === 'Runtime.exceptionThrown') logs.push('EXC ' + (m.params.exceptionDetails.exception?.description || m.params.exceptionDetails.text)); });
 const send = (method, params = {}) => new Promise((res, rej) => { const i = ++id; pending.set(i, (m) => (m.error ? rej(new Error(`${method}: ${m.error.message}`)) : res(m.result))); ws.send(JSON.stringify({ id: i, method, params })); });
