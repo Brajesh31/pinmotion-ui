@@ -57,18 +57,28 @@ Do not close INC-001 until all boxes above have evidence.
 ## 3. Phase roadmap
 
 ### Phase 0 · Stop the gallery boot failure and stabilize the preview
-**Status: In progress**
+**Status: In progress · implementation committed, end-to-end proof pending**
 
-Scope:
-- Fix invalid generated JavaScript and component boot sequencing.
-- Keep error reporting visible and actionable.
-- Ensure all bundles load on the gallery route, not only individual demo routes.
-- Keep source generator, generated gallery and validator in sync.
-- Verify direct refresh of `/pinmotion-ui/gallery/` and component deep links.
-- Confirm the original seven components still work after the full 22-component family loads.
+Implemented in the current source:
+- [x] Quote component IDs when generating the gallery wire-map properties.
+- [x] Add a visible startup failure monitor for script load errors, runtime errors, rejected promises and a stalled bootstrap.
+- [x] Add a Node parser check for the generated gallery runtime.
+- [x] Add first-load browser assertions for all 29 cards, every card's ready state and all 30 registered tags.
+- [x] Make the Chrome browser suite a mandatory Validate workflow step.
+- [x] Keep the source generator and checked-in gallery output aligned.
+
+Still required:
+- [ ] Latest Validate workflow passes, including the real-browser suite.
+- [ ] Latest Pages generation/deployment workflow passes.
+- [ ] Verify the published gallery on a real browser with a hard refresh and direct URL entry.
+- [ ] Verify no original component regressed when all 29 bundles load together.
+- [ ] Close both INC-001 and INC-002 with linked test/deployment evidence.
 
 Exit gate:
-- INC-001 is closed with both automated and live-browser evidence.
+- All 29 gallery cards render and initialize on first load.
+- The status reaches “All 29 live components loaded successfully.”
+- All 30 custom-element tags are registered.
+- No startup console errors or missing component scripts remain.
 - No original component is removed or visually regressed.
 - Latest CI and Pages workflows pass.
 
@@ -325,8 +335,8 @@ Only after formal GO:
 |---|---|---|---|---|
 | INC-001 | P0 | Gallery runtime did not parse because hyphenated wire keys were unquoted | Fix generator, add parse and real-browser first-load tests | Fix committed, awaiting full verification |
 | INC-002 | P1 | Failed gallery bootstrap could leave an indefinite loading message | Add visible global error/stall diagnostics | Fix committed, awaiting full verification |
-| QA-001 | P1 | Browser interaction suite is optional and not a mandatory CI gate | Make browser tests a release gate | Open |
-| QA-002 | P1 | Full first-load gallery behavior was not asserted by browser tests | Test all 29 cards and 30 tags | Test added, awaiting CI run |
+| QA-001 | P1 | Browser interaction suite was not a mandatory CI gate | Make browser tests a release gate | CI gate committed, awaiting green run |
+| QA-002 | P1 | Full first-load gallery behavior was not asserted by browser tests | Test all 29 cards and 30 tags | Assertions committed, awaiting green run |
 | QA-003 | P1 | Full cross-browser and real-device evidence is missing | Complete Phase 5 matrix | Open |
 | A11Y-001 | P1 | WCAG 2.2 AA conformance has not been demonstrated | Complete Phase 4 audit and remediation | Open |
 | A11Y-002 | P1 | Plunger reduced-motion behavior is a documented exception | Implement and retest a reduced-motion alternative | Open |
