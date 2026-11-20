@@ -1,63 +1,107 @@
 # Plunger
 
-A send button you have to mean. It is a pinball shooter rod with nothing round it: a black knob, a chrome collar, the rod, a red rubber tip, a steel bracket, and two springs drawn live, one that squashes and one that stretches. Drag the knob back. The rod ratchets every fifth of the way. Pull all the way and a steel ball drops in front of the pulled-back tip and bounces twice. Let go and the plunger slams forward and knocks the ball off the edge of the screen, and `send` fires. A shorter pull just springs back and sends nothing.
+A pull-to-send action control built as a pinball shooter rod. A full pull followed by release sends the ball and emits `send`; a short pull springs back without sending.
 
-One of seven files in this repo. Same idea in each (an ordinary control as a real pinball part: a photographed body, a live chrome ball, recorded sounds), different control.
+## 📦 Bundle and elements
 
-## Run it
+- **Bundle:** `plunger/plunger.js`, approximately 432 KB.
+- **Custom elements:** `<pinball-plunger>`.
+- **Dependencies:** no external runtime packages. The selected bundle embeds its shared runtime, artwork, and sound data.
 
-```sh
-python3 -m http.server 8000     # from the repo folder
-# open http://localhost:8000/plunger/
-```
+## 🚀 Quick start
 
-`?embed=1` hides the heading and the hint.
-
-## Use it
-
-`plunger.js` is the whole control: one file of about 432 KB with its photographs and sounds inside it, and no dependencies.
+Load the standalone script and add the element to your HTML:
 
 ```html
 <script src="plunger.js"></script>
 <pinball-plunger label="Send"></pinball-plunger>
 ```
 
+Listen to the documented events and read the current properties:
+
 ```js
-const el = document.querySelector('pinball-plunger');
-el.addEventListener('send', (e) => send(e.detail.power));   // power: how hard, 0 to 1
-el.fire();            // a full pull and release, from code
+const plunger = document.querySelector('pinball-plunger');
+
+plunger.addEventListener('send', (event) => {
+  sendMessage({ power: event.detail.power });
+});
+
+plunger.fire(); // Programmatically perform a full pull and release.
 ```
 
-| attribute | what it sets | default |
-|---|---|---|
-| `label` | its name for screen readers | Send |
-| `flip` | puts the knob on the left: you pull left and the ball leaves to the right | off |
-| `disabled` | greys it out and ignores presses | off |
+The component bundle is a plain script, not an ES module. Do not split it or remove its embedded artwork/runtime data. See [the repository README](../README.md) for the shadcn registry route and local development commands.
 
-- **It is a `<button>`** in the shadow root. Hold Space or Enter to pull it back and let go to shoot; a screen reader can also press it, which does the whole pull.
-- **Leave room on both sides.** About one knob-height on the knob's side for the pull, and on the tip's side for the ball. The ball leaves across the page: while it rolls away it is drawn above everything else, then removed.
-- **Let go while the ball is still falling** and the plunger waits for it to land.
-- **Size** is `--pb-size`, the height of the knob: 44 pixels by default.
-- **Attributes set where it starts.** After that, use the properties and methods above.
-- **Sound is on.** It plays after the first press on the page, as browsers require. Add `silent` to the element to mute it, or set `PinballKit.sound = false` to mute every pinball control on the page.
+## 🧩 API reference
 
-## What happens
+### Attributes
 
-| you | it |
+| Attribute | Type | Default | Applies to / update behavior |
+|---|---|---|---|
+| label | String | `Send` | Observed after connection | Accessible-name fallback for the internal button. |
+| flip | Boolean | Absent | Observed after connection | Reverses the plunger orientation so the knob is on the left. |
+| disabled | Boolean | Absent | Observed after connection | Makes the host inert and prevents interaction. |
+
+The `label`, `flip`, and `disabled` attributes are observed after connection. Changing `flip` reverses the control orientation.
+
+### Properties
+
+| Property | Type | Access | Details |
+|---|---|---|---|
+| `flipped` | boolean | Read-only getter | Whether the `flip` attribute is present. |
+
+### Methods
+
+| Method | Details |
 |---|---|
-| drag the knob back | the spring squashes and the rod ratchets every fifth of the way |
-| pull all the way | a relay clicks, a ball drops in front of the tip, lands and bounces twice |
-| let go | the plunger slams forward, hits the ball and knocks it off the edge of the screen; `send` fires with `{ power }` at the hit |
-| let go early | it springs back home; nothing is sent |
+| `fire()` | Start a programmatic full pull. The plunger completes the pull/release sequence and emits `send` when the ball is struck. |
 
-It does not change with `prefers-reduced-motion` yet: the pull and the shot still play.
+### Events
 
-## Limits
+| Event | Payload and trigger |
+|---|---|
+| `send` | CustomEvent, `detail: { power: number }` Fires when the full pull/release sequence strikes the ball. `power` is normalized from 0 to 1. |
 
-- **Reduced motion is not honoured yet.** The pull and the shot still play.
-- **The ball crosses the whole page,** above everything else, for about a second.
-- **It needs WebGL** for the ball and the lamps. Without it the control is still a working, focusable control, but nothing is drawn.
-- **One kind of picture.** It scales with `--pb-size` and stays sharp up to about three times its default size, but it does not reflow: the photographed body keeps its shape.
-- **The ball mirrors the page.** Set `--pb-page` to your page colour (a hex colour such as `#14161a`) so its reflections match; the default is the cream the set was shot on.
-- **The file is large** because the photographs and the sounds are inside it. Load only the controls a page uses.
-- **Checked in headless Chromium** with real touch and key events at phone width. Not tried in Safari or Firefox, on a real phone, or with a screen reader, and the sound has not been checked on a phone.
+The shared event helper dispatches custom events with `bubbles: true` and `composed: true`, so listeners can be attached to the custom element or an ancestor outside its Shadow DOM. Event names and payloads above describe this component's actual implementation.
+
+## 🎮 Input and keyboard
+
+**Pointer and touch:** Drag the knob back and release it after the ball has dropped in front of the tip. A pointer tap only twitches the knob; it is not a send action. A release before the full pull does not emit `send`.
+
+**Keyboard:** The internal control is a native button. Hold Space or Enter to pull it back; release the key to shoot. A synthetic button activation, such as an assistive-technology click, invokes a full `fire()` sequence.
+
+## 📝 Form integration
+
+The plunger is an action control and does not expose a form value.
+
+## 🎨 Styling, rendering, and sound
+
+Set `--pb-size` to change the knob height (44px by default). Leave roughly one knob-height of space on the pull side and room on the tip side for the ball to travel. Set `--pb-focus` to change the visible focus outline.
+
+The shared chrome ball and lamps use WebGL. Set the instance's `silent` attribute to mute that element, or set `PinballKit.sound = false` to mute the shared page audio. Audio initializes after the first pointer or keyboard interaction, as browsers require.
+
+## ♿ Motion and accessibility
+
+The Plunger is the current reduced-motion exception. Its pull and shot animation still play when `prefers-reduced-motion: reduce` is active.
+
+The interactive control lives in an open Shadow DOM and uses the semantic role and focus behavior described above. Set a useful `label`, or provide `aria-label` / `aria-labelledby` before connection. The repository's optional automated interaction script uses headless Chromium; it is not a substitute for a screen-reader audit.
+
+## 🎯 Mechanical behavior
+
+| Action | Result |
+|---|---|
+| Pull the knob | The spring compresses and the rod ratchets as the pull increases. |
+| Reach full pull | A ball drops in front of the tip and bounces before the release. |
+| Release at full pull | The plunger strikes the ball and emits `send` with normalized `power`. |
+| Release early | The spring returns home; no `send` event is emitted. |
+
+## ⚠️ Implementation notes and limits
+
+- The ball travels across the page above surrounding content before it is removed. Allow sufficient open space around the control.
+- The public convenience method documented for application use is `fire()`; `send` is the completion event.
+- Reduced motion is not honoured for this component yet.
+- The travelling ball is drawn above page content and crosses the page before it disappears.
+- **It needs WebGL** for the ball and the lamps. Without it the control is still a working, focusable control, but the shader-drawn visuals are missing.
+- **One kind of picture.** It scales with `--pb-size` and stays sharp to about three times its default size, but it does not reflow: the photographed body keeps its shape.
+- **The ball mirrors the page.** Set `--pb-page` to a six-digit hex colour such as `#14161a` so its reflections match; the default is the cream the set was shot on.
+- **The file is large** because photographs and sounds are embedded. Load only the controls a page uses.
+- **Browser coverage.** The repository includes an optional headless Chromium interaction script with touch and keyboard input at a mobile-width viewport. The regular CI workflow does not run it. Safari, Firefox, physical devices, and screen-reader behavior are not documented as tested.

@@ -1,63 +1,110 @@
 # Toggle
 
-A switch. The body is a photograph of a short pinball lane with a lamp under one end, and the knob is a chrome ball drawn live: it mirrors the lane under it, and its scratches turn as it rolls. Flip it and a solenoid kicks the ball across. It rolls, hits the far wall with a clack, the lamp's relay closes as the ball reaches the seat, a chime rings, and the ball rocks back and forth a few times before it comes to rest. You can also drag the ball and throw it.
+A binary switch whose thumb is a live chrome ball. The checked state is logical state; the ball and lamp animate toward that state.
 
-One of seven files in this repo. Same idea in each (an ordinary control as a real pinball part: a photographed body, a live chrome ball, recorded sounds), different control.
+## 📦 Bundle and elements
 
-## Run it
+- **Bundle:** `toggle/toggle.js`, approximately 848 KB.
+- **Custom elements:** `<pinball-toggle>`.
+- **Dependencies:** no external runtime packages. The selected bundle embeds its shared runtime, artwork, and sound data.
 
-```sh
-python3 -m http.server 8000     # from the repo folder
-# open http://localhost:8000/toggle/
-```
+## 🚀 Quick start
 
-`?embed=1` hides the heading and the hint.
-
-## Use it
-
-`toggle.js` is the whole control: one file of about 848 KB with its photographs and sounds inside it, and no dependencies.
+Load the standalone script and add the element to your HTML:
 
 ```html
 <script src="toggle.js"></script>
-<pinball-toggle label="Push alerts"></pinball-toggle>
+<pinball-toggle name="notifications" value="yes" label="Push alerts"></pinball-toggle>
 ```
+
+Listen to the documented events and read the current properties:
 
 ```js
-const el = document.querySelector('pinball-toggle');
-el.addEventListener('change', (e) => console.log(e.detail.checked));
-el.checked = true;    // from code: the ball is kicked across, with no change event
-el.toggle();
+const toggle = document.querySelector('pinball-toggle');
+
+toggle.addEventListener('change', (event) => {
+  console.log('Checked:', event.detail.checked);
+});
+
+toggle.checked = true; // Updates state without dispatching change or input.
 ```
 
-| attribute | what it sets | default |
-|---|---|---|
-| `checked` | starts on | off |
-| `label` | its name for screen readers | Toggle |
-| `name`, `value` | sent with its form when on, like a checkbox | `on` |
-| `disabled` | greys it out and ignores presses | off |
-| `mode` | `live`, or `plates` (a photographed ball that slides) or `3d` (no photographs at all): the three ways it was tried | `live` |
+The component bundle is a plain script, not an ES module. Do not split it or remove its embedded artwork/runtime data. See [the repository README](../README.md) for the shadcn registry route and local development commands.
 
-- **It is a `<button role="switch">`** in the shadow root, with `aria-checked`. It takes focus; Space and Enter flip it.
-- **`change` fires with `{ checked }`** when a person flips it, and an `input` event with it. Setting `checked` from code does not fire them.
-- **Size** is `--pb-size`, its height: 36 pixels by default.
-- **Attributes set where it starts.** After that, use the properties and methods above.
-- **Sound is on.** It plays after the first press on the page, as browsers require. Add `silent` to the element to mute it, or set `PinballKit.sound = false` to mute every pinball control on the page.
+## 🧩 API reference
 
-## What happens
+### Attributes
 
-| you | it |
+| Attribute | Type | Default | Applies to / update behavior |
+|---|---|---|---|
+| checked | Boolean | Absent (off) | Observed after connection | Presence means on; removing it means off. |
+| disabled | Boolean | Absent | Observed after connection | Makes the host inert and prevents interaction. |
+| mode | String enum | `live` | Observed after connection | `live`, `plates`, or `3d`. The latter two are alternate rendering modes, not separate controls. |
+| label | String | `Toggle` | Read on connection | Accessible-name fallback when `aria-label` and `aria-labelledby` are not supplied. It is not observed for later changes. |
+| name | String | Omitted | Form configuration | Form field name. Set it before using the control in a form. |
+| value | String | `on` | Form configuration | Submitted while checked. An empty string also falls back to `on` in the current implementation. |
+
+Only `checked`, `disabled`, and `mode` are observed after the element connects. Set `label`, `name`, and `value` before connection. The `checked` property and attribute stay synchronized.
+
+### Properties
+
+| Property | Type | Access | Details |
+|---|---|---|---|
+| `checked` | boolean | Read/write | Current logical switch value. |
+
+### Methods
+
+| Method | Details |
 |---|---|
-| press | a solenoid kick, then the ball rolls across with a rolling sound |
-| the ball reaches the far end | it clacks into the wall, the lamp's relay closes, the lamp warms up from red to amber and a chime rings |
-| then | it rocks in its seat four or five times, each knock quieter, and settles |
-| drag the ball | it follows your finger; let go and it carries on with the speed it had, to whichever end it was heading |
+| `toggle()` | Flip the logical checked state programmatically. It does not emit user-interaction events. |
 
-With `prefers-reduced-motion` the ball and the moving parts go straight to where they end up, and the lamps still light.
+### Events
 
-## Limits
+| Event | Payload and trigger |
+|---|---|
+| `change` | CustomEvent, `detail: { checked: boolean }` Fires for user activation, including a drag that resolves to a new checked state. It does not fire for programmatic state changes. |
+| `input` | Plain `Event`; **no `detail` payload** Fires immediately after `change` for the same user toggle. Read `event.target.checked` or use the `change` payload. |
 
-- **It needs WebGL** for the ball and the lamps. Without it the control is still a working, focusable control, but nothing is drawn.
-- **One kind of picture.** It scales with `--pb-size` and stays sharp up to about three times its default size, but it does not reflow: the photographed body keeps its shape.
-- **The ball mirrors the page.** Set `--pb-page` to your page colour (a hex colour such as `#14161a`) so its reflections match; the default is the cream the set was shot on.
-- **The file is large** because the photographs and the sounds are inside it. Load only the controls a page uses.
-- **Checked in headless Chromium** with real touch and key events at phone width. Not tried in Safari or Firefox, on a real phone, or with a screen reader, and the sound has not been checked on a phone.
+The shared event helper dispatches custom events with `bubbles: true` and `composed: true`, so listeners can be attached to the custom element or an ancestor outside its Shadow DOM. Event names and payloads above describe this component's actual implementation.
+
+## 🎮 Input and keyboard
+
+**Pointer and touch:** Tap or click the switch button, or drag the ball along the lane and release. A drag resolves to the nearest end and commits the checked state.
+
+**Keyboard:** The internal control is a native button with `role="switch"` and `aria-checked`. Space and Enter activate it.
+
+## 📝 Form integration
+
+The control is form-associated. With `name` set, it submits no value while off. While on, it submits the `value` attribute, or `on` when that attribute is absent or empty. Form-associated custom elements require browser support for `ElementInternals`.
+
+## 🎨 Styling, rendering, and sound
+
+Set `--pb-size` to change the control height (36px by default). Set `--pb-page` to a six-digit hex colour matching the page background so the chrome reflections blend into the page. `--pb-focus` changes the visible keyboard-focus outline.
+
+The shared chrome ball and lamps use WebGL. Set the instance's `silent` attribute to mute that element, or set `PinballKit.sound = false` to mute the shared page audio. Audio initializes after the first pointer or keyboard interaction, as browsers require.
+
+## ♿ Motion and accessibility
+
+The shared runtime honours `prefers-reduced-motion` by moving the ball directly to the final state. The lamp still reflects the checked state.
+
+The interactive control lives in an open Shadow DOM and uses the semantic role and focus behavior described above. Set a useful `label`, or provide `aria-label` / `aria-labelledby` before connection. The repository's optional automated interaction script uses headless Chromium; it is not a substitute for a screen-reader audit.
+
+## 🎯 Mechanical behavior
+
+| Action | Result |
+|---|---|
+| Activate | The ball is kicked toward the selected end; the lamp and sound feedback follow the ball. |
+| Drag and release | The ball carries its release momentum, then settles at the nearest end. |
+| Disable | The custom element becomes inert and visually muted. |
+
+## ⚠️ Implementation notes and limits
+
+- The visual `mode` attribute switches rendering style only. Do not use it as application state.
+- Programmatic `.checked` changes and `toggle()` update the form value and rendering but deliberately do not emit `change` or `input`.
+- The `input` event is not a `CustomEvent` and has no `detail`; use `change.detail.checked` when you need a payload.
+- The `label` attribute is read on connection rather than observed live. Set it before the element is inserted, or provide `aria-label` / `aria-labelledby`.
+- **It needs WebGL** for the ball and the lamps. Without it the control is still a working, focusable control, but the shader-drawn visuals are missing.
+- **One kind of picture.** It scales with `--pb-size` and stays sharp to about three times its default size, but it does not reflow: the photographed body keeps its shape.
+- **The ball mirrors the page.** Set `--pb-page` to a six-digit hex colour such as `#14161a` so its reflections match; the default is the cream the set was shot on.
+- **The file is large** because photographs and sounds are embedded. Load only the controls a page uses.
+- **Browser coverage.** The repository includes an optional headless Chromium interaction script with touch and keyboard input at a mobile-width viewport. The regular CI workflow does not run it. Safari, Firefox, physical devices, and screen-reader behavior are not documented as tested.

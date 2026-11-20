@@ -8,6 +8,7 @@ This directory documents the repository as it exists today. It is an implementat
 | --- | --- |
 | [Architecture](architecture.md) | Static site structure, standalone bundles, shared runtime, rendering, animation, sound, and custom-element lifecycle |
 | [Component reference](component-reference.md) | The seven bundles, eight element tags, current attributes, events, methods, sizing, and form participation |
+| [Component API conventions](component-api-conventions.md) | Rules for authoring and keeping API metadata accurate |
 | [Site map](site-map.md) | Every published page path, page-level sections, gallery interactions, and responsive layout behavior |
 | [Development](development.md) | Local setup, npm scripts, source-of-truth files, safe editing workflow, and generated outputs |
 | [Asset pipeline](asset-pipeline.md) | Artwork and audio source directories, embedded data, bundle generation, and documentation generation |

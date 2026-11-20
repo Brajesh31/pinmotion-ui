@@ -18,6 +18,92 @@ const table = (head, rows) => `| ${head.join(' | ')} |\n|${head.map(() => '---')
 const COUNT = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve'][SPEC.length];
 const Count = COUNT[0].toUpperCase() + COUNT.slice(1);
 const tags = (c) => (c.extra ? `<pinball-bumper> and <${c.tag}>` : `<${c.tag}>`);
+
+function componentReadme(c,size,table,Count,COMMON_LIMITS){
+  const a=c.api;
+  const attrTable=table(["Attribute","Type","Default","Applies to / update behavior"],a.attributes);
+  const propTable=a.properties.length?table(["Property","Type","Access","Details"],a.properties):"No additional public properties are documented.";
+  const methodTable=a.methods.length?table(["Method","Details"],a.methods):"No additional public methods are documented.";
+  const eventTable=table(["Event","Payload and trigger"],a.events.map(([name,detail,trigger])=>[name,`${detail} ${trigger}`]));
+  return `# ${c.name}
+
+${a.overview}
+
+## 📦 Bundle and elements
+
+- **Bundle:** \`${c.id}/${c.id}.js\`, approximately ${size}.
+- **Custom elements:** ${a.tags.map(tag=>`\`${tag}\``).join(", ")}.
+- **Dependencies:** no external runtime packages. The selected bundle embeds its shared runtime, artwork, and sound data.
+
+## 🚀 Quick start
+
+Load the standalone script and add the element to your HTML:
+
+\`\`\`html
+${a.quickStart}
+\`\`\`
+
+Listen to the documented events and read the current properties:
+
+\`\`\`js
+${a.example}
+\`\`\`
+
+The component bundle is a plain script, not an ES module. Do not split it or remove its embedded artwork/runtime data. See [the repository README](../README.md) for the shadcn registry route and local development commands.
+
+## 🧩 API reference
+
+### Attributes
+
+${attrTable}
+
+${a.attributeUpdates}
+
+### Properties
+
+${propTable}
+
+### Methods
+
+${methodTable}
+
+### Events
+
+${eventTable}
+
+The shared event helper dispatches custom events with \`bubbles: true\` and \`composed: true\`, so listeners can be attached to the custom element or an ancestor outside its Shadow DOM. Event names and payloads above describe this component's actual implementation.
+
+## 🎮 Input and keyboard
+
+**Pointer and touch:** ${a.input}
+
+**Keyboard:** ${a.keyboard}
+
+## 📝 Form integration
+
+${a.forms}
+
+## 🎨 Styling, rendering, and sound
+
+${a.styling}
+
+The shared chrome ball and lamps use WebGL. Set the instance's \`silent\` attribute to mute that element, or set \`PinballKit.sound = false\` to mute the shared page audio. Audio initializes after the first pointer or keyboard interaction, as browsers require.
+
+## ♿ Motion and accessibility
+
+${a.motion}
+
+The interactive control lives in an open Shadow DOM and uses the semantic role and focus behavior described above. Set a useful \`label\`, or provide \`aria-label\` / \`aria-labelledby\` before connection. The repository's optional automated interaction script uses headless Chromium; it is not a substitute for a screen-reader audit.
+
+## 🎯 Mechanical behavior
+
+${table(["Action","Result"],a.happens)}
+
+## ⚠️ Implementation notes and limits
+
+${[...a.notes,...a.limits,...COMMON_LIMITS].map(note=>`- ${note}`).join("\n")}
+`;
+}
 // the page the set was photographed for: warm cream, dark ink, the lamps' amber and the bumpers' red
 const PAGE = `:root { --bg: #f3efe5; --ink: #2b2620; --dim: #7a7064; --line: #d9d1c1; --amber: #c9700f; --red: #b3322b; }
   * { box-sizing: border-box; }
@@ -31,50 +117,8 @@ const SOUND_PILL = '<button class="pill" type="button" id="sound" aria-pressed="
 const SOUND_JS = "const snd = document.getElementById('sound'); snd.onclick = () => { PinballKit.sound = !PinballKit.sound; snd.setAttribute('aria-pressed', String(PinballKit.sound)); snd.textContent = PinballKit.sound ? 'Sound on' : 'Sound off'; };";
 
 for (const c of SPEC) {
-  // ---- the folder's README
-  put(`${c.id}/README.md`, `# ${c.name}
-
-${c.intro.join('\n\n')}
-
-One of ${COUNT} files in this repo. Same idea in each (an ordinary control as a real pinball part: a photographed body, a live chrome ball, recorded sounds), different control.
-
-## Run it
-
-\`\`\`sh
-python3 -m http.server 8000     # from the repo folder
-# open http://localhost:8000/${c.id}/
-\`\`\`
-
-\`?embed=1\` hides the heading and the hint.
-
-## Use it
-
-\`${c.id}.js\` is the whole control: one file of about ${size(c.id)} with its photographs and sounds inside it, and no dependencies.
-
-\`\`\`html
-${c.use}
-\`\`\`
-
-\`\`\`js
-${c.js}
-\`\`\`
-
-${table(['attribute', 'what it sets', 'default'], c.attrs)}
-
-${c.notes.map((n) => `- ${n}`).join('\n')}
-- **Attributes set where it starts.** After that, use the properties and methods above.
-- **Sound is on.** It plays after the first press on the page, as browsers require. Add \`silent\` to the element to mute it, or set \`PinballKit.sound = false\` to mute every pinball control on the page.
-
-## What happens
-
-${table(['you', 'it'], c.happens)}
-
-${c.id === 'plunger' ? 'It does not change with \`prefers-reduced-motion\` yet: the pull and the shot still play.' : 'With \`prefers-reduced-motion\` the ball and the moving parts go straight to where they end up, and the lamps still light.'}
-
-## Limits
-
-${[...c.limits, ...COMMON_LIMITS].map((l) => `- ${l}`).join('\n')}
-`);
+  // ---- the folder's README: structured API metadata is the source of truth.
+  put(`${c.id}/README.md`, componentReadme(c, size(c.id), table, Count, COMMON_LIMITS));
 
   // ---- the folder's demo page
   put(`${c.id}/index.html`, `<!doctype html>

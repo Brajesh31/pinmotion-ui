@@ -1,64 +1,117 @@
 # Drain
 
-Delete, with undo. A steel plate holds a chute with a ball resting at the top, a dark outhole at the bottom, and a round SHOOT AGAIN lamp. Press the ball, or drag it down the chute, and it rolls into the hole and drops out of sight: that is the delete. SHOOT AGAIN starts blinking for the undo window, faster near the end. Press it and the ball-save kickback fires the ball straight back up out of the drain, with two chime notes: that is the undo. Let the window run out and the lamp goes dark and the delete is final.
+A delete action with a timed undo window. The ball drains to represent deletion; the SHOOT AGAIN control restores it before the countdown expires.
 
-One of seven files in this repo. Same idea in each (an ordinary control as a real pinball part: a photographed body, a live chrome ball, recorded sounds), different control.
+## 📦 Bundle and elements
 
-## Run it
+- **Bundle:** `drain/drain.js`, approximately 888 KB.
+- **Custom elements:** `<pinball-drain>`.
+- **Dependencies:** no external runtime packages. The selected bundle embeds its shared runtime, artwork, and sound data.
 
-```sh
-python3 -m http.server 8000     # from the repo folder
-# open http://localhost:8000/drain/
-```
+## 🚀 Quick start
 
-`?embed=1` hides the heading and the hint.
-
-## Use it
-
-`drain.js` is the whole control: one file of about 888 KB with its photographs and sounds inside it, and no dependencies.
+Load the standalone script and add the element to your HTML:
 
 ```html
 <script src="drain.js"></script>
 <pinball-drain window="6000" label="Delete draft"></pinball-drain>
 ```
 
+Listen to the documented events and read the current properties:
+
 ```js
-const el = document.querySelector('pinball-drain');
-el.addEventListener('delete', (e) => hide(draft));        // e.detail.undoMs: how long undo lasts
-el.addEventListener('undo', () => show(draft));
-el.addEventListener('commit', () => destroy(draft));      // the window ran out
-el.state;             // 'ready', 'draining', 'undoable', 'saving' or 'gone'
-el.reset();           // a new ball at the top, ready again
+const drain = document.querySelector('pinball-drain');
+
+drain.addEventListener('delete', (event) => {
+  hideDraft({ undoMs: event.detail.undoMs });
+});
+
+drain.addEventListener('undo', () => showDraft());
+drain.addEventListener('commit', () => destroyDraft());
+
+drain.addEventListener('reset', () => prepareNextDraft());
 ```
 
-| attribute | what it sets | default |
-|---|---|---|
-| `window` | how long undo lasts, in milliseconds; 0 makes the delete final at once | 6000 |
-| `label` | the group's name for screen readers | Delete and undo |
-| `disabled` | greys it out and ignores presses | off |
+The component bundle is a plain script, not an ES module. Do not split it or remove its embedded artwork/runtime data. See [the repository README](../README.md) for the shadcn registry route and local development commands.
 
-- **Two `<button>`s** in the shadow root: the chute (Enter, Space, Delete or Backspace drains the ball) and SHOOT AGAIN, which is `aria-disabled` except while undo is possible.
-- **After `commit` it stays empty** until you call `reset()`. The demo pages reset it after a moment.
-- **`el.remaining`** is how many milliseconds of undo are left.
-- **Size** is `--pb-size`, its height: 112 pixels by default.
-- **Attributes set where it starts.** After that, use the properties and methods above.
-- **Sound is on.** It plays after the first press on the page, as browsers require. Add `silent` to the element to mute it, or set `PinballKit.sound = false` to mute every pinball control on the page.
+## 🧩 API reference
 
-## What happens
+### Attributes
 
-| you | it |
+| Attribute | Type | Default | Applies to / update behavior |
+|---|---|---|---|
+| window | Number (milliseconds) | `6000` | Observed after connection | Undo duration, read when a delete starts. A value of 0 makes deletion final immediately. Invalid or negative values fall back to 6000ms. |
+| label | String | `Delete and undo` | Observed after connection | Accessible name for the control group. |
+| disabled | Boolean | Absent | Observed after connection | Makes the host inert and prevents interaction. |
+
+The `window`, `label`, and `disabled` attributes are observed after connection. Set `window` before triggering a delete; changing it during an active countdown does not rewrite the timer already started.
+
+### Properties
+
+| Property | Type | Access | Details |
+|---|---|---|---|
+| `state` | string | Read-only by convention | Current lifecycle state: `ready`, `draining`, `undoable`, `saving`, or `gone`. |
+| `undoWindow` | number | Read-only getter | Effective undo duration in milliseconds. |
+| `remaining` | number | Read-only getter | Remaining milliseconds while state is `undoable`; otherwise 0. |
+
+### Methods
+
+| Method | Details |
 |---|---|
-| press the ball or drag it down | a relay, then the ball rolls down the chute and drops into the hole; `delete` fires |
-| during the window | SHOOT AGAIN blinks, then blinks faster near the end |
-| press SHOOT AGAIN | the kickback solenoid fires the ball back up the chute with a streak and two chime notes; `undo` fires |
-| let it run out | a low chime, the lamp goes dark; `commit` fires |
+| `delete(user = false, initialVel = 180)` | Begin deletion when the control is ready. Use the UI for normal interaction; passing `true` as the first argument emits the `delete` event. |
+| `undo(user = false)` | Restore while state is `draining` or `undoable`. Passing `true` emits `undo`. |
+| `reset(user = false)` | Serve a fresh ball and return to `ready`. Passing `true` emits `reset`. |
 
-With `prefers-reduced-motion` the ball and the moving parts go straight to where they end up, and the lamps still light.
+### Events
 
-## Limits
+| Event | Payload and trigger |
+|---|---|
+| `delete` | CustomEvent, `detail: { undoMs: number }` Fires when a user starts deletion, before the ball finishes draining. |
+| `undo` | CustomEvent, empty detail object Fires when a user restores the item using SHOOT AGAIN. |
+| `commit` | CustomEvent, empty detail object Fires when the undo window expires. With `window="0"`, it fires immediately after deletion. |
+| `reset` | CustomEvent, empty detail object Only emitted when `reset(true)` is called. The normal `reset()` programmatic call is silent. |
 
-- **It needs WebGL** for the ball and the lamps. Without it the control is still a working, focusable control, but nothing is drawn.
-- **One kind of picture.** It scales with `--pb-size` and stays sharp up to about three times its default size, but it does not reflow: the photographed body keeps its shape.
-- **The ball mirrors the page.** Set `--pb-page` to your page colour (a hex colour such as `#14161a`) so its reflections match; the default is the cream the set was shot on.
-- **The file is large** because the photographs and the sounds are inside it. Load only the controls a page uses.
-- **Checked in headless Chromium** with real touch and key events at phone width. Not tried in Safari or Firefox, on a real phone, or with a screen reader, and the sound has not been checked on a phone.
+The shared event helper dispatches custom events with `bubbles: true` and `composed: true`, so listeners can be attached to the custom element or an ancestor outside its Shadow DOM. Event names and payloads above describe this component's actual implementation.
+
+## 🎮 Input and keyboard
+
+**Pointer and touch:** Click the ball/chute or drag the ball downward. SHOOT AGAIN restores the item while the state is `draining` or `undoable`.
+
+**Keyboard:** The chute and SHOOT AGAIN are native buttons and support normal button activation (Enter/Space). Delete and Backspace on the chute also begin deletion. SHOOT AGAIN is exposed with `aria-disabled` when undo is unavailable; its handler also checks lifecycle state.
+
+## 📝 Form integration
+
+The drain is an action control and does not expose a form value.
+
+## 🎨 Styling, rendering, and sound
+
+Set `--pb-size` to change the plate height (112px by default). Set `--pb-page` to a six-digit hex page colour and `--pb-focus` to change the visible focus outline.
+
+The shared chrome ball and lamps use WebGL. Set the instance's `silent` attribute to mute that element, or set `PinballKit.sound = false` to mute the shared page audio. Audio initializes after the first pointer or keyboard interaction, as browsers require.
+
+## ♿ Motion and accessibility
+
+The shared runtime honours `prefers-reduced-motion`; the ball moves directly to its state destination, while the undo countdown and lifecycle continue.
+
+The interactive control lives in an open Shadow DOM and uses the semantic role and focus behavior described above. Set a useful `label`, or provide `aria-label` / `aria-labelledby` before connection. The repository's optional automated interaction script uses headless Chromium; it is not a substitute for a screen-reader audit.
+
+## 🎯 Mechanical behavior
+
+| Action | Result |
+|---|---|
+| Delete | The ball rolls down the chute; state becomes `draining` and `delete` fires. |
+| Undo is available | The state becomes `undoable` and the SHOOT AGAIN lamp blinks while time remains. |
+| Undo | The ball is kicked back; `undo` fires. |
+| Timer expires | `commit` fires and state becomes `gone`. |
+
+## ⚠️ Implementation notes and limits
+
+- The `delete` event occurs at the start of the drain animation. Treat it as the beginning of the undo window, not as proof that the commit has happened.
+- After `commit`, the component remains in `gone` until `reset()` is called. The demo page resets it automatically for demonstration purposes.
+- After `commit`, the component stays empty until your application calls `reset()`.
+- A `window` of 0 removes the undo opportunity and emits `commit` immediately after deletion.
+- **It needs WebGL** for the ball and the lamps. Without it the control is still a working, focusable control, but the shader-drawn visuals are missing.
+- **One kind of picture.** It scales with `--pb-size` and stays sharp to about three times its default size, but it does not reflow: the photographed body keeps its shape.
+- **The ball mirrors the page.** Set `--pb-page` to a six-digit hex colour such as `#14161a` so its reflections match; the default is the cream the set was shot on.
+- **The file is large** because photographs and sounds are embedded. Load only the controls a page uses.
+- **Browser coverage.** The repository includes an optional headless Chromium interaction script with touch and keyboard input at a mobile-width viewport. The regular CI workflow does not run it. Safari, Firefox, physical devices, and screen-reader behavior are not documented as tested.

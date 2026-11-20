@@ -32,7 +32,8 @@ Form-associated custom elements depend on browser platform support. The reposito
 
 The core reads `prefers-reduced-motion: reduce` and updates its `calm` state when the media query changes.
 
-- Toggle, Slider, Stepper, Drop targets, Drain, and Pop bumpers document that moving parts go straight to their end state while lamps still show their resulting state.
+- Toggle, Slider, Stepper, Drain, and Pop bumpers snap moving visuals to their final state while retaining the resulting control state.
+- **Drop targets** also snap their targets and lamps. Its `bonus` event is tied to the normal-motion impact callback and is not emitted in reduced-motion mode; use `change.detail.allChecked` for application logic.
 - **Plunger is the exception.** Its pull and shot continue to animate when reduced motion is requested.
 
 Do not claim full reduced-motion coverage until Plunger behavior is addressed and retested.

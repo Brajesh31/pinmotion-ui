@@ -39,6 +39,7 @@ const requiredFiles = [
   'gallery/title.jpg',
   'registry.json',
   'llms.txt',
+  'docs/component-api-conventions.md',
   'making-of/README.md',
   'making-of/prompts.md',
   'skills/pinball-ui/SKILL.md',
@@ -65,6 +66,25 @@ check('canonical component list contains seven entries', ids.length === 7, `foun
 check('build and documentation component lists match', JSON.stringify(NAMES) === JSON.stringify(ids));
 check('component IDs are unique', new Set(ids).size === ids.length);
 check('component tags are unique', new Set(SPEC.map((component) => component.tag)).size === ids.length);
+
+for (const component of SPEC) {
+  check(`API metadata exists: ${component.id}`, Boolean(component.api));
+  check(`API sections are complete: ${component.id}`, Boolean(
+    component.api?.attributes?.length &&
+    Array.isArray(component.api?.properties) &&
+    Array.isArray(component.api?.methods) &&
+    component.api?.events?.length &&
+    component.api?.input &&
+    component.api?.keyboard &&
+    component.api?.forms &&
+    component.api?.motion
+  ));
+  check(`custom element tags are documented: ${component.id}`, Array.isArray(component.api?.tags) && component.api.tags.length > 0);
+  const guide = read(`${component.id}/README.md`);
+  check(`generated guide contains API reference: ${component.id}`, guide.includes('## 🧩 API reference'));
+  check(`generated guide contains event contract: ${component.id}`, guide.includes('### Events'));
+  check(`generated guide contains form behavior: ${component.id}`, guide.includes('## 📝 Form integration'));
+}
 
 const rootIndex = read('index.html');
 check('root page redirects to the gallery', /url\s*=\s*gallery\//i.test(rootIndex) && rootIndex.includes('href="gallery/"'));
