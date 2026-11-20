@@ -108,5 +108,7 @@ Do not describe the project as cross-browser certified based on the current chec
 - Screen-reader behavior is not documented as tested.
 - Sound playback has not been verified on a physical phone.
 - The browser suite is a mandatory Validate workflow step. A passing Chrome run is not evidence of Safari, Firefox, real-device, or screen-reader support.
+- Successful form-value submission is covered for selected controls, but `form.reset()` behavior is not tested and is currently unsupported because neither form-associated component base implements `formResetCallback` (QA-004).
+- Disabled-fieldset behavior is not tested for the original four form controls; the PinballKit base lacks `formDisabledCallback` (QA-005).
 
 These gaps are tracked as explicit validation work, not assumed passes.
