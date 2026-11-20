@@ -194,18 +194,22 @@
   `;
 
   class Base extends HTMLElement {
+    canRestoreFormProperty(name){
+      for(let proto=this;proto;proto=Object.getPrototypeOf(proto)){const descriptor=Object.getOwnPropertyDescriptor(proto,name);if(descriptor)return typeof descriptor.set==='function'||descriptor.writable===true}
+      return false;
+    }
     captureFormState(){
       const state={};
-      if('checked' in this){const value=this.checked;if(value!==undefined)state.checked=value}
-      if('value' in this){const value=this.value;if(value!==undefined&&(value===null||['string','number','boolean'].includes(typeof value)||Array.isArray(value)))state.value=value}
+      if(this.canRestoreFormProperty('checked')){const value=this.checked;if(value!==undefined)state.checked=value}
+      if(this.canRestoreFormProperty('value')){const value=this.value;if(value!==undefined&&(value===null||['string','number','boolean'].includes(typeof value)||Array.isArray(value)))state.value=value}
       return state;
     }
     restoreFormState(state){
       let snapshot=state;
       if(typeof state==='string'){try{snapshot=JSON.parse(state)}catch{snapshot={value:state}}}
       if(!snapshot||typeof snapshot!=='object')snapshot={value:snapshot};
-      if(Object.prototype.hasOwnProperty.call(snapshot,'checked')&&'checked' in this)this.checked=snapshot.checked;
-      if(Object.prototype.hasOwnProperty.call(snapshot,'value')&&'value' in this)this.value=snapshot.value;
+      if(Object.prototype.hasOwnProperty.call(snapshot,'checked')&&this.canRestoreFormProperty('checked'))this.checked=snapshot.checked;
+      if(Object.prototype.hasOwnProperty.call(snapshot,'value')&&this.canRestoreFormProperty('value'))this.value=snapshot.value;
       this.syncForm();
     }
     formResetCallback(){if(this._formDefaults)this.restoreFormState(this._formDefaults)}
