@@ -133,6 +133,7 @@ for (const file of syntaxFiles) {
 
 const deployWorkflow = read('.github/workflows/deploy-pages.yml');
 check('Pages deploy action uses v5', deployWorkflow.includes('actions/deploy-pages@v5'));
+check('Pages artifact action uses v5', deployWorkflow.includes('actions/upload-pages-artifact@v5'));
 check('Pages artifact includes hidden files', deployWorkflow.includes('include-hidden-files: true'));
 
 console.log('');
