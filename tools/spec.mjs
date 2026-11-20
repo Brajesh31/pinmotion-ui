@@ -6,10 +6,10 @@ export const AUTHOR = 'Brajesh Kumar (maintainer)';
 
 // Limits every control shares; each README ends with its own, then these.
 export const COMMON_LIMITS = [
-  '**It needs WebGL** for the ball and the lamps. Without it the control is still a working, focusable control, but nothing is drawn.',
-  '**One kind of picture.** It scales with `--pb-size` and stays sharp up to about three times its default size, but it does not reflow: the photographed body keeps its shape.',
-  '**The ball mirrors the page.** Set `--pb-page` to your page colour (a hex colour such as `#14161a`) so its reflections match; the default is the cream the set was shot on.',
-  '**The file is large** because the photographs and the sounds are inside it. Load only the controls a page uses.',
+  '**It needs WebGL** for the ball and the lamps. Without it the control is still a working, focusable control, but the shader-drawn visuals are missing.',
+  '**One kind of picture.** It scales with `--pb-size` and stays sharp to about three times its default size, but it does not reflow: the photographed body keeps its shape.',
+  '**The ball mirrors the page.** Set `--pb-page` to a six-digit hex colour such as `#14161a` so its reflections match; the default is the cream the set was shot on.',
+  '**The file is large** because photographs and sounds are embedded. Load only the controls a page uses.',
   '**Browser coverage.** The repository includes an optional headless Chromium interaction script with touch and keyboard input at a mobile-width viewport. The regular CI workflow does not run it. Safari, Firefox, physical devices, and screen-reader behavior are not documented as tested.',
 ];
 
