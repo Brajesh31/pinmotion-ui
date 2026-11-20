@@ -197,6 +197,11 @@ check('segmented: selected value participates in form', await formValue('extra-r
 // Informational displays.
 await ev("document.querySelector('pinball-progress').value = 65");
 check('progress: value updates its progressbar aria state', await ev("document.querySelector('pinball-progress').shadowRoot.querySelector('.track').getAttribute('aria-valuenow')") === '65');
+await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] });
+await ev("document.querySelector('pinball-progress').setAttribute('indeterminate','')");
+check('progress: indeterminate animation is disabled for reduced motion', await ev("getComputedStyle(document.querySelector('pinball-progress').shadowRoot.querySelector('.fill')).animationName") === 'none');
+await ev("document.querySelector('pinball-progress').removeAttribute('indeterminate')");
+await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'no-preference' }] });
 await ev("document.querySelector('pinball-meter').value = 72");
 check('meter: value updates its meter aria state', await ev("document.querySelector('pinball-meter').shadowRoot.querySelector('.track').getAttribute('aria-valuenow')") === '72');
 
