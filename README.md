@@ -10,7 +10,7 @@ Twenty-nine standalone interface bundles: seven original controls rebuilt as pin
 [![Deploy to GitHub Pages](https://github.com/Brajesh31/pinmotion-ui/actions/workflows/deploy-pages.yml/badge.svg?branch=main)](https://github.com/Brajesh31/pinmotion-ui/actions/workflows/deploy-pages.yml)
 [![GitHub stars](https://img.shields.io/github/stars/Brajesh31/pinmotion-ui?style=flat)](https://github.com/Brajesh31/pinmotion-ui/stargazers)
 
-**[Open the live gallery](https://brajesh31.github.io/pinmotion-ui/gallery/)** · [Release plan](docs/RELEASE-PLAN.md) · [Release checklist](docs/RELEASE-CHECKLIST.md) · [Source code](https://github.com/Brajesh31/pinmotion-ui) · [Component registry](registry.json) · [LLM guide](llms.txt) · [MIT License](LICENSE)
+**[Open the live gallery](https://brajesh31.github.io/pinmotion-ui/gallery/)** · [Release plan](docs/RELEASE-PLAN.md) · [Release checklist](docs/RELEASE-CHECKLIST.md) · [Component inventory](docs/component-inventory.md) · [Source code](https://github.com/Brajesh31/pinmotion-ui) · [Component registry](registry.json) · [LLM guide](llms.txt) · [MIT License](LICENSE)
 
 ## 🎮 What is included
 
