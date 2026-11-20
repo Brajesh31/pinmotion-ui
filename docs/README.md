@@ -7,6 +7,7 @@ This directory documents the repository as it exists today. It is an implementat
 | Document | What it explains |
 | --- | --- |
 | [Architecture](architecture.md) | Static site structure, standalone bundles, shared runtime, rendering, animation, sound, and custom-element lifecycle |
+| [Design system](design-system.md) | Color tokens, typography, surface styles, runtime families and accessibility conventions |
 | [Component reference](component-reference.md) | The 29 bundles, 30 element tags, current attributes, events, methods, sizing, and form participation |
 | [Component API conventions](component-api-conventions.md) | Rules for authoring and keeping API metadata accurate |
 | [Site map](site-map.md) | Every published page path, page-level sections, gallery interactions, and responsive layout behavior |
