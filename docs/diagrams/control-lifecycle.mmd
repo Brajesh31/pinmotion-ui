@@ -1,0 +1,18 @@
+sequenceDiagram
+  actor User
+  participant Input as Native control in Shadow DOM
+  participant Element as Custom element
+  participant Clock as Shared PinballKit clock
+  participant Render as Shared WebGL renderer
+  participant Audio as Shared sound controller
+  participant App as Consuming application
+
+  User->>Input: Pointer / touch / keyboard action
+  Input->>Element: Component handler updates state
+  Element->>Clock: Start / continue animation frames
+  Clock->>Element: frame(dt)
+  Element->>Render: Draw current scene and ball state
+  Render-->>Element: Copy render to element canvas
+  Element->>Audio: Request kick / relay / chime / roll effect
+  Element-->>App: Bubbling, composed CustomEvent
+  App->>Element: Read public property or method

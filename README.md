@@ -173,6 +173,21 @@ Set `CHROME` to the Chrome or Chromium executable when it is not available as `c
 - [Pinball UI skill](skills/pinball-ui/SKILL.md), the workflow for integrating or creating controls in this style
 - [How it was made](making-of/README.md), including design decisions, artwork plates, WebGL rendering, and sound
 
+## 🏗️ Technical documentation
+
+The documentation set below covers the implementation, operational workflows, browser behavior, and project limits:
+
+- [Documentation hub](docs/README.md)
+- [System architecture](docs/architecture.md)
+- [Component reference and event contracts](docs/component-reference.md)
+- [Site map and page behavior](docs/site-map.md)
+- [Development workflow and repository conventions](docs/development.md)
+- [Asset embedding and generated-file pipeline](docs/asset-pipeline.md)
+- [Testing strategy and verification boundaries](docs/testing.md)
+- [GitHub Pages deployment](docs/deployment.md)
+- [Accessibility, rendering requirements, and known limitations](docs/accessibility.md)
+- [Architecture diagram sources](docs/diagrams/)
+
 ## 🧭 Browser and accessibility status
 
 The repository's interaction tests exercise headless Chromium with touch and keyboard input at a mobile viewport. The project documentation does **not** claim that Safari, Firefox, physical phones, or screen-reader behavior has been tested. Sound playback has also not been verified on a physical phone. Treat those as open validation areas, not supported-browser guarantees.

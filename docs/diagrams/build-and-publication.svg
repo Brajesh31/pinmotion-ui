@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+<title id="title">Pinball UI build and publication pipeline</title>
+<desc id="desc">Core source, artwork, recorded sounds, and component bundle logic are assembled into standalone JavaScript. Component specification generates documentation, demos, gallery, registry and llms.txt. Committed static files are checked and deployed through GitHub Pages Actions.</desc>
+<defs>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="none" stroke="#8d4a28" stroke-width="1.5"/></marker>
+  <style>
+    .bg{fill:#f3efe5}.box{fill:#fffaf0;stroke:#c9bda9;stroke-width:2}.src{fill:#f2d18b;stroke:#a95f17;stroke-width:2}.out{fill:#2b2620;stroke:#2b2620}.t{font:600 18px Arial,sans-serif;fill:#2b2620}.s{font:14px Arial,sans-serif;fill:#5e5448}.wt{font:600 17px Arial,sans-serif;fill:#fffaf0}.ws{font:14px Arial,sans-serif;fill:#f5dfb7}.line{stroke:#8d4a28;stroke-width:2;fill:none;marker-end:url(#arrow)}.head{font:600 27px Arial,sans-serif;fill:#2b2620}
+  </style>
+</defs>
+<rect class="bg" width="1200" height="720"/>
+<text x="48" y="54" class="head">BUILD · GENERATE · DEPLOY</text>
+
+<rect class="src" x="48" y="100" width="220" height="120" rx="16"/>
+<text x="72" y="142" class="t">core.js</text><text x="72" y="172" class="s">Shared runtime</text>
+
+<rect class="src" x="48" y="250" width="220" height="120" rx="16"/>
+<text x="72" y="292" class="t">art/ + sounds/</text><text x="72" y="322" class="s">Source media</text>
+
+<rect class="src" x="48" y="400" width="220" height="120" rx="16"/>
+<text x="72" y="442" class="t">Component bundles</text><text x="72" y="472" class="s">Control logic</text>
+
+<rect class="box" x="344" y="220" width="220" height="180" rx="16"/>
+<text x="368" y="266" class="t">tools/build.mjs</text><text x="368" y="300" class="s">Embeds core + media</text><text x="368" y="330" class="s">Preserves component logic</text>
+
+<path class="line" d="M268 160 H310 V260 H334"/>
+<path class="line" d="M268 310 H334"/>
+<path class="line" d="M268 460 H310 V360 H334"/>
+
+<rect class="out" x="630" y="110" width="250" height="150" rx="16"/>
+<text x="654" y="154" class="wt">7 standalone bundles</text><text x="654" y="190" class="ws">Each contains one control</text><text x="654" y="220" class="ws">and embedded shared runtime</text>
+<path class="line" d="M564 280 H600 V185 H620"/>
+
+<rect class="src" x="344" y="480" width="220" height="120" rx="16"/>
+<text x="368" y="522" class="t">tools/spec.mjs</text><text x="368" y="552" class="s">Canonical component data</text>
+
+<rect class="box" x="630" y="390" width="250" height="180" rx="16"/>
+<text x="654" y="432" class="t">tools/docs.mjs</text><text x="654" y="466" class="s">Component READMEs + demos</text><text x="654" y="496" class="s">Gallery + registry + llms.txt</text><text x="654" y="526" class="s">Uses current bundle sizes</text>
+<path class="line" d="M564 540 H620"/>
+<path class="line" d="M755 260 V380"/>
+
+<rect class="out" x="950" y="190" width="210" height="200" rx="16"/>
+<text x="974" y="236" class="wt">GitHub Pages</text><text x="974" y="272" class="ws">Push to main</text><text x="974" y="302" class="ws">Preflight + syntax</text><text x="974" y="332" class="ws">Upload artifact</text><text x="974" y="362" class="ws">Deploy website</text>
+<path class="line" d="M880 185 H920 V250 H940"/>
+<path class="line" d="M880 480 H910 V330 H940"/>
+
+<text x="48" y="665" class="s">Commit generated outputs before deployment. The Pages workflow publishes checked-in static files; it does not run the generators.</text>
+</svg>

@@ -1,0 +1,36 @@
+flowchart TD
+  CORE["core.js shared runtime"]
+  SOUND["sounds/ recorded takes"]
+  ART["art/{component}/ artwork plates"]
+  LOGIC["Component bundles and component logic"]
+  BUILD["tools/build.mjs"]
+  BUNDLES["Seven standalone JavaScript bundles"]
+  SKILLCORE["skills/pinball-ui/core.js"]
+  SPEC["tools/spec.mjs canonical component specification"]
+  DOCGEN["tools/docs.mjs"]
+  DOCS["Component READMEs and demo pages"]
+  GALLERY["gallery/index.html"]
+  REGISTRY["registry.json"]
+  LLMS["llms.txt"]
+  PUSH["Push to main / manual dispatch"]
+  PAGESBUILD["Pages workflow preflight and syntax checks"]
+  ARTIFACT["GitHub Pages artifact"]
+  DEPLOY["GitHub Pages deployment"]
+
+  CORE --> BUILD
+  SOUND --> BUILD
+  ART --> BUILD
+  LOGIC --> BUILD
+  BUILD --> BUNDLES
+  BUILD --> SKILLCORE
+  BUNDLES --> DOCGEN
+  SPEC --> DOCGEN
+  DOCGEN --> DOCS
+  DOCGEN --> GALLERY
+  DOCGEN --> REGISTRY
+  DOCGEN --> LLMS
+  BUNDLES --> PUSH
+  DOCS --> PUSH
+  GALLERY --> PUSH
+  REGISTRY --> PUSH
+  PUSH --> PAGESBUILD --> ARTIFACT --> DEPLOY

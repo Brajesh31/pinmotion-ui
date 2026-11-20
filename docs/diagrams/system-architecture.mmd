@@ -1,0 +1,31 @@
+flowchart TB
+  subgraph SITE["Static site"]
+    ROOT["/ root redirect"]
+    GALLERY["/gallery/ interactive gallery"]
+    DEMOS["Seven component demo pages"]
+    ROOT --> GALLERY
+  end
+
+  subgraph BUNDLE["Standalone component bundle"]
+    BUNDLEART["Embedded artwork data"]
+    BUNDLECORE["Embedded shared core copy"]
+    COMPONENT["Component class and registration"]
+  end
+
+  GALLERY --> BUNDLE
+  DEMOS --> BUNDLE
+  BUNDLECORE --> GUARD{"window.PinballKit exists?"}
+  GUARD -->|"No"| INIT["Initialize shared runtime"]
+  GUARD -->|"Yes"| REUSE["Reuse existing runtime"]
+  INIT --> API["window.PinballKit"]
+  REUSE --> API
+  BUNDLEART --> COMPONENT
+  API --> COMPONENT
+  COMPONENT --> SHADOW["Custom element and Shadow DOM"]
+  SHADOW --> INPUT["Native semantic input"]
+  COMPONENT --> CLOCK["Shared animation clock"]
+  CLOCK --> WEBGL["One shared WebGL context"]
+  CLOCK --> AUDIO["Shared Web Audio controller"]
+  WEBGL --> CANVAS["Per-control 2D canvas"]
+  INPUT --> EVENTS["Bubbling, composed CustomEvents"]
+  INPUT --> FORM["ElementInternals where form-associated"]

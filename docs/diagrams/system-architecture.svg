@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+<title id="title">Pinball UI system architecture</title>
+<desc id="desc">Static site pages load standalone component bundles. The first embedded core initializes a shared PinballKit runtime, which coordinates custom elements, animation, WebGL rendering, audio, events, and form participation.</desc>
+<defs>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="none" stroke="#8d4a28" stroke-width="1.5"/></marker>
+  <style>
+    .bg{fill:#f3efe5}.panel{fill:#fffaf0;stroke:#c9bda9;stroke-width:2}.core{fill:#2b2620;stroke:#2b2620}.gold{fill:#f2d18b;stroke:#a95f17;stroke-width:2}.node{fill:#fffaf0;stroke:#8d4a28;stroke-width:2}.t{font:600 19px Arial,sans-serif;fill:#2b2620}.s{font:15px Arial,sans-serif;fill:#5e5448}.wt{font:600 19px Arial,sans-serif;fill:#fffaf0}.ws{font:15px Arial,sans-serif;fill:#f5dfb7}.line{stroke:#8d4a28;stroke-width:2.2;fill:none;marker-end:url(#arrow)}
+  </style>
+</defs>
+<rect class="bg" width="1200" height="760"/>
+<text x="54" y="52" class="t" font-size="28">PINBALL UI · SYSTEM ARCHITECTURE</text>
+<text x="54" y="82" class="s">Static pages + independent script bundles + one shared page runtime</text>
+
+<rect class="panel" x="54" y="118" rx="18" width="300" height="142"/>
+<text x="80" y="158" class="t">Static site</text>
+<text x="80" y="192" class="s">/ root redirect</text>
+<text x="80" y="220" class="s">/gallery/ and seven demos</text>
+
+<rect class="gold" x="440" y="118" rx="18" width="318" height="142"/>
+<text x="466" y="158" class="t">Standalone bundle</text>
+<text x="466" y="192" class="s">Component behavior + artwork</text>
+<text x="466" y="220" class="s">Embedded shared core + sounds</text>
+
+<path class="line" d="M354 189 H430"/>
+<rect class="core" x="844" y="118" rx="18" width="300" height="142"/>
+<text x="870" y="158" class="wt">window.PinballKit</text>
+<text x="870" y="192" class="ws">Initialized by first bundle</text>
+<text x="870" y="220" class="ws">Later bundles reuse the runtime</text>
+<path class="line" d="M758 189 H834"/>
+
+<rect class="panel" x="54" y="340" rx="18" width="300" height="150"/>
+<text x="80" y="382" class="t">Custom element</text>
+<text x="80" y="416" class="s">Open Shadow DOM</text>
+<text x="80" y="444" class="s">Native semantic control</text>
+<text x="80" y="472" class="s">State + composed events</text>
+<path class="line" d="M599 260 V300 H204 V330"/>
+
+<rect class="node" x="440" y="340" rx="18" width="318" height="150"/>
+<text x="466" y="382" class="t">Shared animation clock</text>
+<text x="466" y="416" class="s">requestAnimationFrame</text>
+<text x="466" y="444" class="s">Timers + Spring motion</text>
+<text x="466" y="472" class="s">Frame callbacks per element</text>
+<path class="line" d="M994 260 V300 H599 V330"/>
+
+<rect class="node" x="844" y="340" rx="18" width="300" height="150"/>
+<text x="870" y="382" class="t">Rendering + sound</text>
+<text x="870" y="416" class="s">One WebGL context</text>
+<text x="870" y="444" class="s">Per-control 2D canvas</text>
+<text x="870" y="472" class="s">Shared Web Audio output</text>
+<path class="line" d="M758 415 H834"/>
+
+<rect class="gold" x="250" y="575" rx="18" width="700" height="124"/>
+<text x="280" y="616" class="t">Application integration</text>
+<text x="280" y="650" class="s">Listen for bubbling/composed events · read properties/methods · submit supported form values</text>
+<text x="280" y="678" class="s">Consumers load only the standalone bundles their page requires</text>
+<path class="line" d="M204 490 V540 H430 V565"/>
+<path class="line" d="M599 490 V565"/>
+<path class="line" d="M994 490 V540 H770 V565"/>
+</svg>
