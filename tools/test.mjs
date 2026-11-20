@@ -268,6 +268,23 @@ await ev(`${E('toggle')}.removeAttribute('disabled')`);
 
 await sleep(1500);
 check('no sideways scroll at 390', (await ev('document.documentElement.scrollWidth')) <= 390, await ev('document.documentElement.scrollWidth'));
+// Load every demo in a fresh page context to verify its standalone bundle.
+for (const component of SPEC) {
+  const url = URL_.replace(/\/gallery\/?$/, '/' + component.id + '/');
+  const expectedTags = (component.api?.tags || ['<' + component.tag + '>']).map((tag) => tag.slice(1, -1));
+  await send('Page.navigate', { url });
+  let standaloneReady = false;
+  for (let attempt = 0; attempt < 50; attempt++) {
+    try {
+      standaloneReady = await ev('document.readyState === "complete" && ' +
+        JSON.stringify(expectedTags) + '.every((tag) => !!customElements.get(tag)) && !!document.querySelector(' + JSON.stringify(component.tag) + ')');
+    } catch {}
+    if (standaloneReady) break;
+    await sleep(100);
+  }
+  check(component.id + ': standalone demo registers its component tags', standaloneReady, url);
+}
+
 if (logs.length) { console.log(logs.join('\n')); fails++; }
 ws.close(); chrome.kill(); await sleep(300); try { rmSync(PROFILE, { recursive: true, force: true }); } catch {}
 console.log(fails ? `${fails} failed` : 'all passed'); process.exit(fails ? 1 : 0);
