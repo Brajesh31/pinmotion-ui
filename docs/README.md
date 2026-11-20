@@ -8,6 +8,7 @@ This directory documents the repository as it exists today. It is an implementat
 | --- | --- |
 | [Architecture](architecture.md) | Static site structure, standalone bundles, shared runtime, rendering, animation, sound, and custom-element lifecycle |
 | [Design system](design-system.md) | Color tokens, typography, surface styles, runtime families and accessibility conventions |
+| [Renderer parity notes](renderer-parity.md) | Utility backglass artwork, conditional shared WebGL marker, CSS fallback and remaining renderer gaps |
 | [Component reference](component-reference.md) | The 29 bundles, 30 element tags, current attributes, events, methods, sizing, and form participation |
 | [Component API conventions](component-api-conventions.md) | Rules for authoring and keeping API metadata accurate |
 | [Site map](site-map.md) | Every published page path, page-level sections, gallery interactions, and responsive layout behavior |
@@ -31,7 +32,7 @@ The diagram source files are stored in [diagrams/](diagrams/). Mermaid sources a
 
 - The site is static HTML, CSS, and browser JavaScript. It does not use a client-side router or an application framework.
 - There are 29 distributed bundles and 30 custom-element tags. The bumper bundle registers both the single bumper and the three-bumper cluster.
-- Each bundle is intended to work by itself. The original seven include PinballKit, artwork and recorded sound; the 22 utility controls include PinmotionExtras and native/CSS component behavior.
+- Each bundle is intended to work by itself. The original seven include PinballKit, artwork and recorded sound; the 22 utility controls include PinmotionExtras and native/CSS component behavior, with optional renderer/sound reuse only when an original bundle has already initialized PinballKit.
 - When several bundles are loaded on the same page, the first bundle initializes `window.PinballKit`; later bundles reuse it.
 - The root `package.json` is a private tooling manifest. It is not a published npm package.
 - The repository is licensed under MIT, Copyright (c) 2026 Brajesh Kumar; see `LICENSE`.

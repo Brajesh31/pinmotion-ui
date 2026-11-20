@@ -18,7 +18,7 @@ Pinball UI turns familiar interface patterns into tactile pinball mechanisms: a 
 - **30 custom element tags**, because the bumper bundle defines both a single bumper and a three-bumper cluster.
 - **Web Components** that can be used from plain HTML and JavaScript without a framework.
 - **Keyboard and form support** for the value controls that expose form values.
-- **Two runtime families:** seven original WebGL/audio bundles and 22 lightweight CSS/native bundles.
+- **Two runtime families:** seven original WebGL/audio bundles and 22 lightweight CSS/native bundles, which can reuse the original chrome-ball shader when PinballKit is already loaded.
 
 ## 🧩 Components
 
@@ -139,7 +139,7 @@ When several original mechanical bundles are loaded on the same page, the first 
 
 ### Lightweight utility controls
 
-The 22 utility controls use native HTML inputs, buttons, lists and CSS rendering inside the same pinball-inspired metal decks, chrome details, amber pilot lamps and brass action surfaces as the original seven. They do not require WebGL, PinballKit or embedded audio. When PinballKit is already loaded on the page, their user interactions can reuse its mechanical sound effects. Their API guides document exact native semantics and browser-dependent behaviors.
+The 22 utility controls use native HTML inputs, buttons, lists and CSS rendering inside pinball-inspired metal decks. Each has its own vector backglass emblem, pilot lamps, brass action surfaces and CSS chrome-ball fallback. They do not require WebGL, PinballKit or embedded audio. When the original runtime is already loaded, their backglass marker can reuse its live chrome-ball shader and their user interactions can reuse its mechanical sound effects. Their API guides document exact native semantics and browser-dependent behaviors.
 
 ## 🔌 Events and form integration
 

@@ -104,6 +104,8 @@ check('plunger: holding Space and letting go sends', (await fired('plunger send'
 
 
 check('all 22 lightweight elements connect and attach Shadow DOM', await ev("['checkbox','radio-group','segmented','progress','meter','rating','tabs','accordion','disclosure','tooltip','dialog','toast','breadcrumbs','pagination','search','text-field','text-area','select','combobox','file-drop','date-picker','color-picker'].every(id => { const e=document.querySelector('pinball-'+id); return !!(e && e.shadowRoot); })") === true);
+check('all 22 utility components show their own backglass emblem', await ev("['checkbox','radio-group','segmented','progress','meter','rating','tabs','accordion','disclosure','tooltip','dialog','toast','breadcrumbs','pagination','search','text-field','text-area','select','combobox','file-drop','date-picker','color-picker'].every(id => { const e=document.querySelector('pinball-'+id); const b=e?.shadowRoot?.querySelector('.backglass'); return !!(b && b.dataset.model==='pinball-'+id && b.querySelector('svg')); })") === true);
+check('utility chrome-ball markers reuse the shared WebGL shader in the full gallery', await ev("(() => { const e=document.querySelector('pinball-checkbox'); const d=e?.shadowRoot?.querySelector('.pinball-deck'); const c=e?.shadowRoot?.querySelector('.chrome-ball'); return !!(window.PinballKit && d?.classList.contains('has-live-ball') && c?.width===64 && c?.height===64); })()") === true);
 
 // Checkbox, radio group and segmented selector.
 await ev("document.querySelector('pinball-checkbox').setAttribute('name','extra-checkbox')");

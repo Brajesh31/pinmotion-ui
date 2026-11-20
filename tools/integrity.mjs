@@ -35,6 +35,10 @@ check('utility family follows mechanical family', JSON.stringify(SPEC.slice(7).m
 check('component IDs are unique', unique(SPEC.map(c => c.id)));
 const tags = SPEC.flatMap(c => c.api?.tags || [`<${c.tag}>`]);
 check('30 custom-element tags are unique', tags.length === 30 && unique(tags), `found ${tags.length}`);
+const extrasCore = read('tools/extra-core.js');
+check('all 22 utility elements have a component-specific backglass emblem', EXTRA_NAMES.every(id => extrasCore.includes("'pinball-" + id + "'")));
+check('utility renderer reuses the original chrome-ball shader when available', extrasCore.includes('kit.glsl.head') && extrasCore.includes('kit.glsl.ball') && extrasCore.includes('kit.paint'));
+check('utility bundles retain a CSS chrome-ball fallback', extrasCore.includes('.pinball-deck:after') && extrasCore.includes('.pinball-deck.has-live-ball:after'));
 
 const gallery = read('gallery/index.html');
 const registry = JSON.parse(read('registry.json'));
@@ -80,6 +84,8 @@ for (const component of SPEC) {
       !bundle.includes('window.PinballKit =') &&
       !bundle.includes('const SOUNDS =') &&
       !bundle.includes('function getGL()'));
+    check(`${id}: component-specific backglass is bundled`, bundle.includes('class="backglass"') && bundle.includes('class="chrome-ball"'));
+    check(`${id}: optional chrome renderer uses shared runtime, not an embedded copy`, bundle.includes('kit.glsl.ball') && bundle.includes('kit.paint') && !bundle.includes('window.PinballKit ='));
     check(`${id}: matching lightweight source exists`, existsSync(resolve(ROOT, 'extras-src', `${id}.js`)));
     const source = read(`extras-src/${id}.js`);
     check(`${id}: bundle contains its source implementation`, bundle.includes(source.trim()));

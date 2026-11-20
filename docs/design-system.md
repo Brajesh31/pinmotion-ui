@@ -1,12 +1,12 @@
 # 🎨 Pinball UI design system
 
-The library has one mechanical visual direction and two rendering families. Both use a warm workshop palette, brushed-steel bezels, dark playfield wells, chrome fasteners/ball details, amber lamps and brass control surfaces. The original seven controls achieve this with photographed plates and live WebGL rendering; the 22 utility components preserve native browser semantics inside CSS-rendered pinball control decks.
+The library has one mechanical visual direction and two rendering families. Both use a warm workshop palette, brushed-steel bezels, dark playfield wells, chrome fasteners/ball details, amber lamps and brass control surfaces. The original seven controls achieve this with photographed plates and live WebGL rendering. The 22 utility components preserve native browser semantics inside CSS-rendered control decks, add individual vector backglass emblems and three pilot lamps, and can reuse the original chrome-ball shader when PinballKit is already loaded.
 
 ## 1. Design principles
 
 1. **Mechanical character, clear interaction.** Controls can feel tactile, but their state, label, keyboard model and event contract must remain explicit.
 2. **Native semantics first.** Use native inputs, buttons, links, details/summary, dialog and form APIs when they fit the control.
-3. **One shared palette, two runtimes.** Keep the visual identity consistent without loading the heavy PinballKit renderer into lightweight components.
+3. **One shared palette, two runtimes.** Keep the visual identity consistent without embedding or initializing the heavy PinballKit runtime in lightweight components. Reuse the shared chrome-ball shader only when that runtime is already present.
 4. **Self-contained delivery.** A consumer loads one standalone script for the component they need. Do not require a separate CSS file, external image host or third-party runtime package.
 5. **Honest capability claims.** A visual metaphor does not guarantee screen-reader support, cross-browser behavior, WebGL fallback or reduced-motion completeness. Document tested behavior and known gaps.
 
@@ -15,9 +15,9 @@ The library has one mechanical visual direction and two rendering families. Both
 | Family | Components | Rendering and shared runtime | Visual treatment |
 | --- | --- | --- | --- |
 | Original mechanical | Toggle, Slider, Plunger, Stepper, Drop Targets, Drain, Pop Bumpers | PinballKit, WebGL, source WebP plates, embedded recorded audio | Photographed machine bodies, chrome-ball reflections, lamps, springs and physical impacts |
-| Lightweight utility | Checkbox, Radio Group, Segmented Control, Progress, Meter, Rating, Tabs, Accordion, Disclosure, Tooltip, Dialog, Toast, Breadcrumbs, Pagination, Search, Text Field, Text Area, Select, Combobox, File Drop, Date Picker, Color Picker | PinmotionExtras, native HTML semantics and CSS; no WebGL or recorded audio | Brushed-steel control decks, chrome fasteners, amber lamps, brass buttons, inset playfield wells and native inputs |
+| Lightweight utility | Checkbox, Radio Group, Segmented Control, Progress, Meter, Rating, Tabs, Accordion, Disclosure, Tooltip, Dialog, Toast, Breadcrumbs, Pagination, Search, Text Field, Text Area, Select, Combobox, File Drop, Date Picker, Color Picker | PinmotionExtras and native HTML/CSS; no embedded renderer or audio. Optionally reuses the already-loaded PinballKit shader and sound effects | Brushed-steel decks, component-specific vector backglass emblems, three pilot lamps, CSS fallback sphere, and native inputs |
 
-Do not add `window.PinballKit`, shader code or recorded sound payloads to a utility component merely to reuse the color language. Do not assume PinballKit APIs exist when a utility bundle is loaded by itself.
+Do not copy or embed the PinballKit runtime, shader source or recorded sound payloads into a utility component. The utility base may call the existing `PinballKit.program`, `PinballKit.paint` and `PinballKit.glsl` helpers only after checking that the original runtime is already available. A utility bundle loaded alone must use its CSS fallback and remain functional without WebGL.
 
 ## 3. Color tokens
 
@@ -67,7 +67,7 @@ The shared utility base applies `inert` to a disabled host. Native controls also
 
 - PinballKit controls use a shared animation clock, WebGL and recorded audio. Most controls honor `prefers-reduced-motion`; Plunger is the current exception.
 - Drop Targets' `bonus` event is tied to the normal-motion impact callback. Use the `change` event's `allChecked` state for application logic when reduced motion is enabled.
-- Utility controls use native browser interaction and short CSS transitions. Progress indeterminate mode currently animates its stripe; it does not yet define a dedicated reduced-motion override.
+- Utility controls use native browser interaction and short CSS transitions. Their backglass lamps flash on emitted interactions; the chrome ball marker uses the original shared WebGL shader when available and otherwise falls back to CSS. Motion is skipped for the marker under `prefers-reduced-motion`. Progress indeterminate mode still needs a dedicated reduced-motion override.
 - Sound is supplemental feedback, not an application state signal. Only the original mechanical runtime exposes PinballKit shared audio controls.
 
 ## 8. Accessibility rules
@@ -98,4 +98,4 @@ The shared utility base applies `inert` to a disabled host. Native controls also
 - [Visual language and token board](visuals/visual-language.svg)
 - [Editable component-family diagram](diagrams/component-families.mmd)
 
-Utility controls can reuse recorded PinballKit sound effects when the mechanical runtime is already present on the page. They do not load that runtime or audio by themselves. Use these diagrams as documentation assets. They are not a substitute for testing an individual component in the actual browser.
+Utility controls can reuse the original chrome-ball shader and recorded PinballKit sound effects when the mechanical runtime is already present. They do not load that runtime or audio by themselves. See [renderer parity notes](renderer-parity.md) for the boundary between the shared live marker and the still CSS-rendered utility control bodies. Use these diagrams as documentation assets, not as a substitute for testing an individual component in a browser.
