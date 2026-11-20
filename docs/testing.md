@@ -25,7 +25,7 @@ npm run check
 
 1. `npm run build:check` ensures the seven PinballKit bundles match embedded core/art and the 22 utility bundles match `tools/extra-core.js` plus `extras-src/`.
 2. `npm run docs:check` ensures the generated component docs, demos, gallery, registry, and `llms.txt` match `tools/spec.mjs` and current bundle sizes.
-3. `npm run validate` checks required files, 29 component IDs, unique IDs/tags, generated page and registry relationships, package/lockfile metadata, JavaScript syntax, and GitHub Pages action settings. It also runs `tools/audit-components.mjs` to compare source registrations, observed attributes, documented member/event names, component demos/guides, and registry coverage.
+3. `npm run validate` checks required files, 29 component IDs, unique IDs/tags, generated page and registry relationships, package/lockfile metadata, JavaScript syntax, and GitHub Pages action settings. It also runs `tools/audit-components.mjs` to compare source registrations and observed-attribute declarations, actual form-associated declarations and value methods, documented property/method names, custom-event detail keys (including plain Event exceptions), component demos/guides, and registry coverage.
 4. `npm run integrity` checks bundled source and generated artifact integrity.
 
 The check scripts are intended to detect stale output; use the non-check commands only when you intend to regenerate files.
