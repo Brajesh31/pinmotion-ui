@@ -106,7 +106,7 @@ const fired = (k) => ev(`__n[${JSON.stringify(k)}] || 0`);
 // put the gallery's grid inside a form, once, to read what a form would send (the controls are form-associated)
 await ev(`(() => { const f = document.createElement('form'); f.id = 'f'; const g = document.getElementById('grid'); g.before(f); f.appendChild(g); for (const t of ['toggle', 'slider', 'stepper', 'targets']) document.querySelector('pinball-' + t).setAttribute('name', t); })()`); await sleep(600);
 const formValue = (n) => ev(`new FormData(document.getElementById('f')).get(${JSON.stringify(n)})`);
-await ev(`window.window.__formDefaults = {
+await ev(`window.__formDefaults = {
   toggle: document.querySelector('pinball-toggle').checked,
   slider: document.querySelector('pinball-slider').value,
   stepper: document.querySelector('pinball-stepper').value,
@@ -116,6 +116,7 @@ await ev(`window.window.__formDefaults = {
   segmented: document.querySelector('pinball-segmented').value,
   textField: document.querySelector('pinball-text-field').value
 }`);
+const formDefaults = JSON.parse(await ev('JSON.stringify(window.__formDefaults)'));
 let fails = 0;
 const check = (name, ok, got) => { if (!ok) fails++; console.log(`${ok ? 'ok  ' : 'FAIL'} ${name}${got !== undefined ? `  ->  ${got}` : ''}`); };
 check('gallery: all 29 component cards render on first load', galleryBootReport.cardCount === 29, galleryBootReport.cardCount);
@@ -360,12 +361,12 @@ check('color picker: hex value and readout stay synchronized', await prop('color
    textField: document.querySelector('pinball-text-field').value
  })`));
  check('phase 2 forms: reset restores original PinballKit control defaults',
-   resetState.toggle === window.__formDefaults.toggle && resetState.slider === window.__formDefaults.slider &&
-   resetState.stepper === window.__formDefaults.stepper && JSON.stringify(resetState.targets) === JSON.stringify(window.__formDefaults.targets),
+   resetState.toggle === formDefaults.toggle && resetState.slider === formDefaults.slider &&
+   resetState.stepper === formDefaults.stepper && JSON.stringify(resetState.targets) === JSON.stringify(formDefaults.targets),
    JSON.stringify(resetState));
  check('phase 2 forms: reset restores utility control defaults',
-   resetState.checkbox === window.__formDefaults.checkbox && resetState.radio === window.__formDefaults.radio &&
-   resetState.segmented === window.__formDefaults.segmented && resetState.textField === window.__formDefaults.textField,
+   resetState.checkbox === formDefaults.checkbox && resetState.radio === formDefaults.radio &&
+   resetState.segmented === formDefaults.segmented && resetState.textField === formDefaults.textField,
    JSON.stringify(resetState));
 
  await ev(`document.querySelector('pinball-toggle').formStateRestoreCallback(JSON.stringify({checked:true}), 'restore')`);
