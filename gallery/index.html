@@ -31,6 +31,18 @@
   .said { margin: 0; min-height: 20px; color: var(--amber); text-align: center; }
   .acts { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-top: 10px; }
   .note { margin: 56px auto 0; max-width: 640px; text-align: center; color: var(--dim); font-size: 14px; }
+  .gallery-tools { max-width: 760px; margin: 34px auto 0; display: grid; gap: 10px; text-align: center; }
+  .search-label { font: 600 11px/1.3 "Futura", "Century Gothic", "Avenir Next", "Trebuchet MS", sans-serif; letter-spacing: .14em; text-transform: uppercase; color: var(--dim); }
+  #component-search { width: min(100%, 560px); margin: 0 auto; min-height: 44px; padding: 10px 14px; border: 1.5px solid var(--line); border-radius: 8px; background: #fffdf7; color: var(--ink); font: 15px Georgia, serif; }
+  .filters { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+  .filter span { margin-left: 6px; opacity: .7; font-variant-numeric: tabular-nums; }
+  .filter.is-active { background: var(--ink); color: var(--bg); }
+  .gallery-status { min-height: 22px; margin: 0; color: var(--dim); font-size: 13px; }
+  .gallery-status[data-state="error"] { color: var(--red); }
+  .item[hidden] { display: none !important; }
+  .item .cap span { overflow-wrap: anywhere; }
+  .item .stage { min-height: 260px; }
+  .item .acts { margin-top: auto; }
   .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 </style>
 </head>
@@ -46,7 +58,18 @@
       <button class="pill" type="button" id="sound" aria-pressed="true">Sound on</button>
     </p>
   </header>
-  <main class="grid" id="grid"></main>
+  <section class="gallery-tools" aria-label="Gallery controls">
+    <label class="search-label" for="component-search">Find a component</label>
+    <input id="component-search" type="search" placeholder="Search components, tags, or patterns…" autocomplete="off">
+    <div class="filters" role="group" aria-label="Filter components">
+      <button class="pill filter is-active" type="button" data-filter="all" aria-pressed="true">All <span data-count="all">29</span></button>
+      <button class="pill filter" type="button" data-filter="pinball" aria-pressed="false">Original <span data-count="pinball">7</span></button>
+      <button class="pill filter" type="button" data-filter="lightweight" aria-pressed="false">Utility <span data-count="lightweight">22</span></button>
+    </div>
+    <p class="gallery-status" id="gallery-status" role="status" aria-live="polite">Loading component catalogue…</p>
+  </section>
+  <main class="grid" id="grid" aria-busy="true"></main>
+  <noscript><p class="note">JavaScript is required to render the interactive component gallery. Open an individual component demo from the repository instead.</p></noscript>
   <p class="note">Explore the live controls. The original mechanical set initializes sound after the first interaction. Utility components use native inputs and CSS-based presentation. Test reduced-motion and browser behavior in your target environment.</p>
   <p class="sr" aria-live="polite" id="copied"></p>
 </div>
@@ -464,21 +487,83 @@ const WIRE = {
   color-picker: (el, say) => { el.addEventListener('change', e => say('Colour: ' + e.detail.value.toUpperCase())); },
 };
 const grid = document.getElementById('grid'), copied = document.getElementById('copied');
-const copy = async (btn, text) => { try { await navigator.clipboard.writeText(text); } catch { const t = document.createElement('textarea'); t.value = text; document.body.appendChild(t); t.select(); document.execCommand('copy'); t.remove(); } const was = btn.textContent; btn.textContent = 'Copied'; copied.textContent = 'Copied to the clipboard'; setTimeout(() => { btn.textContent = was; copied.textContent = ''; }, 1400); };
+const status = document.getElementById('gallery-status');
+const search = document.getElementById('component-search');
+const filterButtons = [...document.querySelectorAll('[data-filter]')];
+const setStatus = (message, state = 'info') => { status.textContent = message; status.dataset.state = state; };
+const copy = async (btn, text) => {
+  try { await navigator.clipboard.writeText(text); }
+  catch {
+    const t = document.createElement('textarea'); t.value = text; document.body.appendChild(t);
+    t.select(); document.execCommand('copy'); t.remove();
+  }
+  const was = btn.textContent; btn.textContent = 'Copied'; copied.textContent = 'Copied to the clipboard';
+  setTimeout(() => { btn.textContent = was; copied.textContent = ''; }, 1400);
+};
+const cards = [];
 for (const c of ITEMS) {
   const s = document.createElement('section'); s.className = 'item'; s.id = c.id;
-  s.innerHTML = '<div class="cap label"><h2></h2><span></span></div><div class="stage">' + c.html + '</div><p class="said label" aria-hidden="true"></p><div class="acts"><button class="pill" type="button" data-a="install">Copy install</button><button class="pill" type="button" data-a="prompt">Copy a prompt</button><a class="pill" href="../' + c.id + '/">Open</a></div>';
-  s.querySelector('h2').textContent = c.name; s.querySelector('.cap span').textContent = c.kind;
-  s.querySelector('.stage').style.setProperty('--pb-size', c.size);
+  s.innerHTML = '<div class="cap label"><h2></h2><span></span></div><div class="stage"></div><p class="said label" aria-hidden="true"></p><div class="acts"><button class="pill" type="button" data-a="install">Copy install</button><button class="pill" type="button" data-a="prompt">Copy a prompt</button><a class="pill" href="../' + c.id + '/">Open</a></div>';
+  s.querySelector('h2').textContent = c.name;
+  s.querySelector('.cap span').textContent = c.kind + ' · ' + c.tags;
+  const stage = s.querySelector('.stage'); stage.style.setProperty('--pb-size', c.size);
+  stage.innerHTML = c.html;
   grid.appendChild(s);
-  const el = s.querySelector(c.tag), said = s.querySelector('.said');
-  WIRE[c.id](el, (t) => { said.textContent = t; });
-  const install = 'npx shadcn add ' + REPO + '/' + c.id;
-  const prompt = 'Add the Pinball UI "' + c.name + '" control to this project. It is one plain script with no dependencies that registers ' + c.tags + ': ' + c.desc + '\n\n1. Download ' + SITE + '/' + c.id + '/' + c.id + '.js into the folder this project serves static files from (for example public/pinball-ui/' + c.id + '.js), or run: ' + install + '\n2. Load it with a plain script tag, not as a module, and do not edit, split or re-bundle the file; it contains the standalone control implementation and any required helper.\n3. In the page, ' + c.docs + '\n4. Follow the component API guide for the supported properties, methods, keyboard behavior, form handling and styling.\n\nFull notes: https://github.com/' + REPO + '/blob/main/' + c.id + '/README.md';
-  s.querySelector('[data-a=install]').addEventListener('click', (e) => copy(e.currentTarget, install));
+  const said = s.querySelector('.said'), el = stage.querySelector(c.tag);
+  cards.push({card:s, component:c, element:el, said});
+  s.querySelector('[data-a=install]').addEventListener('click', (e) => copy(e.currentTarget, 'npx shadcn@latest add ' + REPO + '/' + c.id));
+  const prompt = 'Add the Pinball UI "' + c.name + '" control to this project. Load ' + SITE + '/' + c.id + '/' + c.id + '.js with a plain script tag, not as a module. Keep the standalone bundle unchanged. Element: ' + c.tags + '. ' + c.desc + '\n\nAPI guide: https://github.com/' + REPO + '/blob/main/' + c.id + '/README.md';
   s.querySelector('[data-a=prompt]').addEventListener('click', (e) => copy(e.currentTarget, prompt));
 }
-const snd = document.getElementById('sound'); snd.onclick = () => { PinballKit.sound = !PinballKit.sound; snd.setAttribute('aria-pressed', String(PinballKit.sound)); snd.textContent = PinballKit.sound ? 'Sound on' : 'Sound off'; };
+const unavailable = [];
+for (const entry of cards) {
+  if (!entry.element) {
+    unavailable.push(entry.component.name + ' (example selector not found)');
+    entry.card.dataset.loadState = 'error';
+    continue;
+  }
+  try {
+    if (customElements.get(entry.component.tag)) {
+      WIRE[entry.component.id](entry.element, (message) => { entry.said.textContent = message; });
+      entry.card.dataset.loadState = 'ready';
+    } else {
+      unavailable.push(entry.component.name + ' (custom element not registered)');
+      entry.card.dataset.loadState = 'error';
+    }
+  } catch (error) {
+    unavailable.push(entry.component.name + ' (initialization failed)');
+    entry.card.dataset.loadState = 'error';
+    console.error('Pinmotion UI gallery component failed:', entry.component.id, error);
+  }
+}
+const applyFilters = () => {
+  const term = search.value.trim().toLowerCase();
+  const active = document.querySelector('[data-filter].is-active')?.dataset.filter || 'all';
+  let visible = 0;
+  for (const {card, component} of cards) {
+    const matchesFamily = active === 'all' || component.runtime === active;
+    const haystack = [component.name, component.id, component.tag, component.tags, component.kind, component.desc].join(' ').toLowerCase();
+    const show = matchesFamily && (!term || haystack.includes(term));
+    card.hidden = !show;
+    if (show) visible++;
+  }
+  setStatus(visible + ' of ' + ITEMS.length + ' components shown' + (unavailable.length ? ' · ' + unavailable.length + ' component(s) failed to initialize' : ''));
+};
+search.addEventListener('input', applyFilters);
+filterButtons.forEach(button => button.addEventListener('click', () => {
+  filterButtons.forEach(item => { const selected = item === button; item.classList.toggle('is-active', selected); item.setAttribute('aria-pressed', String(selected)); });
+  applyFilters();
+}));
+grid.setAttribute('aria-busy', 'false');
+if (unavailable.length) {
+  setStatus('Loaded ' + (ITEMS.length - unavailable.length) + ' of ' + ITEMS.length + ' components. Missing: ' + unavailable.join(', '), 'error');
+  console.error('Pinmotion UI gallery load failures:', unavailable);
+} else {
+  setStatus('All ' + ITEMS.length + ' live components loaded successfully.');
+}
+applyFilters();
+const snd = document.getElementById('sound');
+snd.onclick = () => { PinballKit.sound = !PinballKit.sound; snd.setAttribute('aria-pressed', String(PinballKit.sound)); snd.textContent = PinballKit.sound ? 'Sound on' : 'Sound off'; };
 </script>
 </body>
 </html>
