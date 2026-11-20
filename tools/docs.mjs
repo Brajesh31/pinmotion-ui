@@ -213,7 +213,7 @@ put('registry.json', JSON.stringify({
 // ---- llms.txt
 put('llms.txt', `# Pinball UI
 
-> ${Count} ordinary UI controls as real pinball parts: photographed bodies (a lane, a shooter rod, flippers and a score reel, a drop-target bank, an outhole, pop bumpers), a chrome ball drawn live in WebGL that mirrors what is under it, and recorded sounds (solenoids, relays, chimes, a rolling ball). Each is one plain script that registers a custom element, with its photographs and sounds inside it: no dependencies, no build step, no other files to fetch. MIT licensed. No real machine's names, art or logos are used.
+> ${Count} ordinary UI controls as real pinball parts: photographed bodies (a lane, a shooter rod, flippers and a score reel, a drop-target bank, an outhole, pop bumpers), a chrome ball drawn live in WebGL that mirrors what is under it, and recorded sounds (solenoids, relays, chimes, a rolling ball). Each is one plain script that registers a custom element, with its photographs and sounds inside it: no dependencies, no build step, no other files to fetch. License status is unspecified: no root LICENSE file is present, and the private developer package is marked UNLICENSED. No real machine's names, art or logos are used.
 
 Live gallery: ${SITE}
 Source: https://github.com/${REPO}
