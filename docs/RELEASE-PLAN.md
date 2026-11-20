@@ -68,8 +68,8 @@ Implemented in the current source:
 - [x] Keep the source generator and checked-in gallery output aligned.
 
 Still required:
-- [x] Latest Validate workflow passes, including the real-browser suite: [run 44833625705](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44833625705), commit `f54d1e4f9ce1e989691ddf707179c8764c67c3f9`.
-- [x] Latest Pages generation/deployment workflow passes: [run 44833625348](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44833625348), same commit.
+- [x] Latest Validate workflow passes, including the real-browser suite: [run 44835256653](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44835256653), commit `a47c5b40eeb5fb9f5232c51863531d3300a7c847`.
+- [x] Latest Pages generation/deployment workflow passes: [run 44835256398](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44835256398), attempt 2, commit `a47c5b40eeb5fb9f5232c51863531d3300a7c847`.
 - [ ] Verify the published gallery in a real browser with a hard refresh and direct URL entry. Automated URL access is not a substitute for this manual check.
 - [x] The mandatory Chromium suite verifies all 29 gallery cards, ready state, all 30 tags, original mechanical interactions and standalone routes on the latest commit.
 - [ ] Complete the visual comparison against the previous approved baseline and close INC-001/INC-002 with linked evidence.
@@ -146,7 +146,7 @@ Phase 2 coverage to add:
 - [ ] Solo bundle behavior plus mixed bundle order and full-gallery regression tests.
 - [ ] Fault isolation: one component initialization exception must not prevent unrelated cards rendering and reporting ready.
 - [ ] A coverage ledger showing every documented interaction has a test or explicit manual evidence.
-- [x] Latest CI evidence attached: [Validate run 44833625705](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44833625705), commit `f54d1e4f9ce1e989691ddf707179c8764c67c3f9`.
+- [x] Latest CI evidence attached: [Validate run 44835256653](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44835256653), commit `a47c5b40eeb5fb9f5232c51863531d3300a7c847`.
 - [ ] Expand the new smoke assertions into the complete per-component state/input/event/form matrix.
 
 Known implementation gaps are not passes:
