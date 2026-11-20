@@ -194,6 +194,23 @@
   `;
 
   class Base extends HTMLElement {
+    captureFormState(){
+      const state={};
+      if('checked' in this){const value=this.checked;if(value!==undefined)state.checked=value}
+      if('value' in this){const value=this.value;if(value!==undefined&&(value===null||['string','number','boolean'].includes(typeof value)||Array.isArray(value)))state.value=value}
+      return state;
+    }
+    restoreFormState(state){
+      let snapshot=state;
+      if(typeof state==='string'){try{snapshot=JSON.parse(state)}catch{snapshot={value:state}}}
+      if(!snapshot||typeof snapshot!=='object')snapshot={value:snapshot};
+      if(Object.prototype.hasOwnProperty.call(snapshot,'checked')&&'checked' in this)this.checked=snapshot.checked;
+      if(Object.prototype.hasOwnProperty.call(snapshot,'value')&&'value' in this)this.value=snapshot.value;
+      this.syncForm();
+    }
+    formResetCallback(){if(this._formDefaults)this.restoreFormState(this._formDefaults)}
+    formStateRestoreCallback(state){this.restoreFormState(state)}
+
     constructor(){
       super();
       this.root=this.attachShadow({mode:'open',delegatesFocus:true});
@@ -204,6 +221,7 @@
         this.ready=true;
         this.root.innerHTML='<style>'+baseCSS+(this.constructor.css||'')+mechanicalCSS+'</style><div class="pinball-deck">'+deckHeader(this.localName)+this.render()+'</div>';
         this.setup();
+        if(this.internals)this._formDefaults=this.captureFormState();
         this.tryChromeRenderer();
         this._disabledObserver=new MutationObserver(()=>this.syncDisabled());
         this._disabledObserver.observe(this,{attributes:true,attributeFilter:['disabled']});
@@ -294,8 +312,8 @@
     }
 
     syncDisabled(){this.inert=this.hasAttribute('disabled');this.syncForm()}
-    syncForm(){if(!this.internals||typeof this.formValue!=='function')return;try{this.internals.setFormValue(this.hasAttribute('disabled')?null:this.formValue())}catch{}}
-    formDisabledCallback(disabled){this.inert=!!disabled||this.hasAttribute('disabled')}
+    syncForm(){if(!this.internals||typeof this.formValue!=='function')return;try{this.internals.setFormValue(this.hasAttribute('disabled')?null:this.formValue(),JSON.stringify(this.captureFormState()))}catch{}}
+    formDisabledCallback(disabled){this.inert=!!disabled||this.hasAttribute('disabled');this.syncForm()}
     render(){return ''} setup(){}
   }
   window.PinmotionExtras=Object.freeze({Base,esc,clamp,safeURL,baseCSS,mechanicalCSS});
