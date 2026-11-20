@@ -2,6 +2,7 @@
 // Read-only repository validation. Generated-file parity is checked separately by tools/build.mjs and tools/docs.mjs.
 import { existsSync, readFileSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
+import { Script } from 'node:vm';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { SPEC, REPO, SITE } from './spec.mjs';
@@ -98,6 +99,17 @@ const rootIndex = read('index.html');
 check('root page redirects to the gallery', /url\s*=\s*gallery\//i.test(rootIndex) && rootIndex.includes('href="gallery/"'));
 
 const gallery = read('gallery/index.html');
+const galleryRuntime = gallery.match(/<script>\s*([\s\S]*?)<\/script>\s*<\/body>/);
+let galleryRuntimeError = '';
+try {
+  if (!galleryRuntime) throw new Error('the inline gallery runtime script was not found');
+  new Script(galleryRuntime[1], { filename: 'gallery/index.html inline runtime' });
+} catch (error) {
+  galleryRuntimeError = error.message;
+}
+check('gallery inline runtime parses as valid JavaScript', Boolean(galleryRuntime) && !galleryRuntimeError, galleryRuntimeError);
+check('gallery error monitor provides a visible startup failure state', gallery.includes('Gallery startup failed:') && gallery.includes('the gallery bootstrap did not finish'));
+check('gallery runtime quotes component IDs in its wire map', gallery.includes('"radio-group":') && gallery.includes('"text-field":') && gallery.includes('"date-picker":') && gallery.includes('"color-picker":'));
 for (const id of ids) {
   check(`${id}: standalone script exists`, existsSync(join(ROOT, id, `${id}.js`)));
   check(`${id}: demo page exists`, existsSync(join(ROOT, id, 'index.html')));
