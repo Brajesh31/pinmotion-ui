@@ -83,32 +83,41 @@ Exit gate:
 - Latest CI and Pages workflows pass.
 
 ### Phase 1 · Complete inventory and component contract audit
-**Status: In progress · generated inventory and static source-to-contract checks added; behavioral and manual review outstanding**
+**Status: In progress · complete inventory and static source-to-contract audit verified; detailed behavior and compatibility review outstanding**
 
 Completed in this phase:
 - [x] Inventory all 29 component bundles, 30 custom-element tags, 29 dedicated demos, 29 component guides, and 29 registry entries.
 - [x] Generate a detailed component inventory from `tools/spec.mjs` and `tools/extras-spec.mjs`.
 - [x] Preserve the original seven mechanical controls as a separate runtime and visual family.
 - [x] Document the 22 lightweight utility controls and their separate PinmotionExtras runtime.
-- [x] Add source registration checks against each component's declared custom-element tags.
-- [x] Add static checks for documented observed attributes, property names, method names, and event names.
-- [x] Add checks for each component source, generated bundle, demo, guide, and registry entry.
+- [x] Verify all source custom-element registration names and uniqueness against the API metadata.
+- [x] Compare every source `observedAttributes` declaration with the attributes documented as observed.
+- [x] Verify documented property names and public method names are present in each implementation.
+- [x] Compare documented custom-event detail key sets with source payload objects, including shorthand properties, duplicate `hit` events, empty details, and Toggle's plain `input` event.
+- [x] Compare API form-association claims with executable `static formAssociated = true` declarations and the presence of component form-value methods.
+- [x] Check each component source, generated bundle, demo, guide, and registry entry for presence and linkage.
 - [x] Integrate the source-to-contract audit into the mandatory repository validation workflow.
+
+Static audit evidence:
+- Component contract audit: **424 checks passed, 0 failed** on commit `dea5484f5beae9d34a34515b614acd0255938278`.
+- Full validation: **608 checks passed, 0 failed** on the same commit.
+- Headless Chromium suite: `all passed`, including the 29-card first-load check and all 30 custom-element registrations.
 
 Still required:
 - [ ] Verify exact attribute defaults, reflection, connection-time configuration, and update timing against implementation.
-- [ ] Verify property accessors, method parameters, return values, and programmatic event behavior.
-- [ ] Verify event payload shapes, ordering, bubbling, composed behavior, and dispatch conditions.
+- [ ] Verify property accessors, method parameter defaults, return values, and programmatic event behavior.
+- [ ] Verify event ordering, bubbling/composed behavior, and dispatch conditions through implementation review and interaction evidence.
 - [ ] Verify keyboard navigation and pointer/touch behavior for every component.
-- [ ] Verify form association, submitted values, constraint validation, reset, restore, and disabled behavior in supported browsers.
+- [ ] Verify form values, constraint validation, reset, state restore, and disabled behavior for every applicable component in supported browsers.
 - [ ] Review styling hooks, responsive limits, WebGL fallback, audio behavior, and reduced-motion statements against implementation.
-- [ ] Check duplicate registration, independent bundle loading, mixed bundle order, and collision behavior in standalone demos and the full gallery.
+- [ ] Confirm all 29 component demos initialize their own bundle independently, including the two bumper tags.
+- [ ] Check mixed bundle order, shared-runtime reuse, and collision behavior in standalone demos and the full gallery.
 - [ ] Test every registry entry from a clean consumer project.
 - [ ] Complete manual review of all 29 component guides and record evidence for each contract.
 
 Exit gate:
 - One generated, source-controlled inventory covers all bundles, tags, demos, guides, and registry entries.
-- CI checks every source registration and static API name against the specification.
+- CI checks every source registration, observed-attribute declaration, form-association declaration, documented member name, and event detail key against the specification.
 - Every behavioral contract is verified against implementation and interaction evidence.
 - No duplicate or missing tags, scripts, guides, demos, or registry entries remain.
 - All unresolved contract discrepancies are fixed or explicitly documented and approved.
