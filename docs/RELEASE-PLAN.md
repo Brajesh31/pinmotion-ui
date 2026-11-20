@@ -57,7 +57,7 @@ Do not close INC-001 until all boxes above have evidence.
 ## 3. Phase roadmap
 
 ### Phase 0 · Stop the gallery boot failure and stabilize the preview
-**Status: In progress · implementation committed, end-to-end proof pending**
+**Status: In progress · automated CI and deployment gates passed on the latest commit; published-site manual QA remains open**
 
 Implemented in the current source:
 - [x] Quote component IDs when generating the gallery wire-map properties.
@@ -68,11 +68,11 @@ Implemented in the current source:
 - [x] Keep the source generator and checked-in gallery output aligned.
 
 Still required:
-- [ ] Latest Validate workflow passes, including the real-browser suite.
-- [ ] Latest Pages generation/deployment workflow passes.
-- [ ] Verify the published gallery on a real browser with a hard refresh and direct URL entry.
-- [ ] Verify no original component regressed when all 29 bundles load together.
-- [ ] Close both INC-001 and INC-002 with linked test/deployment evidence.
+- [x] Latest Validate workflow passes, including the real-browser suite: [run 44833625705](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44833625705), commit `f54d1e4f9ce1e989691ddf707179c8764c67c3f9`.
+- [x] Latest Pages generation/deployment workflow passes: [run 44833625348](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44833625348), same commit.
+- [ ] Verify the published gallery in a real browser with a hard refresh and direct URL entry. Automated URL access is not a substitute for this manual check.
+- [x] The mandatory Chromium suite verifies all 29 gallery cards, ready state, all 30 tags, original mechanical interactions and standalone routes on the latest commit.
+- [ ] Complete the visual comparison against the previous approved baseline and close INC-001/INC-002 with linked evidence.
 
 Exit gate:
 - All 29 gallery cards render and initialize on first load.
@@ -80,7 +80,7 @@ Exit gate:
 - All 30 custom-element tags are registered.
 - No startup console errors or missing component scripts remain.
 - No original component is removed or visually regressed.
-- Latest CI and Pages workflows pass.
+- Latest CI and Pages workflows pass. (Passed on `f54d1e4`; published-site manual QA remains required.)
 
 ### Phase 1 · Complete inventory and component contract audit
 **Status: In progress · inventory, static contract checks and route existence/browser checks are complete; runtime contract semantics and per-component review remain open**
@@ -146,7 +146,8 @@ Phase 2 coverage to add:
 - [ ] Solo bundle behavior plus mixed bundle order and full-gallery regression tests.
 - [ ] Fault isolation: one component initialization exception must not prevent unrelated cards rendering and reporting ready.
 - [ ] A coverage ledger showing every documented interaction has a test or explicit manual evidence.
-- [ ] Latest CI evidence attached to this phase.
+- [x] Latest CI evidence attached: [Validate run 44833625705](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44833625705), commit `f54d1e4f9ce1e989691ddf707179c8764c67c3f9`.
+- [ ] Expand the new smoke assertions into the complete per-component state/input/event/form matrix.
 
 Known implementation gaps are not passes:
 - `formResetCallback` is absent from both component bases, so native form reset does not restore custom component values.
