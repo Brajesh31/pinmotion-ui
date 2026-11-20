@@ -27,7 +27,7 @@
     :host([disabled]){opacity:.62}
     .pinball-deck{
       position:relative;isolation:isolate;display:block;max-width:100%;
-      padding:27px 10px 10px;border:2px solid #62686a;border-radius:10px;
+      padding:30px 10px 10px;border:2px solid #62686a;border-radius:10px;
       background:
         radial-gradient(circle at 9px 9px,#fff 0 1px,#bfc3c3 1.2px 2px,#5d6264 2.2px 3.4px,transparent 3.8px),
         radial-gradient(circle at calc(100% - 9px) 9px,#fff 0 1px,#bfc3c3 1.2px 2px,#5d6264 2.2px 3.4px,transparent 3.8px),
@@ -37,16 +37,13 @@
       box-shadow:inset 0 1px 2px #fff,inset 0 -4px 10px #3c352c32,0 3px 0 #55514a,0 6px 12px #21180f36;
     }
     .pinball-deck:before{
-      content:"PINBALL  •  CONTROL PANEL";position:absolute;left:12px;top:6px;
-      color:#4b4032;font:700 8px/14px "Century Gothic",Arial,sans-serif;
-      letter-spacing:.16em;text-transform:uppercase;text-indent:13px;
-      text-shadow:0 1px #fff9;pointer-events:none;z-index:2;
+      content:none;
     }
     .pinball-deck:after{
       content:"";position:absolute;right:8px;top:5px;width:17px;height:17px;border-radius:50%;
       background:radial-gradient(circle at 28% 23%,#fff 0 6%,#e4e9e9 10%,#a5afb2 27%,#596267 49%,#e7eeee 63%,#60686b 79%,#30383b 100%);
       border:1px solid #545b5e;box-shadow:0 0 0 1px #f8f5ed,0 1px 3px #17130e88;
-      pointer-events:none;z-index:3;
+      pointer-events:none;z-index:6;
     }
     .pinball-deck>*{position:relative;z-index:1}
     .machine{
@@ -102,10 +99,66 @@
     .row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
     .muted{color:#776e62}
     .hidden{display:none!important}
+
+    .backglass{position:absolute!important;left:8px;right:31px;top:3px;height:20px;z-index:7!important;display:flex;align-items:center;gap:5px;overflow:visible;color:#42382c;pointer-events:none}
+    .backglass svg{flex:none;width:25px;height:16px;overflow:visible;fill:none;stroke:#b37a32;stroke-width:1.35;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 1px #fff9)}
+    .backglass-brand{color:#443729;font:800 7.5px/1 "Century Gothic",Arial,sans-serif;letter-spacing:.11em;white-space:nowrap;text-shadow:0 1px #fff9}
+    .backglass-brand b{color:#be7929;padding:0 2px}
+    .backglass-code{color:#815523;font:700 7px/1 ui-monospace,monospace;letter-spacing:.08em;border-left:1px solid #8b7b6755;padding-left:5px}
+    .backglass-lamps{display:flex;align-items:center;gap:3px;margin-left:auto;padding-right:3px}
+    .backglass-lamps i{display:block;width:5px;height:5px;border-radius:50%;background:#645b4e;border:1px solid #302a22;box-shadow:inset 0 1px 1px #0009}
+    .backglass-lamps i.on{background:radial-gradient(circle at 30% 25%,#fff8d1,#ffc04a 42%,#a74b09 88%);border-color:#8c551d;box-shadow:0 0 4px 2px #e9a13b99,0 0 8px #e78d2988,inset 0 1px #fff}
+    .chrome-ball{position:absolute;right:-25px;top:-2px;width:26px;height:26px;padding:0;opacity:0;display:block;overflow:visible;border:0;background:transparent;filter:drop-shadow(0 1px 2px #22180f88);transition:opacity .12s ease}
+    .pinball-deck.has-live-ball .chrome-ball{opacity:1}
+    .pinball-deck.has-live-ball:after{opacity:0}
+    .pinball-deck.impact .chrome-ball{animation:chrome-impact .32s cubic-bezier(.2,.8,.3,1)}
+    .pinball-deck.impact:after{animation:chrome-impact .32s cubic-bezier(.2,.8,.3,1)}
+    @keyframes chrome-impact{0%{translate:0 0;rotate:0deg}38%{translate:-2px 1px;rotate:-18deg}72%{translate:1px -1px;rotate:10deg}100%{translate:0 0;rotate:0deg}}
+    @media (prefers-reduced-motion:reduce){.chrome-ball{transition:none!important}.pinball-deck.impact .chrome-ball,.pinball-deck.impact:after{animation:none!important}}
+
     @media (prefers-reduced-motion:reduce){
       .pinball-deck button{transition:none!important}
     }
   `;
+
+
+  // Component-specific vector backglass emblems. These are decorative motifs, not photographic plate replacements.
+  const MODELS = Object.freeze({
+    'pinball-checkbox': { name:'CHECKBOX', code:'01', svg:'<rect x="5" y="3" width="14" height="14" rx="3"/><path d="m8 10 3 3 6-7"/><path d="M23 6h5M23 11h5M23 16h5"/>' },
+    'pinball-radio-group': { name:'RADIO BANK', code:'02', svg:'<circle cx="8" cy="10" r="5"/><circle cx="8" cy="10" r="2"/><circle cx="21" cy="10" r="5"/><circle cx="21" cy="10" r="2"/>' },
+    'pinball-segmented': { name:'SEGMENT RAIL', code:'03', svg:'<rect x="3" y="4" width="26" height="12" rx="3"/><path d="M12 4v12M21 4v12"/><rect x="4" y="5" width="7" height="10" rx="2" fill="#d18a2b" stroke="#ffe2a5"/>' },
+    'pinball-progress': { name:'LAMP LANE', code:'04', svg:'<path d="M3 10h26"/><circle cx="6" cy="10" r="2"/><circle cx="13" cy="10" r="2"/><circle cx="20" cy="10" r="2"/><circle cx="27" cy="10" r="2"/><path d="M4 4v12M28 4v12"/>' },
+    'pinball-meter': { name:'GAUGE', code:'05', svg:'<path d="M4 16a12 12 0 0 1 24 0"/><path d="M16 15 23 7"/><circle cx="16" cy="15" r="2.5"/><path d="M7 17h18"/>' },
+    'pinball-rating': { name:'STAR TARGET', code:'06', svg:'<path d="m8 3 2.2 4.5 5 .7-3.6 3.5.9 5-4.5-2.4-4.5 2.4.9-5-3.6-3.5 5-.7z"/><path d="M19 5h10M19 10h8M19 15h6"/>' },
+    'pinball-tabs': { name:'SELECTOR BANK', code:'07', svg:'<path d="M3 6h8v10H3zM12 4h8v12h-8zM21 6h8v10h-8z"/><path d="M5 18h22"/>' },
+    'pinball-accordion': { name:'HINGED PANELS', code:'08', svg:'<rect x="3" y="3" width="26" height="4" rx="1"/><rect x="3" y="9" width="26" height="4" rx="1"/><rect x="3" y="15" width="26" height="4" rx="1"/><path d="M25 4v2M25 10v2M25 16v2"/>' },
+    'pinball-disclosure': { name:'LATCH', code:'09', svg:'<path d="M4 4h24v13H4z"/><path d="m11 8 5 5 5-5"/><circle cx="7" cy="7" r="1"/><circle cx="25" cy="7" r="1"/>' },
+    'pinball-tooltip': { name:'CALLOUT', code:'10', svg:'<path d="M4 3h24v12H15l-5 4v-4H4z"/><circle cx="11" cy="9" r="1"/><circle cx="16" cy="9" r="1"/><circle cx="21" cy="9" r="1"/>' },
+    'pinball-dialog': { name:'BACKGLASS WINDOW', code:'11', svg:'<rect x="3" y="3" width="26" height="16" rx="2"/><path d="M3 7h26M7 5h1M10 5h1M14 11h14M14 15h10"/>' },
+    'pinball-toast': { name:'SIGNAL BEACON', code:'12', svg:'<path d="M10 16a6 6 0 1 1 12 0"/><path d="M7 16h18v3H7zM13 4V2M5 7 3 5M27 7l2-2"/><circle cx="16" cy="10" r="2" fill="#d18a2b"/>' },
+    'pinball-breadcrumbs': { name:'TRACK LINKS', code:'13', svg:'<path d="M4 10h24"/><circle cx="5" cy="10" r="3"/><circle cx="16" cy="10" r="3"/><circle cx="27" cy="10" r="3"/><path d="M8 7 11 10 8 13M19 7l3 3-3 3"/>' },
+    'pinball-pagination': { name:'SCORE REELS', code:'14', svg:'<rect x="3" y="4" width="26" height="12" rx="2"/><path d="M11 4v12M20 4v12"/><path d="M6 8h3M14 8h3M23 8h3"/><circle cx="7.5" cy="13" r="1"/><circle cx="16" cy="13" r="1"/><circle cx="25" cy="13" r="1"/>' },
+    'pinball-search': { name:'RADAR SCAN', code:'15', svg:'<circle cx="13" cy="9" r="6"/><path d="m18 14 8 6"/><path d="M13 4v5l4 2"/><path d="M23 4h6M25 8h4"/>' },
+    'pinball-text-field': { name:'INPUT RAIL', code:'16', svg:'<rect x="3" y="5" width="26" height="10" rx="2"/><path d="M7 10h13M22 8v4"/><circle cx="25" cy="10" r="1"/>' },
+    'pinball-text-area': { name:'PAPER FEED', code:'17', svg:'<path d="M7 2h17l5 5v12H7z"/><path d="M24 2v5h5M11 11h14M11 15h14"/><path d="M3 5v13"/>' },
+    'pinball-select': { name:'SELECT LEVER', code:'18', svg:'<path d="M4 16h24"/><path d="M16 16 22 5"/><circle cx="22" cy="5" r="3"/><path d="M8 13v6M24 13v6"/>' },
+    'pinball-combobox': { name:'CHOICE TRACK', code:'19', svg:'<rect x="3" y="3" width="26" height="5" rx="1"/><path d="M5 12h22M5 16h17"/><circle cx="25" cy="13" r="3" fill="#d18a2b"/>' },
+    'pinball-file-drop': { name:'FEED CHUTE', code:'20', svg:'<path d="M10 3h12l-2 6H12zM12 9h8l-2 6h-4z"/><path d="M16 2v5M13 4l3 3 3-3"/><path d="M8 18h16"/>' },
+    'pinball-date-picker': { name:'DATE CLOCK', code:'21', svg:'<rect x="3" y="4" width="26" height="15" rx="2"/><path d="M3 8h26M9 2v4M23 2v4M9 12h4M17 12h5M9 16h4"/>' },
+    'pinball-color-picker': { name:'COLOR LAMPS', code:'22', svg:'<circle cx="8" cy="10" r="5" fill="#bd3d2d"/><circle cx="16" cy="10" r="5" fill="#d6a12c"/><circle cx="24" cy="10" r="5" fill="#397d75"/>' }
+  });
+  const deckHeader = (tag) => {
+    const model = MODELS[tag] || MODELS['pinball-checkbox'];
+    return '<div class="backglass" aria-hidden="true" data-model="' + tag + '">' +
+      '<svg viewBox="0 0 32 20" focusable="false">' + model.svg + '</svg>' +
+      '<span class="backglass-brand">PINBALL <b>·</b> ' + model.name + '</span>' +
+      '<span class="backglass-code">' + model.code + '</span>' +
+      '<span class="backglass-lamps"><i></i><i></i><i></i></span>' +
+      '<canvas class="chrome-ball" width="64" height="64"></canvas></div>';
+  };
+  let chromeProgram = null;
+  let chromeProgramOwner = null;
+
 
   // Component-specific details which should still read as buttons, lamps, score reels and backglass controls.
   const mechanicalCSS = `
@@ -149,15 +202,16 @@
     connectedCallback(){
       if(!this.ready){
         this.ready=true;
-        this.root.innerHTML='<style>'+baseCSS+(this.constructor.css||'')+mechanicalCSS+'</style><div class="pinball-deck">'+this.render()+'</div>';
+        this.root.innerHTML='<style>'+baseCSS+(this.constructor.css||'')+mechanicalCSS+'</style><div class="pinball-deck">'+deckHeader(this.localName)+this.render()+'</div>';
         this.setup();
+        this.tryChromeRenderer();
         this._disabledObserver=new MutationObserver(()=>this.syncDisabled());
         this._disabledObserver.observe(this,{attributes:true,attributeFilter:['disabled']});
       }
       this.syncDisabled();
       this.syncForm();
     }
-    disconnectedCallback(){if(this._disabledObserver)this._disabledObserver.disconnect()}
+    disconnectedCallback(){if(this._disabledObserver)this._disabledObserver.disconnect();clearTimeout(this._lampTimer);clearTimeout(this._impactTimer);if(this._ballFrame)cancelAnimationFrame(this._ballFrame)}
     $(s){return this.root.querySelector(s)}
     emit(type,detail={}){
       const kit=window.PinballKit;
@@ -167,8 +221,78 @@
         else if(type==='close'||type==='dismiss'||type==='cancel')kit.sfx.relay(false);
         else if(type==='search')kit.sfx.clack(.25);
       }
+      this.pulseDeck(type);
       this.dispatchEvent(new CustomEvent(type,{bubbles:true,composed:true,detail}));
     }
+
+    tryChromeRenderer(){
+      const kit=window.PinballKit,canvas=this.$('.chrome-ball');
+      if(!canvas||!kit?.glsl?.head||!kit?.glsl?.ball||typeof kit.program!=='function'||typeof kit.paint!=='function')return false;
+      try{
+        if(!chromeProgram||chromeProgramOwner!==kit){
+          const fragment=kit.glsl.head+'\n'+
+            'vec4 scene(vec2 p){\n'+
+            'float lane=1.0-smoothstep(0.015,0.12,abs(p.y-0.66));\n'+
+            'float rail=1.0-smoothstep(0.006,0.024,min(abs(p.x-0.16),abs(p.x-0.84)));\n'+
+            'float grain=sin(p.x*92.0+p.y*31.0)*0.018;\n'+
+            'vec3 wood=vec3(0.34,0.25,0.16)+grain;\n'+
+            'return vec4(wood,clamp(max(lane*0.72,rail*0.5),0.0,0.82));\n'+
+            '}\n'+kit.glsl.ball+'\n'+
+            'void main(){\n'+
+            'vec2 p=uView.xy+vUv*uView.zw;\n'+
+            'vec4 under=shadow(scene(p),p);\n'+
+            'gl_FragColor=ball(p,under);\n'+
+            '}';
+          chromeProgram=kit.program(kit.glsl.vs,fragment);
+          chromeProgramOwner=kit;
+        }
+        if(!chromeProgram||!kit.getGL?.())return false;
+        canvas.width=64;canvas.height=64;
+        const painted=kit.paint(chromeProgram,64,64,(gl,u)=>{
+          gl.uniform4f(u.uView,0,0,1,1);
+          gl.uniform3f(u.uBall,0.5,0.5,0.34);
+          gl.uniform1f(u.uRoll,this._ballRoll||0);
+          gl.uniform1f(u.uPx,1/64);
+          gl.uniform3f(u.uPage,0.95,0.93,0.88);
+        },canvas);
+        if(!painted)return false;
+        this.$('.pinball-deck')?.classList.add('has-live-ball');
+        return true;
+      }catch{
+        this.$('.pinball-deck')?.classList.remove('has-live-ball');
+        return false;
+      }
+    }
+    paintChromeBall(){return this.tryChromeRenderer()}
+    rollChromeBall(type){
+      const deck=this.$('.pinball-deck');
+      if(deck){
+        deck.classList.remove('impact');deck.classList.add('impact');
+        clearTimeout(this._impactTimer);
+        this._impactTimer=setTimeout(()=>deck.classList.remove('impact'),360);
+      }
+      const delta=type==='change'||type==='toggle'?0.95:type==='open'||type==='show'?1.2:type==='search'?0.72:0.48;
+      if(window.matchMedia?.('(prefers-reduced-motion: reduce)').matches){
+        this._ballRoll=(this._ballRoll||0)+delta;this.paintChromeBall();return;
+      }
+      if(this._ballFrame)cancelAnimationFrame(this._ballFrame);
+      const from=this._ballRoll||0,to=from+delta,started=performance.now(),duration=300;
+      const frame=(now)=>{
+        const t=Math.min(1,(now-started)/duration),eased=1-Math.pow(1-t,3);
+        this._ballRoll=from+(to-from)*eased;this.paintChromeBall();
+        if(t<1)this._ballFrame=requestAnimationFrame(frame);else this._ballFrame=0;
+      };
+      this._ballFrame=requestAnimationFrame(frame);
+    }
+    pulseDeck(type){
+      const lamps=this.root.querySelectorAll('.backglass-lamps i');
+      const index=type==='open'||type==='show'||type==='search'?1:type==='close'||type==='dismiss'||type==='cancel'?2:0;
+      lamps.forEach((lamp,i)=>lamp.classList.toggle('on',i===index));
+      clearTimeout(this._lampTimer);
+      this._lampTimer=setTimeout(()=>lamps.forEach(lamp=>lamp.classList.remove('on')),220);
+      this.tryChromeRenderer();this.rollChromeBall(type);
+    }
+
     syncDisabled(){this.inert=this.hasAttribute('disabled');this.syncForm()}
     syncForm(){if(!this.internals||typeof this.formValue!=='function')return;try{this.internals.setFormValue(this.hasAttribute('disabled')?null:this.formValue())}catch{}}
     formDisabledCallback(disabled){this.inert=!!disabled||this.hasAttribute('disabled')}

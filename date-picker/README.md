@@ -4,7 +4,7 @@ A date field that delegates parsing, calendar presentation and constraints to th
 
 ## 📦 Bundle and elements
 
-- **Bundle:** `date-picker/date-picker.js`, approximately 12 KB.
+- **Bundle:** `date-picker/date-picker.js`, approximately 22 KB.
 - **Custom elements:** `<pinball-date-picker>`.
 - **Dependencies:** no external runtime packages. The bundle embeds the lightweight helper and component implementation; it does not include WebGL or audio.
 
@@ -70,9 +70,9 @@ Form-associated. With name set, submits the ISO date string.
 
 ## 🎨 Styling, rendering, and sound
 
-The component sits in the shared Pinball UI metal deck with brushed-steel edges, four recessed fasteners, a chrome ball marker, an amber pilot lamp and a dark inset playfield. The date input is presented in a warm bordered control panel.
+The component sits in the shared Pinball UI metal deck with brushed-steel edges, four recessed fasteners, a component-specific backglass emblem, three pilot lamps, a chrome ball marker and a dark inset playfield. If PinballKit is already present, the marker uses the original shared chrome-ball shader; otherwise it falls back to CSS. The date input is presented in a warm bordered control panel.
 
-This standalone file embeds the compact Pinmotion Extras base and this component implementation. Its metal deck, chrome fasteners, amber pilot lamp and brass control styling follow the original PinballKit family. It does not load WebGL or recorded audio. When PinballKit is already present on the page, user actions reuse its recorded mechanical sound effects; when used alone, the component remains self-contained and silent.
+This standalone file embeds the compact Pinmotion Extras base and this component implementation. It does not initialize or embed PinballKit, its WebGL runtime, shader source or recorded audio. Its component-specific backglass emblem and metal deck use the Pinball UI mechanical visual language. When PinballKit is already present, the backglass chrome-ball marker reuses its shared WebGL shader and user actions can reuse its sound effects. When loaded alone, the control remains self-contained and uses the CSS chrome-ball fallback.
 
 ## ♿ Motion and accessibility
 
