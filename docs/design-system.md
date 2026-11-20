@@ -1,6 +1,6 @@
 # 🎨 Pinball UI design system
 
-The library has one visual direction and two implementation families. Both use a warm workshop palette, dark mechanical ink, amber as the primary action accent, and clear focus states. The original seven controls achieve the look with photographed plates and live WebGL rendering; the 22 utility components use native browser controls with CSS styling.
+The library has one mechanical visual direction and two rendering families. Both use a warm workshop palette, brushed-steel bezels, dark playfield wells, chrome fasteners/ball details, amber lamps and brass control surfaces. The original seven controls achieve this with photographed plates and live WebGL rendering; the 22 utility components preserve native browser semantics inside CSS-rendered pinball control decks.
 
 ## 1. Design principles
 
@@ -15,7 +15,7 @@ The library has one visual direction and two implementation families. Both use a
 | Family | Components | Rendering and shared runtime | Visual treatment |
 | --- | --- | --- | --- |
 | Original mechanical | Toggle, Slider, Plunger, Stepper, Drop Targets, Drain, Pop Bumpers | PinballKit, WebGL, source WebP plates, embedded recorded audio | Photographed machine bodies, chrome-ball reflections, lamps, springs and physical impacts |
-| Lightweight utility | Checkbox, Radio Group, Segmented Control, Progress, Meter, Rating, Tabs, Accordion, Disclosure, Tooltip, Dialog, Toast, Breadcrumbs, Pagination, Search, Text Field, Text Area, Select, Combobox, File Drop, Date Picker, Color Picker | PinmotionExtras, native HTML semantics and CSS; no WebGL or recorded audio | Cream control surfaces, steel borders, amber active states, compact shadows and native inputs |
+| Lightweight utility | Checkbox, Radio Group, Segmented Control, Progress, Meter, Rating, Tabs, Accordion, Disclosure, Tooltip, Dialog, Toast, Breadcrumbs, Pagination, Search, Text Field, Text Area, Select, Combobox, File Drop, Date Picker, Color Picker | PinmotionExtras, native HTML semantics and CSS; no WebGL or recorded audio | Brushed-steel control decks, chrome fasteners, amber lamps, brass buttons, inset playfield wells and native inputs |
 
 Do not add `window.PinballKit`, shader code or recorded sound payloads to a utility component merely to reuse the color language. Do not assume PinballKit APIs exist when a utility bundle is loaded by itself.
 
@@ -98,4 +98,4 @@ The shared utility base applies `inert` to a disabled host. Native controls also
 - [Visual language and token board](visuals/visual-language.svg)
 - [Editable component-family diagram](diagrams/component-families.mmd)
 
-Use these diagrams as documentation assets. They are not a substitute for testing an individual component in the actual browser.
+Utility controls can reuse recorded PinballKit sound effects when the mechanical runtime is already present on the page. They do not load that runtime or audio by themselves. Use these diagrams as documentation assets. They are not a substitute for testing an individual component in the actual browser.

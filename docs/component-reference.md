@@ -65,4 +65,4 @@ The original mechanical form controls are Toggle, Slider, Stepper and Drop targe
 
 ## 📐 Styling
 
-The original mechanical family uses `--pb-size`, `--pb-page` and `--pb-focus`. The lightweight utility family uses `--pui-ink`, `--pui-dim`, `--pui-line`, `--pui-amber` and `--pui-focus` from its embedded helper.
+The original mechanical family uses `--pb-size`, `--pb-page` and `--pb-focus`. The lightweight utility family uses the shared `--pb-*` tokens, with `--pui-*` aliases retained for compatibility. Its controls are framed in a steel deck with a chrome marker, amber pilot lamp and brass actuation surfaces. If PinballKit is already initialized on the page, utility actions reuse its mechanical sound effects; they do not bundle WebGL or recorded audio.

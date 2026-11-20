@@ -3,7 +3,7 @@ const make = (c) => {
   const tag = '<' + c.tag + '>';
   const api = {
     runtime: 'lightweight',
-    runtimeNotes: 'This standalone file embeds the small guarded Pinmotion Extras base and this component implementation. It does not load the PinballKit WebGL renderer, recorded audio, or external packages.',
+    runtimeNotes: 'This standalone file embeds the compact Pinmotion Extras base and this component implementation. Its metal deck, chrome fasteners, amber pilot lamp and brass control styling follow the original PinballKit family. It does not load WebGL or recorded audio. When PinballKit is already present on the page, user actions reuse its recorded mechanical sound effects; when used alone, the component remains self-contained and silent.',
     commonLimits: [],
     overview: c.overview,
     tags: [tag],
@@ -17,7 +17,7 @@ const make = (c) => {
     input: c.input,
     keyboard: c.keyboard,
     forms: c.forms,
-    styling: c.styling,
+    styling: 'The component sits in the shared Pinball UI metal deck with brushed-steel edges, four recessed fasteners, a chrome ball marker, an amber pilot lamp and a dark inset playfield. ' + c.styling,
     motion: c.motion || 'The component uses native browser controls and CSS transitions. No continuous scripted physics or automatic motion is required.',
     notes: c.notes || [],
     happens: c.happens || [],

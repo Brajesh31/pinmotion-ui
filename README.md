@@ -139,7 +139,7 @@ When several original mechanical bundles are loaded on the same page, the first 
 
 ### Lightweight utility controls
 
-The 22 utility controls use native HTML inputs, buttons, lists and CSS presentation. They do not require `--pb-size`, `--pb-page`, WebGL, PinballKit or recorded audio. Their API guides document exact native semantics and browser-dependent behaviors.
+The 22 utility controls use native HTML inputs, buttons, lists and CSS rendering inside the same pinball-inspired metal decks, chrome details, amber pilot lamps and brass action surfaces as the original seven. They do not require WebGL, PinballKit or embedded audio. When PinballKit is already loaded on the page, their user interactions can reuse its mechanical sound effects. Their API guides document exact native semantics and browser-dependent behaviors.
 
 ## 🔌 Events and form integration
 

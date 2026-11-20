@@ -84,4 +84,4 @@ The 22 utility controls use native browser elements or ARIA patterns inside thei
 | Search / Text Field / Text Area / Select / Date Picker / Color Picker | Native inputs, textarea and select | Browser-native keyboard behavior |
 | Combobox / File Drop | ARIA combobox/listbox with input; focusable drop target and native file input | Arrow/Enter/Escape for listbox; Enter/Space to open file picker |
 
-The utility family has a separate base helper and does not rely on WebGL. Form-associated controls attempt `ElementInternals`; support depends on browser implementation. Dedicated physical-device and assistive-technology testing is still required.
+The utility family has a separate base helper and CSS-rendered mechanical housings, but does not rely on WebGL or embedded audio. If the original PinballKit runtime is already loaded, utility interactions can call its shared sound effects. Form-associated controls attempt `ElementInternals`; support depends on browser implementation. Dedicated physical-device and assistive-technology testing is still required.
