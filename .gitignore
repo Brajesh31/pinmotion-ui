@@ -1,3 +1,25 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Node / npm
+node_modules/
+npm-debug.log*
+package-lock.json.old
+
+# Test and generated output
+coverage/
+artifacts/
+playwright-report/
+test-results/
+
+# Local hosting / environment
 .vercel
-node_modules
 _scratch
+.env
+.env.*
+!.env.example
