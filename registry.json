@@ -7,7 +7,7 @@
       "name": "toggle",
       "type": "registry:file",
       "title": "Pinball UI Toggle",
-      "description": "A switch whose knob is a chrome pinball in a short lane. Flip it and the ball is kicked across, hits the far wall, rocks in its seat and settles, and the lamp under the on end lights. One file of about 848 KB with its photographs and sounds inside it, no dependencies, defines <pinball-toggle>.",
+      "description": "A switch whose knob is a chrome pinball in a short lane. Flip it and the ball is kicked across, hits the far wall, rocks in its seat and settles, and the lamp under the on end lights. One standalone file of about 848 KB with no external runtime dependencies; includes PinballKit, artwork and recorded sound. Defines <pinball-toggle>.",
       "author": "Brajesh Kumar (maintainer)",
       "categories": [
         "switch",
@@ -29,7 +29,7 @@
       "name": "slider",
       "type": "registry:file",
       "title": "Pinball UI Slider",
-      "description": "A slider whose thumb is a chrome pinball rolling along a lane of ten lamps. Each lamp lights as the ball reaches it and goes out as the ball rolls back past it, so the lit lamps are the filled part of the track. One file of about 607 KB with its photographs and sounds inside it, no dependencies, defines <pinball-slider>.",
+      "description": "A slider whose thumb is a chrome pinball rolling along a lane of ten lamps. Each lamp lights as the ball reaches it and goes out as the ball rolls back past it, so the lit lamps are the filled part of the track. One standalone file of about 607 KB with no external runtime dependencies; includes PinballKit, artwork and recorded sound. Defines <pinball-slider>.",
       "author": "Brajesh Kumar (maintainer)",
       "categories": [
         "slider",
@@ -51,7 +51,7 @@
       "name": "plunger",
       "type": "registry:file",
       "title": "Pinball UI Plunger",
-      "description": "A send button you pull. It is a bare pinball shooter rod: knob, rod, spring and rubber tip. Pull the knob all the way back and a ball drops in front of the tip; let go and the plunger knocks the ball off the edge of the screen and fires send. One file of about 432 KB with its photographs and sounds inside it, no dependencies, defines <pinball-plunger>.",
+      "description": "A send button you pull. It is a bare pinball shooter rod: knob, rod, spring and rubber tip. Pull the knob all the way back and a ball drops in front of the tip; let go and the plunger knocks the ball off the edge of the screen and fires send. One standalone file of about 432 KB with no external runtime dependencies; includes PinballKit, artwork and recorded sound. Defines <pinball-plunger>.",
       "author": "Brajesh Kumar (maintainer)",
       "categories": [
         "button",
@@ -74,7 +74,7 @@
       "name": "stepper",
       "type": "registry:file",
       "title": "Pinball UI Stepper",
-      "description": "A number stepper made of two pinball flippers either side of a two-digit score reel. Press a flipper and it snaps up, the lamp flashes and the drums roll to the new number, carrying into the tens like an old score counter. One file of about 779 KB with its photographs and sounds inside it, no dependencies, defines <pinball-stepper>.",
+      "description": "A number stepper made of two pinball flippers either side of a two-digit score reel. Press a flipper and it snaps up, the lamp flashes and the drums roll to the new number, carrying into the tens like an old score counter. One standalone file of about 779 KB with no external runtime dependencies; includes PinballKit, artwork and recorded sound. Defines <pinball-stepper>.",
       "author": "Brajesh Kumar (maintainer)",
       "categories": [
         "stepper",
@@ -97,7 +97,7 @@
       "name": "targets",
       "type": "registry:file",
       "title": "Pinball UI Drop targets",
-      "description": "A row of up to four checkboxes as a bank of pinball drop targets with your labels printed on them. Tick one and a ball rolls in, knocks its target down and lights its lamp; untick it and the target springs back up. Knock all four down for a bonus chime. One file of about 838 KB with its photographs and sounds inside it, no dependencies, defines <pinball-targets>.",
+      "description": "A row of up to four checkboxes as a bank of pinball drop targets with your labels printed on them. Tick one and a ball rolls in, knocks its target down and lights its lamp; untick it and the target springs back up. Knock all four down for a bonus chime. One standalone file of about 838 KB with no external runtime dependencies; includes PinballKit, artwork and recorded sound. Defines <pinball-targets>.",
       "author": "Brajesh Kumar (maintainer)",
       "categories": [
         "checkbox",
@@ -119,7 +119,7 @@
       "name": "drain",
       "type": "registry:file",
       "title": "Pinball UI Drain",
-      "description": "A delete button with an undo window, built from a pinball outhole and a SHOOT AGAIN lamp. Press or drag the ball into the drain to delete; SHOOT AGAIN blinks while you can still undo, and pressing it kicks the ball back out. One file of about 888 KB with its photographs and sounds inside it, no dependencies, defines <pinball-drain>.",
+      "description": "A delete button with an undo window, built from a pinball outhole and a SHOOT AGAIN lamp. Press or drag the ball into the drain to delete; SHOOT AGAIN blinks while you can still undo, and pressing it kicks the ball back out. One standalone file of about 888 KB with no external runtime dependencies; includes PinballKit, artwork and recorded sound. Defines <pinball-drain>.",
       "author": "Brajesh Kumar (maintainer)",
       "categories": [
         "delete",
@@ -142,7 +142,7 @@
       "name": "bumper",
       "type": "registry:file",
       "title": "Pinball UI Pop bumpers",
-      "description": "Pinball pop bumpers as buttons. One file defines two: <pinball-bumper>, a single bumper you press like a clap or upvote button, and <pinball-bumpers>, a triangle of three that a ball ricochets around when you press it, scoring as it goes. One file of about 713 KB with its photographs and sounds inside it, no dependencies, defines <pinball-bumper> and <pinball-bumpers>.",
+      "description": "Pinball pop bumpers as buttons. One file defines two: <pinball-bumper>, a single bumper you press like a clap or upvote button, and <pinball-bumpers>, a triangle of three that a ball ricochets around when you press it, scoring as it goes. One standalone file of about 713 KB with no external runtime dependencies; includes PinballKit, artwork and recorded sound. Defines <pinball-bumper> and <pinball-bumpers>.",
       "author": "Brajesh Kumar (maintainer)",
       "categories": [
         "button",
@@ -160,6 +160,446 @@
         }
       ],
       "docs": "Pinball UI Pop bumpers is a plain script that registers a custom element. Load /pinball-ui/bumper.js with a script tag (not a module), then use <pinball-bumper cap=\"+1\"></pinball-bumper> for one button, or <pinball-bumpers caps=\"100,500,100\"></pinball-bumpers> for the cluster. Both fire hit with { points, score, combo }. Size it with --pb-size. More: https://brajesh31.github.io/pinmotion-ui"
+    },
+    {
+      "name": "checkbox",
+      "type": "registry:file",
+      "title": "Pinball UI Checkbox",
+      "description": "A single checkbox with a physical-style lamp and a recessed mechanical button. It exposes a boolean checked state and participates in forms. One standalone file of about 5 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-checkbox>.",
+      "author": "Brajesh Kumar (maintainer)",
+      "categories": [
+        "web-components",
+        "ui-components",
+        "pinball-inspired"
+      ],
+      "files": [
+        {
+          "path": "checkbox/checkbox.js",
+          "type": "registry:file",
+          "target": "~/public/pinball-ui/checkbox.js"
+        }
+      ],
+      "docs": "Pinball UI Checkbox is a plain script that registers a custom element. Load /pinball-ui/checkbox.js with a script tag (not a module), then use <pinball-checkbox> and read its documented properties or events. Size it with --pb-size. More: https://brajesh31.github.io/pinmotion-ui"
+    },
+    {
+      "name": "radio-group",
+      "type": "registry:file",
+      "title": "Pinball UI Radio Group",
+      "description": "A single-choice group rendered as a row of mechanical radio selectors. The selected value is reflected in the component property and optional form value. One standalone file of about 6 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-radio-group>.",
+      "author": "Brajesh Kumar (maintainer)",
+      "categories": [
+        "web-components",
+        "ui-components",
+        "pinball-inspired"
+      ],
+      "files": [
+        {
+          "path": "radio-group/radio-group.js",
+          "type": "registry:file",
+          "target": "~/public/pinball-ui/radio-group.js"
+        }
+      ],
+      "docs": "Pinball UI Radio Group is a plain script that registers a custom element. Load /pinball-ui/radio-group.js with a script tag (not a module), then use <pinball-radio-group> and read its documented properties or events. Size it with --pb-size. More: https://brajesh31.github.io/pinmotion-ui"
+    },
+    {
+      "name": "segmented",
+      "type": "registry:file",
+      "title": "Pinball UI Segmented Control",
+      "description": "A compact segmented selector for mutually exclusive values. One segment is visibly latched at a time, with a form value and change event. One standalone file of about 5 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-segmented>.",
+      "author": "Brajesh Kumar (maintainer)",
+      "categories": [
+        "web-components",
+        "ui-components",
+        "pinball-inspired"
+      ],
+      "files": [
+        {
+          "path": "segmented/segmented.js",
+          "type": "registry:file",
+          "target": "~/public/pinball-ui/segmented.js"
+        }
+      ],
+      "docs": "Pinball UI Segmented Control is a plain script that registers a custom element. Load /pinball-ui/segmented.js with a script tag (not a module), then use <pinball-segmented> and read its documented properties or events. Size it with --pb-size. More: https://brajesh31.github.io/pinmotion-ui"
+    },
+    {
+      "name": "progress",
+      "type": "registry:file",
+      "title": "Pinball UI Progress",
+      "description": "A determinate or indeterminate progress bar styled as a row of mechanical lane markings. It communicates task progress without being an input. One standalone file of about 5 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-progress>.",
+      "author": "Brajesh Kumar (maintainer)",
+      "categories": [
+        "web-components",
+        "ui-components",
+        "pinball-inspired"
+      ],
+      "files": [
+        {
+          "path": "progress/progress.js",
+          "type": "registry:file",
+          "target": "~/public/pinball-ui/progress.js"
+        }
+      ],
+      "docs": "Pinball UI Progress is a plain script that registers a custom element. Load /pinball-ui/progress.js with a script tag (not a module), then use <pinball-progress> and read its documented properties or events. Size it with --pb-size. More: https://brajesh31.github.io/pinmotion-ui"
+    },
+    {
+      "name": "meter",
+      "type": "registry:file",
+      "title": "Pinball UI Meter",
+      "description": "A read-only scalar meter with a mechanical needle over low, middle and high zones. It exposes an accessible meter value and is not an input. One standalone file of about 5 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-meter>.",
+      "author": "Brajesh Kumar (maintainer)",
+      "categories": [
+        "web-components",
+        "ui-components",
+        "pinball-inspired"
+      ],
+      "files": [
+        {
+          "path": "meter/meter.js",
+          "type": "registry:file",
+          "target": "~/public/pinball-ui/meter.js"
+        }
+      ],
+      "docs": "Pinball UI Meter is a plain script that registers a custom element. Load /pinball-ui/meter.js with a script tag (not a module), then use <pinball-meter> and read its documented properties or events. Size it with --pb-size. More: https://brajesh31.github.io/pinmotion-ui"
+    },
+    {
+      "name": "rating",
+      "type": "registry:file",
+      "title": "Pinball UI Rating",
+      "description": "A star rating control where each star behaves like an illuminated target. It supports a configurable count, read-only presentation and form submission. One standalone file of about 6 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-rating>.",
+      "author": "Brajesh Kumar (maintainer)",
+      "categories": [
+        "web-components",
+        "ui-components",
+        "pinball-inspired"
+      ],
+      "files": [
+        {
+          "path": "rating/rating.js",
+          "type": "registry:file",
+          "target": "~/public/pinball-ui/rating.js"
+        }
+      ],
+      "docs": "Pinball UI Rating is a plain script that registers a custom element. Load /pinball-ui/rating.js with a script tag (not a module), then use <pinball-rating> and read its documented properties or events. Size it with --pb-size. More: https://brajesh31.github.io/pinmotion-ui"
+    },
+    {
+      "name": "tabs",
+      "type": "registry:file",
+      "title": "Pinball UI Tabs",
+      "description": "A tab set with keyboard navigation and named content slots. Each tab selects one corresponding panel while preserving light-DOM content. One standalone file of about 6 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-tabs>.",
+      "author": "Brajesh Kumar (maintainer)",
+      "categories": [
+        "web-components",
+        "ui-components",
+        "pinball-inspired"
+      ],
+      "files": [
+        {
+          "path": "tabs/tabs.js",
+          "type": "registry:file",
+          "target": "~/public/pinball-ui/tabs.js"
+        }
+      ],
+      "docs": "Pinball UI Tabs is a plain script that registers a custom element. Load /pinball-ui/tabs.js with a script tag (not a module), then use <pinball-tabs> and read its documented properties or events. Size it with --pb-size. More: https://brajesh31.github.io/pinmotion-ui"
+    },
+    {
+      "name": "accordion",
+      "type": "registry:file",
+      "title": "Pinball UI Accordion",
+      "description": "An accordion with up to eight expandable sections, optional multiple-open behavior and named slotted panel content. One standalone file of about 6 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-accordion>.",
+      "author": "Brajesh Kumar (maintainer)",
+      "categories": [
+        "web-components",
+        "ui-components",
+        "pinball-inspired"
+      ],
+      "files": [
+        {
+          "path": "accordion/accordion.js",
+          "type": "registry:file",
+          "target": "~/public/pinball-ui/accordion.js"
+        }
+      ],
+      "docs": "Pinball UI Accordion is a plain script that registers a custom element. Load /pinball-ui/accordion.js with a script tag (not a module), then use <pinball-accordion> and read its documented properties or events. Size it with --pb-size. More: https://brajesh31.github.io/pinmotion-ui"
+    },
+    {
+      "name": "disclosure",
+      "type": "registry:file",
+      "title": "Pinball UI Disclosure",
+      "description": "A simple disclosure built on the native details and summary elements. It exposes an open property and a composed toggle event. One standalone file of about 5 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-disclosure>.",
+      "author": "Brajesh Kumar (maintainer)",
+      "categories": [
+        "web-components",
+        "ui-components",
+        "pinball-inspired"
+      ],
+      "files": [
+        {
+          "path": "disclosure/disclosure.js",
+          "type": "registry:file",
+          "target": "~/public/pinball-ui/disclosure.js"
+        }
+      ],
+      "docs": "Pinball UI Disclosure is a plain script that registers a custom element. Load /pinball-ui/disclosure.js with a script tag (not a module), then use <pinball-disclosure> and read its documented properties or events. Size it with --pb-size. More: https://brajesh31.github.io/pinmotion-ui"
+    },
+    {
+      "name": "tooltip",
+      "type": "registry:file",
+      "title": "Pinball UI Tooltip",
+      "description": "A small contextual tooltip that appears on pointer hover or keyboard focus. The trigger content is provided through the default slot. One standalone file of about 5 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-tooltip>.",
+      "author": "Brajesh Kumar (maintainer)",
+      "categories": [
+        "web-components",
+        "ui-components",
+        "pinball-inspired"
+      ],
+      "files": [
+        {
+          "path": "tooltip/tooltip.js",
+          "type": "registry:file",
+          "target": "~/public/pinball-ui/tooltip.js"
+        }
+      ],
+      "docs": "Pinball UI Tooltip is a plain script that registers a custom element. Load /pinball-ui/tooltip.js with a script tag (not a module), then use <pinball-tooltip> and read its documented properties or events. Size it with --pb-size. More: https://brajesh31.github.io/pinmotion-ui"
+    },
+    {
+      "name": "dialog",
+      "type": "registry:file",
+      "title": "Pinball UI Dialog",
+      "description": "A modal dialog that uses the native HTML dialog element, a trigger button and a close action. Title and body content remain in light DOM slots. One standalone file of about 5 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-dialog>.",
+      "author": "Brajesh Kumar (maintainer)",
+      "categories": [
+        "web-components",
+        "ui-components",
+        "pinball-inspired"
+      ],
+      "files": [
+        {
+          "path": "dialog/dialog.js",
+          "type": "registry:file",
+          "target": "~/public/pinball-ui/dialog.js"
+        }
+      ],
+      "docs": "Pinball UI Dialog is a plain script that registers a custom element. Load /pinball-ui/dialog.js with a script tag (not a module), then use <pinball-dialog> and read its documented properties or events. Size it with --pb-size. More: https://brajesh31.github.io/pinmotion-ui"
+    },
+    {
+      "name": "toast",
+      "type": "registry:file",
+      "title": "Pinball UI Toast",
+      "description": "A dismissible notification with a status announcement, severity variant and optional automatic timeout. One standalone file of about 5 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-toast>.",
+      "author": "Brajesh Kumar (maintainer)",
+      "categories": [
+        "web-components",
+        "ui-components",
+        "pinball-inspired"
+      ],
+      "files": [
+        {
+          "path": "toast/toast.js",
+          "type": "registry:file",
+          "target": "~/public/pinball-ui/toast.js"
+        }
+      ],
+      "docs": "Pinball UI Toast is a plain script that registers a custom element. Load /pinball-ui/toast.js with a script tag (not a module), then use <pinball-toast> and read its documented properties or events. Size it with --pb-size. More: https://brajesh31.github.io/pinmotion-ui"
+    },
+    {
+      "name": "breadcrumbs",
+      "type": "registry:file",
+      "title": "Pinball UI Breadcrumbs",
+      "description": "A responsive breadcrumb navigation trail generated from a compact label and URL list. The final item is marked as the current page. One standalone file of about 5 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-breadcrumbs>.",
+      "author": "Brajesh Kumar (maintainer)",
+      "categories": [
+        "web-components",
+        "ui-components",
+        "pinball-inspired"
+      ],
+      "files": [
+        {
+          "path": "breadcrumbs/breadcrumbs.js",
+          "type": "registry:file",
+          "target": "~/public/pinball-ui/breadcrumbs.js"
+        }
+      ],
+      "docs": "Pinball UI Breadcrumbs is a plain script that registers a custom element. Load /pinball-ui/breadcrumbs.js with a script tag (not a module), then use <pinball-breadcrumbs> and read its documented properties or events. Size it with --pb-size. More: https://brajesh31.github.io/pinmotion-ui"
+    },
+    {
+      "name": "pagination",
+      "type": "registry:file",
+      "title": "Pinball UI Pagination",
+      "description": "A compact pagination control with previous/next actions, current-page state and a limited set of nearby page numbers. One standalone file of about 5 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-pagination>.",
+      "author": "Brajesh Kumar (maintainer)",
+      "categories": [
+        "web-components",
+        "ui-components",
+        "pinball-inspired"
+      ],
+      "files": [
+        {
+          "path": "pagination/pagination.js",
+          "type": "registry:file",
+          "target": "~/public/pinball-ui/pagination.js"
+        }
+      ],
+      "docs": "Pinball UI Pagination is a plain script that registers a custom element. Load /pinball-ui/pagination.js with a script tag (not a module), then use <pinball-pagination> and read its documented properties or events. Size it with --pb-size. More: https://brajesh31.github.io/pinmotion-ui"
+    },
+    {
+      "name": "search",
+      "type": "registry:file",
+      "title": "Pinball UI Search",
+      "description": "A compact search field with a dedicated submit action. It emits live query updates and a search event when submitted. One standalone file of about 5 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-search>.",
+      "author": "Brajesh Kumar (maintainer)",
+      "categories": [
+        "web-components",
+        "ui-components",
+        "pinball-inspired"
+      ],
+      "files": [
+        {
+          "path": "search/search.js",
+          "type": "registry:file",
+          "target": "~/public/pinball-ui/search.js"
+        }
+      ],
+      "docs": "Pinball UI Search is a plain script that registers a custom element. Load /pinball-ui/search.js with a script tag (not a module), then use <pinball-search> and read its documented properties or events. Size it with --pb-size. More: https://brajesh31.github.io/pinmotion-ui"
+    },
+    {
+      "name": "text-field",
+      "type": "registry:file",
+      "title": "Pinball UI Text Field",
+      "description": "A single-line text input with label, placeholder, required state and form-associated value synchronization. One standalone file of about 5 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-text-field>.",
+      "author": "Brajesh Kumar (maintainer)",
+      "categories": [
+        "web-components",
+        "ui-components",
+        "pinball-inspired"
+      ],
+      "files": [
+        {
+          "path": "text-field/text-field.js",
+          "type": "registry:file",
+          "target": "~/public/pinball-ui/text-field.js"
+        }
+      ],
+      "docs": "Pinball UI Text Field is a plain script that registers a custom element. Load /pinball-ui/text-field.js with a script tag (not a module), then use <pinball-text-field> and read its documented properties or events. Size it with --pb-size. More: https://brajesh31.github.io/pinmotion-ui"
+    },
+    {
+      "name": "text-area",
+      "type": "registry:file",
+      "title": "Pinball UI Text Area",
+      "description": "A multi-line text input with resizable height, optional maximum length and form-associated value synchronization. One standalone file of about 5 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-text-area>.",
+      "author": "Brajesh Kumar (maintainer)",
+      "categories": [
+        "web-components",
+        "ui-components",
+        "pinball-inspired"
+      ],
+      "files": [
+        {
+          "path": "text-area/text-area.js",
+          "type": "registry:file",
+          "target": "~/public/pinball-ui/text-area.js"
+        }
+      ],
+      "docs": "Pinball UI Text Area is a plain script that registers a custom element. Load /pinball-ui/text-area.js with a script tag (not a module), then use <pinball-text-area> and read its documented properties or events. Size it with --pb-size. More: https://brajesh31.github.io/pinmotion-ui"
+    },
+    {
+      "name": "select",
+      "type": "registry:file",
+      "title": "Pinball UI Select",
+      "description": "A native select control in a custom pinball-styled panel. Options are configured from compact value:label pairs and the selected value can participate in a form. One standalone file of about 5 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-select>.",
+      "author": "Brajesh Kumar (maintainer)",
+      "categories": [
+        "web-components",
+        "ui-components",
+        "pinball-inspired"
+      ],
+      "files": [
+        {
+          "path": "select/select.js",
+          "type": "registry:file",
+          "target": "~/public/pinball-ui/select.js"
+        }
+      ],
+      "docs": "Pinball UI Select is a plain script that registers a custom element. Load /pinball-ui/select.js with a script tag (not a module), then use <pinball-select> and read its documented properties or events. Size it with --pb-size. More: https://brajesh31.github.io/pinmotion-ui"
+    },
+    {
+      "name": "combobox",
+      "type": "registry:file",
+      "title": "Pinball UI Combobox",
+      "description": "An editable combobox with text filtering, a listbox of matching options, keyboard selection and form-associated string value. One standalone file of about 7 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-combobox>.",
+      "author": "Brajesh Kumar (maintainer)",
+      "categories": [
+        "web-components",
+        "ui-components",
+        "pinball-inspired"
+      ],
+      "files": [
+        {
+          "path": "combobox/combobox.js",
+          "type": "registry:file",
+          "target": "~/public/pinball-ui/combobox.js"
+        }
+      ],
+      "docs": "Pinball UI Combobox is a plain script that registers a custom element. Load /pinball-ui/combobox.js with a script tag (not a module), then use <pinball-combobox> and read its documented properties or events. Size it with --pb-size. More: https://brajesh31.github.io/pinmotion-ui"
+    },
+    {
+      "name": "file-drop",
+      "type": "registry:file",
+      "title": "Pinball UI File Drop",
+      "description": "A keyboard-accessible file chooser and drag-and-drop target. It reports selected File objects to application code but does not upload them. One standalone file of about 5 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-file-drop>.",
+      "author": "Brajesh Kumar (maintainer)",
+      "categories": [
+        "web-components",
+        "ui-components",
+        "pinball-inspired"
+      ],
+      "files": [
+        {
+          "path": "file-drop/file-drop.js",
+          "type": "registry:file",
+          "target": "~/public/pinball-ui/file-drop.js"
+        }
+      ],
+      "docs": "Pinball UI File Drop is a plain script that registers a custom element. Load /pinball-ui/file-drop.js with a script tag (not a module), then use <pinball-file-drop> and read its documented properties or events. Size it with --pb-size. More: https://brajesh31.github.io/pinmotion-ui"
+    },
+    {
+      "name": "date-picker",
+      "type": "registry:file",
+      "title": "Pinball UI Date Picker",
+      "description": "A date field that delegates parsing, calendar presentation and constraints to the browser’s native date input. One standalone file of about 5 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-date-picker>.",
+      "author": "Brajesh Kumar (maintainer)",
+      "categories": [
+        "web-components",
+        "ui-components",
+        "pinball-inspired"
+      ],
+      "files": [
+        {
+          "path": "date-picker/date-picker.js",
+          "type": "registry:file",
+          "target": "~/public/pinball-ui/date-picker.js"
+        }
+      ],
+      "docs": "Pinball UI Date Picker is a plain script that registers a custom element. Load /pinball-ui/date-picker.js with a script tag (not a module), then use <pinball-date-picker> and read its documented properties or events. Size it with --pb-size. More: https://brajesh31.github.io/pinmotion-ui"
+    },
+    {
+      "name": "color-picker",
+      "type": "registry:file",
+      "title": "Pinball UI Color Picker",
+      "description": "A color picker using the native browser color input, with a synchronized uppercase hex value display and form support. One standalone file of about 5 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-color-picker>.",
+      "author": "Brajesh Kumar (maintainer)",
+      "categories": [
+        "web-components",
+        "ui-components",
+        "pinball-inspired"
+      ],
+      "files": [
+        {
+          "path": "color-picker/color-picker.js",
+          "type": "registry:file",
+          "target": "~/public/pinball-ui/color-picker.js"
+        }
+      ],
+      "docs": "Pinball UI Color Picker is a plain script that registers a custom element. Load /pinball-ui/color-picker.js with a script tag (not a module), then use <pinball-color-picker> and read its documented properties or events. Size it with --pb-size. More: https://brajesh31.github.io/pinmotion-ui"
     }
   ]
 }
