@@ -333,10 +333,10 @@ Only after formal GO:
 
 | ID | Priority | Issue / gap | Required resolution | Current status |
 |---|---|---|---|---|
-| INC-001 | P0 | Gallery runtime did not parse because hyphenated wire keys were unquoted | Fix generator, add parse and real-browser first-load tests | Fix committed, awaiting full verification |
+| INC-001 | P0 | Gallery runtime did not parse because hyphenated wire keys were unquoted | Fix generator, add parse and real-browser first-load tests | Fixed; source parser, 29/29 first-load cards and 30/30 tag registration verified |
 | INC-002 | P1 | Failed gallery bootstrap could leave an indefinite loading message | Add visible global error/stall diagnostics | Fix committed, awaiting full verification |
-| QA-001 | P1 | Browser interaction suite was not a mandatory CI gate | Make browser tests a release gate | CI gate committed, awaiting green run |
-| QA-002 | P1 | Full first-load gallery behavior was not asserted by browser tests | Test all 29 cards and 30 tags | Assertions committed, awaiting green run |
+| QA-001 | P1 | Browser interaction suite was not a mandatory CI gate | Make browser tests a release gate | CI gate committed; final rerun pending |
+| QA-002 | P1 | Full first-load gallery behavior was not asserted by browser tests | Test all 29 cards and 30 tags | First-load assertions passed; full suite rerun pending |
 | QA-003 | P1 | Full cross-browser and real-device evidence is missing | Complete Phase 5 matrix | Open |
 | A11Y-001 | P1 | WCAG 2.2 AA conformance has not been demonstrated | Complete Phase 4 audit and remediation | Open |
 | A11Y-002 | P1 | Plunger reduced-motion behavior is a documented exception | Implement and retest a reduced-motion alternative | Open |
