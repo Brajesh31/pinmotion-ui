@@ -8,7 +8,7 @@ The root tooling manifest specifies:
 - npm **10 or newer**;
 - no third-party npm runtime or development dependencies.
 
-Use npm. The repository has a package lockfile and the CI workflow installs from it with `npm ci`. The package is deliberately marked private while distribution decisions remain open.
+Use npm. The repository has a package lockfile and the CI workflow installs from it with `npm ci`. The package is deliberately marked private while distribution decisions remain open. The repository is licensed under MIT, Copyright (c) 2026 Brajesh Kumar.
 
 ## 2. Start locally
 
@@ -46,11 +46,12 @@ The local server binds to `127.0.0.1` by default. Set `HOST` or `PORT`, or use `
 
 | Change | Edit these sources | Then run |
 | --- | --- | --- |
-| Shared runtime behavior | `core.js` | `npm run build`, then `npm run docs`, then `npm run check` |
+| Shared PinballKit runtime behavior | `core.js` | `npm run build`, then `npm run docs`, then `npm run check` |
 | Artwork plate | `art/{component}/` | `npm run build`, then `npm run docs`, then `npm run check` |
 | Recorded sound take | `sounds/` | `npm run build`, then `npm run docs`, then `npm run check` |
 | Component-specific behavior | The relevant `{component}/{component}.js` file, outside the marked embedded sections | `npm run build` to refresh its embedded core/art, then `npm run check` |
-| Component copy, demo markup, attributes, event docs, registry description | `tools/spec.mjs` | `npm run docs`, then `npm run check` |
+| Original component metadata | `tools/spec.mjs` | `npm run docs`, then `npm run check` |
+| Lightweight component metadata | `tools/extras-spec.mjs` | `npm run docs`, then `npm run check` |
 | Build or documentation generation logic | `tools/build.mjs` or `tools/docs.mjs` | Run the affected generator, then `npm run check` |
 | Tests or local server | `tools/test.mjs`, `tools/validate.mjs`, or `tools/serve.mjs` | `npm run check` and relevant manual test |
 | GitHub automation | `.github/workflows/` | Inspect workflow YAML and run the GitHub Actions checks |

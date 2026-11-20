@@ -2,12 +2,13 @@
 
 ## 1. Quality gates currently configured
 
-The repository has two GitHub Actions workflows:
+The repository has three GitHub Actions workflows:
 
 | Workflow | Trigger | What it does |
 | --- | --- | --- |
 | [Validate](../.github/workflows/validate.yml) | Push to `main`, pull request targeting `main`, or manual dispatch | Runs npm install/checks and static-server smoke tests |
-| [Deploy to GitHub Pages](../.github/workflows/deploy-pages.yml) | Push to `main` or manual dispatch | Verifies published files, JavaScript syntax, registry JSON, creates a Pages artifact, and deploys it |
+| [Deploy to GitHub Pages](../.github/workflows/deploy-pages.yml) | Push to `main` or manual dispatch | Verifies static files, syntax and registry JSON, then deploys the site |
+| [Generate and publish components](../.github/workflows/generate-components.yml) | Push to `main` or manual dispatch | Builds all 29 bundles, generates guides/demos/registry, runs checks, smoke-tests routes, and deploys Pages |
 
 The two workflows are independently triggered by their configured events. The Pages workflow does not declare a dependency on the Validate workflow.
 
@@ -22,9 +23,9 @@ npm run check
 
 `npm run check` executes these read-only checks in sequence:
 
-1. `npm run build:check` ensures the embedded artwork and shared core in each distributed bundle match their current sources.
+1. `npm run build:check` ensures the seven PinballKit bundles match embedded core/art and the 22 utility bundles match `tools/extra-core.js` plus `extras-src/`.
 2. `npm run docs:check` ensures the generated component docs, demos, gallery, registry, and `llms.txt` match `tools/spec.mjs` and current bundle sizes.
-3. `npm run validate` checks required files, seven component IDs, unique IDs/tags, generated page and registry relationships, package/lockfile metadata, JavaScript syntax, and GitHub Pages action settings.
+3. `npm run validate` checks required files, 29 component IDs, unique IDs/tags, generated page and registry relationships, package/lockfile metadata, JavaScript syntax, and GitHub Pages action settings.
 
 The check scripts are intended to detect stale output; use the non-check commands only when you intend to regenerate files.
 
@@ -55,7 +56,7 @@ Then in a second terminal:
 npm run test:browser
 ```
 
-The script uses Chrome DevTools Protocol against a headless Chrome/Chromium process. Its test viewport is 390 × 900 CSS pixels with device scale factor 2 and touch emulation enabled. It exercises:
+The script uses Chrome DevTools Protocol against headless Chrome/Chromium and currently exercises the original seven mechanical controls. Its test viewport is 390 × 900 CSS pixels with device scale factor 2 and touch emulation enabled. It exercises:
 - presence of all eight custom-element tags;
 - whether the WebGL output has non-transparent pixels;
 - pointer/touch interaction and keyboard behavior;

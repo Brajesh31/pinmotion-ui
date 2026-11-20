@@ -85,3 +85,18 @@ Copy the control's file into the project's static folder (or `npx shadcn add Bra
 - Where a texture coordinate jumps (a rod with a piece left out of its middle), read both sides and pick one, or a hairline appears.
 - GLSL ES 1 reserves some words you might reach for: `cast` is one.
 - Headless Chromium's software WebGL can lose its context in long runs. For filming, start it with `--ignore-gpu-blocklist --enable-gpu` and check the context is still alive.
+
+
+## 8. The lightweight utility family
+
+The repository now includes 22 utility controls alongside the original seven WebGL/audio mechanisms. These live in `extras-src/{id}.js` and use `tools/extra-core.js`, which exposes `window.PinmotionExtras`. They are standalone CSS/native controls, not PinballKit shader controls. Do not add artwork, audio payloads or WebGL dependencies to them unless the component brief requires it.
+
+To add or update a utility component:
+
+1. Inspect the native HTML semantics and keyboard model required by the control.
+2. Implement it in `extras-src/{id}.js` using the lightweight base.
+3. Add structured API metadata to `tools/extras-spec.mjs`.
+4. Run `npm run build`, `npm run docs` and `npm run check`.
+5. Verify its demo route, form behavior, keyboard behavior and events in a browser before relying on it in production.
+
+Keep the utility bundle small and self-contained. Do not embed the full PinballKit runtime simply to reuse its visual style.

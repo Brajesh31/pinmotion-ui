@@ -18,7 +18,7 @@ The artwork is stored as source WebP plates. The design process and visual itera
 
 ### Sound
 
-The `sounds/` directory currently contains these recorded takes:
+The `sounds/` directory contains the recorded takes embedded only in the original seven mechanical bundles:
 
 | Effect family | Source files |
 | --- | --- |
@@ -32,9 +32,9 @@ The shared runtime also has a synthesized voice mode, but recorded takes are the
 
 ## 2. How a distributed bundle is assembled
 
-The build process is implemented in `tools/build.mjs`.
+The build process is implemented in `tools/build.mjs` and has two distinct bundle-generation paths.
 
-For every component in its canonical `NAMES` array, the builder:
+For each original component in `LEGACY_NAMES`, the builder:
 
 1. reads the existing component bundle;
 2. serializes files from that component's `art/{component}/` folder into base64 data URIs;
@@ -46,7 +46,7 @@ For every component in its canonical `NAMES` array, the builder:
 
 The supported extension-to-MIME mappings in the builder are WebP, JPEG, PNG, MP3, and WAV. Current artwork plates are WebP files. The sound source directory uses MP3 and WAV.
 
-Each distributed component file therefore contains its own copy of the common runtime, its artwork data, and the sound takes. Loading more than one bundle increases downloaded JavaScript size, but the runtime guard prevents multiple shared clock, WebGL, and sound instances from being initialized on one page.
+Each original mechanical bundle contains its own copy of PinballKit, artwork and sound takes. Loading multiple originals increases transfer size, but the runtime guard prevents duplicate clock, WebGL and sound instances. The 22 lightweight bundles follow a separate path: the builder concatenates `tools/extra-core.js` with the matching `extras-src/{id}.js` and writes `id/id.js`. Those bundles do not embed artwork or audio.
 
 ## 3. Generated documentation pipeline
 
@@ -87,3 +87,14 @@ The registry is generated from the component specification. If component IDs, de
 - **Shared execution:** bundles loaded together reuse the page's first initialized PinballKit runtime.
 
 No asset minification, CDN transformation, or compression pipeline is configured in the repository beyond the source image/audio formats and the base64 embedding.
+
+
+## 7. Lightweight utility bundle path
+
+| Path | Role |
+| --- | --- |
+| `tools/extra-core.js` | Compact shared CSS/native component base, guarded by `window.PinmotionExtras`. |
+| `extras-src/{id}.js` | Component-specific source for each of the 22 utility controls. |
+| `{id}/{id}.js` | Generated standalone script containing the lightweight base and that component implementation. |
+
+The utility bundles use native inputs, buttons, details/summary, dialog, listbox and navigation semantics where suitable. Their CSS shares the `--pui-*` tokens defined in the embedded helper. They do not use the legacy artwork/audio embedding markers.

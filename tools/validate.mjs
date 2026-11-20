@@ -79,7 +79,7 @@ for (const component of SPEC) {
     component.api?.attributes?.length &&
     Array.isArray(component.api?.properties) &&
     Array.isArray(component.api?.methods) &&
-    component.api?.events?.length &&
+    Array.isArray(component.api?.events) &&
     component.api?.input &&
     component.api?.keyboard &&
     component.api?.forms &&

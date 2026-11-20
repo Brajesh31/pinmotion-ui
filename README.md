@@ -1,6 +1,6 @@
 # Pinball UI
 
-Seven ordinary interface controls rebuilt as pinball-machine parts. Each control is a standalone JavaScript file that registers a custom element, with its artwork and recorded sounds embedded inside it.
+Twenty-nine standalone interface bundles: seven original controls rebuilt as pinball-machine mechanisms, plus 22 lightweight utility components. Each bundle registers custom elements and has no external runtime package dependencies.
 
 ![Pinball UI control collection](gallery/title.jpg)
 
@@ -8,17 +8,17 @@ Seven ordinary interface controls rebuilt as pinball-machine parts. Each control
 [![Deploy to GitHub Pages](https://github.com/Brajesh31/pinmotion-ui/actions/workflows/deploy-pages.yml/badge.svg?branch=main)](https://github.com/Brajesh31/pinmotion-ui/actions/workflows/deploy-pages.yml)
 [![GitHub stars](https://img.shields.io/github/stars/Brajesh31/pinmotion-ui?style=flat)](https://github.com/Brajesh31/pinmotion-ui/stargazers)
 
-**[Open the live gallery](https://brajesh31.github.io/pinmotion-ui/gallery/)** · [Source code](https://github.com/Brajesh31/pinmotion-ui) · [Component registry](registry.json) · [LLM guide](llms.txt)
+**[Open the live gallery](https://brajesh31.github.io/pinmotion-ui/gallery/)** · [Source code](https://github.com/Brajesh31/pinmotion-ui) · [Component registry](registry.json) · [LLM guide](llms.txt) · [MIT License](LICENSE)
 
 ## 🎮 What is included
 
 Pinball UI turns familiar interface patterns into tactile pinball mechanisms: a chrome ball rolls through a switch lane, lamps mark a slider's value, a shooter rod sends, score reels count, targets drop, an outhole provides undo, and pop bumpers score hits.
 
-- **7 standalone JavaScript bundles** with no runtime package dependencies.
-- **8 custom element tags**, because the bumper bundle defines both a single bumper and a three-bumper cluster.
+- **29 standalone JavaScript bundles** with no runtime package dependencies.
+- **30 custom element tags**, because the bumper bundle defines both a single bumper and a three-bumper cluster.
 - **Web Components** that can be used from plain HTML and JavaScript without a framework.
 - **Keyboard and form support** for the value controls that expose form values.
-- **Embedded artwork and recorded sound**, so each selected control is a single file to copy.
+- **Two runtime families:** seven original WebGL/audio bundles and 22 lightweight CSS/native bundles.
 
 ## 🧩 Components
 
@@ -31,6 +31,35 @@ Pinball UI turns familiar interface patterns into tactile pinball mechanisms: a 
 | Drop targets | `<pinball-targets>` | Checkbox group with up to four falling targets | [Demo](https://brajesh31.github.io/pinmotion-ui/targets/) | [Source](targets/targets.js) · [Docs](targets/README.md) |
 | Drain | `<pinball-drain>` | Delete action with a timed undo window | [Demo](https://brajesh31.github.io/pinmotion-ui/drain/) | [Source](drain/drain.js) · [Docs](drain/README.md) |
 | Pop bumpers | `<pinball-bumper>`, `<pinball-bumpers>` | Single hit button and a three-bumper scoring cluster | [Demo](https://brajesh31.github.io/pinmotion-ui/bumper/) | [Source](bumper/bumper.js) · [Docs](bumper/README.md) |
+
+### Additional utility components
+
+These controls use the lightweight `PinmotionExtras` helper and native browser semantics. They do not load the PinballKit WebGL renderer or recorded audio.
+
+| Control | Custom element(s) | Pattern | Live demo | Source and API docs |
+| --- | --- | --- | --- | --- |
+| Checkbox | `<pinball-checkbox>` | binary selection | [Demo](https://brajesh31.github.io/pinmotion-ui/checkbox/) | [Source](checkbox/checkbox.js) · [Docs](checkbox/README.md) |
+| Radio Group | `<pinball-radio-group>` | single-choice group | [Demo](https://brajesh31.github.io/pinmotion-ui/radio-group/) | [Source](radio-group/radio-group.js) · [Docs](radio-group/README.md) |
+| Segmented Control | `<pinball-segmented>` | compact single-choice selector | [Demo](https://brajesh31.github.io/pinmotion-ui/segmented/) | [Source](segmented/segmented.js) · [Docs](segmented/README.md) |
+| Progress | `<pinball-progress>` | progress indicator | [Demo](https://brajesh31.github.io/pinmotion-ui/progress/) | [Source](progress/progress.js) · [Docs](progress/README.md) |
+| Meter | `<pinball-meter>` | scalar measurement | [Demo](https://brajesh31.github.io/pinmotion-ui/meter/) | [Source](meter/meter.js) · [Docs](meter/README.md) |
+| Rating | `<pinball-rating>` | rating input | [Demo](https://brajesh31.github.io/pinmotion-ui/rating/) | [Source](rating/rating.js) · [Docs](rating/README.md) |
+| Tabs | `<pinball-tabs>` | tab navigation | [Demo](https://brajesh31.github.io/pinmotion-ui/tabs/) | [Source](tabs/tabs.js) · [Docs](tabs/README.md) |
+| Accordion | `<pinball-accordion>` | expandable sections | [Demo](https://brajesh31.github.io/pinmotion-ui/accordion/) | [Source](accordion/accordion.js) · [Docs](accordion/README.md) |
+| Disclosure | `<pinball-disclosure>` | single disclosure | [Demo](https://brajesh31.github.io/pinmotion-ui/disclosure/) | [Source](disclosure/disclosure.js) · [Docs](disclosure/README.md) |
+| Tooltip | `<pinball-tooltip>` | contextual hint | [Demo](https://brajesh31.github.io/pinmotion-ui/tooltip/) | [Source](tooltip/tooltip.js) · [Docs](tooltip/README.md) |
+| Dialog | `<pinball-dialog>` | modal dialog | [Demo](https://brajesh31.github.io/pinmotion-ui/dialog/) | [Source](dialog/dialog.js) · [Docs](dialog/README.md) |
+| Toast | `<pinball-toast>` | notification feedback | [Demo](https://brajesh31.github.io/pinmotion-ui/toast/) | [Source](toast/toast.js) · [Docs](toast/README.md) |
+| Breadcrumbs | `<pinball-breadcrumbs>` | navigation trail | [Demo](https://brajesh31.github.io/pinmotion-ui/breadcrumbs/) | [Source](breadcrumbs/breadcrumbs.js) · [Docs](breadcrumbs/README.md) |
+| Pagination | `<pinball-pagination>` | page navigation | [Demo](https://brajesh31.github.io/pinmotion-ui/pagination/) | [Source](pagination/pagination.js) · [Docs](pagination/README.md) |
+| Search | `<pinball-search>` | search input | [Demo](https://brajesh31.github.io/pinmotion-ui/search/) | [Source](search/search.js) · [Docs](search/README.md) |
+| Text Field | `<pinball-text-field>` | single-line text input | [Demo](https://brajesh31.github.io/pinmotion-ui/text-field/) | [Source](text-field/text-field.js) · [Docs](text-field/README.md) |
+| Text Area | `<pinball-text-area>` | multi-line text input | [Demo](https://brajesh31.github.io/pinmotion-ui/text-area/) | [Source](text-area/text-area.js) · [Docs](text-area/README.md) |
+| Select | `<pinball-select>` | single-choice dropdown | [Demo](https://brajesh31.github.io/pinmotion-ui/select/) | [Source](select/select.js) · [Docs](select/README.md) |
+| Combobox | `<pinball-combobox>` | editable choice | [Demo](https://brajesh31.github.io/pinmotion-ui/combobox/) | [Source](combobox/combobox.js) · [Docs](combobox/README.md) |
+| File Drop | `<pinball-file-drop>` | file selection and dropzone | [Demo](https://brajesh31.github.io/pinmotion-ui/file-drop/) | [Source](file-drop/file-drop.js) · [Docs](file-drop/README.md) |
+| Date Picker | `<pinball-date-picker>` | date input | [Demo](https://brajesh31.github.io/pinmotion-ui/date-picker/) | [Source](date-picker/date-picker.js) · [Docs](date-picker/README.md) |
+| Color Picker | `<pinball-color-picker>` | color input | [Demo](https://brajesh31.github.io/pinmotion-ui/color-picker/) | [Source](color-picker/color-picker.js) · [Docs](color-picker/README.md) |
 
 ## 🚀 Add a control to your project
 
@@ -64,7 +93,7 @@ The repository includes a `registry.json` with one file item for each bundle. In
 npx shadcn@latest add Brajesh31/pinmotion-ui/toggle
 ```
 
-Replace `toggle` with `slider`, `plunger`, `stepper`, `targets`, `drain`, or `bumper`. The registry targets files under `public/pinball-ui/`. Review the CLI output and generated file path in your own project before committing the change.
+Replace `toggle` with any of the other 28 bundle IDs listed above. The registry targets files under `public/pinball-ui/`. Review the CLI output and generated file path in your own project before committing the change.
 
 See the [shadcn CLI documentation](https://ui.shadcn.com/docs/cli) and the repository's [registry definition](registry.json).
 
@@ -72,9 +101,9 @@ See the [shadcn CLI documentation](https://ui.shadcn.com/docs/cli) and the repos
 
 The root `package.json` is a private developer-tooling manifest (`private: true`). There is no published `pinmotion-ui` npm package or supported `npm install pinmotion-ui` command at this stage. Use the standalone files or the registry route above.
 
-## ⚙️ Shared configuration
+## ⚙️ Styling by runtime family
 
-### Size and page reflections
+### Original mechanical controls: size and page reflections
 
 Set `--pb-size` to control a component's height. The live chrome ball uses `--pb-page` to match the page background; use a hex colour. The default page colour is the project's warm cream (`#f3efe5`).
 
@@ -87,9 +116,9 @@ pinball-toggle {
 
 Each control has its own default dimensions. Check the individual component guide before overriding its size.
 
-### Sound
+### Original mechanical controls: sound
 
-Sound starts after the first user interaction, as browsers require. Add the `silent` attribute to mute one instance, or set the shared switch to mute every Pinball UI control on the page:
+The seven original mechanical controls start sound after the first user interaction, as browsers require. Add the `silent` attribute to mute one instance, or set the PinballKit switch to mute the original mechanical set:
 
 ```html
 <pinball-slider silent value="40" label="Volume"></pinball-slider>
@@ -99,14 +128,18 @@ Sound starts after the first user interaction, as browsers require. Add the `sil
 window.PinballKit.sound = false;
 ```
 
-When several bundles are loaded on the same page, the first one establishes `window.PinballKit`; later bundles reuse the shared clock and WebGL context.
+When several original mechanical bundles are loaded on the same page, the first establishes `window.PinballKit`; later mechanical bundles reuse the shared clock and WebGL context. The 22 utility components use a separate lightweight helper.
 
-### Reduced motion and rendering requirements
+### Original mechanical controls: reduced motion and rendering requirements
 
 - Most controls respect `prefers-reduced-motion` by skipping travel animations while keeping the final state and lamp feedback. **The Plunger is currently the exception**: its pull and shot animation still play.
 - WebGL is required to draw the live chrome ball and lamps. Without WebGL, the controls remain focusable and usable, but those visual effects are not drawn.
 - The photographed bodies keep a fixed shape rather than reflowing. They scale through `--pb-size` and remain sharp to roughly three times their default size.
-- The bundles are relatively large because each contains its own artwork and sound data. Load only the controls a page actually uses.
+- The original mechanical bundles are relatively large because each contains its own artwork and sound data. Load only the controls a page actually uses.
+
+### Lightweight utility controls
+
+The 22 utility controls use native HTML inputs, buttons, lists and CSS presentation. They do not require `--pb-size`, `--pb-page`, WebGL, PinballKit or recorded audio. Their API guides document exact native semantics and browser-dependent behaviors.
 
 ## 🔌 Events and form integration
 
@@ -123,6 +156,35 @@ Use the element's properties and the documented events rather than reaching into
 | Pop bumpers | `hit` | Hit index, points, count, score, and combo |
 
 Toggle, Slider, Stepper, and Drop targets can participate in form submission when given a `name` attribute. Their keyboard behavior, attributes, properties, and methods are described in their individual guides.
+
+### Utility component events
+
+| Control | Events |
+| --- | --- |
+| Checkbox | `change` |
+| Radio Group | `change` |
+| Segmented Control | `change` |
+| Progress | None; display-only or native browser behavior |
+| Meter | None; display-only or native browser behavior |
+| Rating | `change` |
+| Tabs | `change` |
+| Accordion | `change` |
+| Disclosure | `toggle` |
+| Tooltip | None; display-only or native browser behavior |
+| Dialog | `open`, `cancel`, `close` |
+| Toast | `show`, `dismiss` |
+| Breadcrumbs | None; display-only or native browser behavior |
+| Pagination | `change` |
+| Search | `input`, `search` |
+| Text Field | `input`, `change` |
+| Text Area | `input`, `change` |
+| Select | `change` |
+| Combobox | `input`, `change` |
+| File Drop | `change` |
+| Date Picker | `input`, `change` |
+| Color Picker | `input`, `change` |
+
+See each component API guide for exact event payloads and trigger conditions.
 
 ## 🧪 Develop and validate
 
@@ -192,9 +254,9 @@ The documentation set below covers the implementation, operational workflows, br
 
 The repository's interaction tests exercise headless Chromium with touch and keyboard input at a mobile viewport. The project documentation does **not** claim that Safari, Firefox, physical phones, or screen-reader behavior has been tested. Sound playback has also not been verified on a physical phone. Treat those as open validation areas, not supported-browser guarantees.
 
-## 📄 License status
+## 📄 License
 
-No root `LICENSE` file is currently present, and the private developer package declares `UNLICENSED`. An earlier generated reference incorrectly described the project as MIT licensed; that claim is being removed until an explicit license is added. Do not assume that the source is available for redistribution under MIT or another open-source license.
+This repository is licensed under the **MIT License**, Copyright (c) 2026 **Brajesh Kumar**. See the full terms in [`LICENSE`](LICENSE). The root npm tooling manifest remains private, so no npm package is published at this stage.
 
 ## 👤 Maintainer
 

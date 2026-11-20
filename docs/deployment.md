@@ -24,8 +24,8 @@ The workflow is [`.github/workflows/deploy-pages.yml`](../.github/workflows/depl
 
 1. Checks out the repository.
 2. Verifies the root page, gallery, gallery title image, registry, and `.nojekyll`.
-3. Verifies each of the seven component demo pages, component READMEs, and non-empty bundles.
-4. Runs `node --check` against each distributed component JavaScript file.
+3. Verifies all 29 component demo pages, component READMEs, and non-empty bundles.
+4. Runs `node --check` against all 29 component bundles and the lightweight source/helper scripts.
 5. Parses `registry.json` with Python's JSON tool.
 6. Runs `actions/configure-pages`.
 7. Uploads the repository as a GitHub Pages artifact, with hidden files included.
@@ -71,3 +71,8 @@ Use the workflow_dispatch option from the GitHub Actions UI when a redeploy is r
 The current repository does not define a dedicated rollback workflow. To recover from a bad static release, revert the offending commit on `main` or restore the last known-good generated artifacts, then allow the normal Pages workflow to deploy the corrected main branch. Verify both the GitHub Actions run and the hosted routes.
 
 No custom domain, DNS configuration, CDN, cache invalidation workflow, or runtime server configuration is defined in this repository snapshot.
+
+
+## 8. Component generation workflow
+
+The [Generate and publish components workflow](../.github/workflows/generate-components.yml) is the reproducible component update path. It builds both runtime families, regenerates component guides and demo routes, runs the full repository check, smoke-tests all 29 routes and bundles, commits generated outputs, and deploys the Pages artifact.

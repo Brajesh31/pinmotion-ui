@@ -68,3 +68,20 @@ The repository records automated checks in headless Chromium with touch and keyb
 - physical-device audio playback.
 
 These are known evidence gaps. The presence of ARIA roles and keyboard handlers is not the same as a completed assistive-technology audit. Test the real consuming application with its target browsers and assistive technologies before relying on these controls in a high-accessibility context.
+
+
+## 9. Lightweight utility component semantics
+
+The 22 utility controls use native browser elements or ARIA patterns inside their own open Shadow DOM. These descriptions document implementation intent, not screen-reader certification.
+
+| Component family | Semantic implementation | Keyboard model |
+| --- | --- | --- |
+| Checkbox / Radio Group / Segmented / Rating | Buttons with checkbox, radio or pressed-state semantics | Space/Enter; choice groups add arrow navigation |
+| Progress / Meter | `progressbar` / `meter` informational roles | Not focusable; display-only |
+| Tabs / Accordion / Disclosure | Tablist/tab/tabpanel, expanded buttons, native details/summary | Arrow/Home/End where implemented; native summary activation |
+| Tooltip / Dialog / Toast | Tooltip description, native dialog, live status region | Focus/Escape, native dialog cancellation, native buttons |
+| Breadcrumbs / Pagination | Navigation landmarks, ordered trail, native page buttons | Native link/button keyboard behavior |
+| Search / Text Field / Text Area / Select / Date Picker / Color Picker | Native inputs, textarea and select | Browser-native keyboard behavior |
+| Combobox / File Drop | ARIA combobox/listbox with input; focusable drop target and native file input | Arrow/Enter/Escape for listbox; Enter/Space to open file picker |
+
+The utility family has a separate base helper and does not rely on WebGL. Form-associated controls attempt `ElementInternals`; support depends on browser implementation. Dedicated physical-device and assistive-technology testing is still required.
