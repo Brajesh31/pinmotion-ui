@@ -32,7 +32,7 @@
 | Property descriptors, getters/setters, return values | Not exhaustively tested | ⏳ Pending |
 | Event order, payload values, propagation and dispatch conditions | Browser suite has selected bubbling/event checks; no exhaustive matrix | 🟡 Partial |
 | Form association declarations | Static `formAssociated` and `formValue()` checks | ✅ Automated/static |
-| Form lifecycle, reset, restore, validation | Reset and state-restore callbacks are absent; native constraint behavior is not exhaustive | ⚠️ Known gap |
+| Form lifecycle, reset, restore, validation | Shared callbacks implemented in both bases; targeted Chromium reset/state-restore/fieldset tests added; full per-control matrix not yet complete | 🟡 Partial |
 | Keyboard behavior | Selected controls tested; not every documented key path for every control | 🟡 Partial |
 | Pointer/touch behavior | Selected interactions tested in Chromium | 🟡 Partial |
 | Styling hooks, responsive limits, WebGL/audio/reduced motion claims | Documented; not comprehensively exercised for every component | 🟡 Partial |
@@ -49,7 +49,8 @@
 - [ ] Property semantics and public method parameters/returns are verified per component.
 - [ ] Event payload values, order, bubbling/composed behavior and trigger conditions are verified.
 - [ ] Every documented keyboard and pointer/touch interaction is covered.
-- [ ] Form lifecycle, validation, disabled-fieldset, reset and state-restore behavior is either implemented and tested or explicitly accepted as unsupported with a tracked defect.
+- [x] Shared bases implement default-state capture, `formResetCallback`, `formStateRestoreCallback`, and disabled-fieldset callbacks.
+- [ ] Complete per-control validity, submission, reset, disabled-fieldset and browser-driven state-restore matrix.
 - [ ] Styling hooks and implementation limitations are checked against actual source and observed rendering.
 - [ ] Mixed bundle load order/collision behavior and clean-consumer registry installs are tested.
 - [ ] All 29 API guides receive a recorded review.
@@ -127,8 +128,7 @@
 
 ## Known implementation defects to track
 
-1. **Form reset:** Both component base classes currently lack `formResetCallback`. Resetting a form does not restore the custom element to its initial state.
-2. **Form state restore:** Neither base currently implements `formStateRestoreCallback`.
+1. **Form reset and state restore:** Both bases now snapshot writable form state after setup, restore defaults on native form reset, and accept serialized state through `formStateRestoreCallback`. New Chromium tests cover representative controls from both component families. The full component-by-component matrix and cross-browser behavior remain open.
 3. **Plunger reduced motion:** Pull and shot animations continue under `prefers-reduced-motion: reduce`.
 4. **Progress reduced motion:** Indeterminate progress animation has no dedicated reduced-motion override.
 5. **Drop Targets reduced motion:** The `bonus` event is tied to the normal-motion impact callback. Consumers needing reliable completion should use `change.detail.allChecked`.
