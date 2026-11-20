@@ -83,7 +83,7 @@ Exit gate:
 - Latest CI and Pages workflows pass.
 
 ### Phase 1 · Complete inventory and component contract audit
-**Status: In progress · complete inventory and static source-to-contract audit verified; detailed behavior and compatibility review outstanding**
+**Status: In progress · complete static contract checks and standalone demo verification; detailed behavioral and compatibility review outstanding**
 
 Completed in this phase:
 - [x] Inventory all 29 component bundles, 30 custom-element tags, 29 dedicated demos, 29 component guides, and 29 registry entries.
@@ -97,11 +97,13 @@ Completed in this phase:
 - [x] Compare API form-association claims with executable `static formAssociated = true` declarations and the presence of component form-value methods.
 - [x] Check each component source, generated bundle, demo, guide, and registry entry for presence and linkage.
 - [x] Integrate the source-to-contract audit into the mandatory repository validation workflow.
+- [x] Verify all 29 standalone demos in headless Chromium. Each check asserts the expected route, registered tag or tags, and demo element.
 
-Static audit evidence:
+Static audit and browser evidence:
 - Component contract audit: **424 checks passed, 0 failed** on commit `dea5484f5beae9d34a34515b614acd0255938278`.
 - Full validation: **608 checks passed, 0 failed** on the same commit.
-- Headless Chromium suite: `all passed`, including the 29-card first-load check and all 30 custom-element registrations.
+- Standalone demo verification plus the complete interaction suite: **29/29 standalone demos passed**, with `all passed` on commit `d6a9dc27114420e78d2bceefda0c2e32c5311a38`.
+- [Latest Validate run](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44830550757) and [Pages deployment](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44830550908) both passed for that commit.
 
 Still required:
 - [ ] Verify exact attribute defaults, reflection, connection-time configuration, and update timing against implementation.
@@ -110,7 +112,6 @@ Still required:
 - [ ] Verify keyboard navigation and pointer/touch behavior for every component.
 - [ ] Verify form values, constraint validation, reset, state restore, and disabled behavior for every applicable component in supported browsers.
 - [ ] Review styling hooks, responsive limits, WebGL fallback, audio behavior, and reduced-motion statements against implementation.
-- [ ] Confirm all 29 component demos initialize their own bundle independently, including the two bumper tags.
 - [ ] Check mixed bundle order, shared-runtime reuse, and collision behavior in standalone demos and the full gallery.
 - [ ] Test every registry entry from a clean consumer project.
 - [ ] Complete manual review of all 29 component guides and record evidence for each contract.
