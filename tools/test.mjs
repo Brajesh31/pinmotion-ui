@@ -1,6 +1,7 @@
 // node tools/test.mjs [URL]   uses every control in the gallery with real touch and key events at phone width, checks the
 // events they fire, their form values and sideways scroll, and exits 1 on a failure. Needs Chrome or Chromium (CHROME=... if it is
 // somewhere unusual) and the repo being served: python3 -m http.server 8000, then the default URL works.
+import { SPEC } from './spec.mjs';
 import { spawn } from 'node:child_process';
 import { rmSync, mkdtempSync } from 'node:fs';
 import { createServer } from 'node:net';
@@ -23,6 +24,19 @@ await send('Runtime.enable');
 await send('Emulation.setDeviceMetricsOverride', { width: 390, height: 900, deviceScaleFactor: 2, mobile: true });
 await send('Emulation.setTouchEmulationEnabled', { enabled: true });
 await send('Page.enable'); await send('Page.navigate', { url: URL_ }); await sleep(4000);
+const expectedTags = SPEC.flatMap((component) => component.api?.tags || [`<${component.tag}>`]).map((tag) => tag.slice(1, -1));
+const galleryBootReport = JSON.parse(await ev(`(() => {
+  const grid = document.getElementById('grid');
+  const status = document.getElementById('gallery-status');
+  const cards = [...(grid?.querySelectorAll('.item') || [])];
+  return JSON.stringify({
+    cardCount: cards.length,
+    busy: grid?.getAttribute('aria-busy'),
+    status: status?.textContent || '',
+    allCardsReady: cards.length === 29 && cards.every((card) => card.dataset.loadState === 'ready'),
+    registeredTags: ${JSON.stringify(expectedTags)}.filter((tag) => customElements.get(tag)).length
+  });
+})()`));
 // E(tag) is the element; S(tag, sel) is something inside its shadow root
 const E = (tag) => `document.querySelector('pinball-${tag}')`, S = (tag, sel) => `${E(tag)}.shadowRoot.querySelector(${JSON.stringify(sel)})`;
 const at = async (expr, fx = 0.5, fy = 0.5) => JSON.parse(await ev(`(() => { const e = ${expr}; e.scrollIntoView({ block: 'center' }); const b = e.getBoundingClientRect(); return JSON.stringify([b.left + b.width * ${fx}, b.top + b.height * ${fy}]); })()`));
@@ -41,6 +55,10 @@ await ev(`(() => { const f = document.createElement('form'); f.id = 'f'; const g
 const formValue = (n) => ev(`new FormData(document.getElementById('f')).get(${JSON.stringify(n)})`);
 let fails = 0;
 const check = (name, ok, got) => { if (!ok) fails++; console.log(`${ok ? 'ok  ' : 'FAIL'} ${name}${got !== undefined ? `  ->  ${got}` : ''}`); };
+check('gallery: all 29 component cards render on first load', galleryBootReport.cardCount === 29, galleryBootReport.cardCount);
+check('gallery: boot state clears instead of remaining on Loading', galleryBootReport.busy === 'false' && !galleryBootReport.status.includes('Loading'), galleryBootReport.status);
+check('gallery: all component cards initialize successfully', galleryBootReport.allCardsReady, galleryBootReport.status);
+check('gallery: all 30 custom element tags register', galleryBootReport.registeredTags === 30, galleryBootReport.registeredTags);
 
 check('all seven files built their elements', (await ev(`['toggle', 'slider', 'plunger', 'stepper', 'targets', 'drain', 'bumpers', 'bumper'].every((t) => { const e = document.querySelector('pinball-' + t); return e && e.shadowRoot && e.shadowRoot.querySelector('canvas'); })`)) === true);
 check('WebGL is drawing (the toggle canvas has pixels)', (await ev(`(() => { const c = ${S('toggle', 'canvas')}; const d = c.getContext('2d').getImageData(0, 0, c.width, c.height).data; let n = 0; for (let i = 3; i < d.length; i += 4) n += d[i] > 0; return n; })()`)) > 1000);
