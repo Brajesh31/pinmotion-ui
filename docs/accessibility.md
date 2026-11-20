@@ -26,7 +26,9 @@ Toggle, Slider, Stepper, and Drop targets document form participation when a `na
 
 Plunger, Drain, and Pop bumpers are action controls and do not document native form values.
 
-Form-associated custom elements depend on browser platform support. The repository's browser test exercises these values in headless Chromium, but no cross-browser form-support matrix is published.
+Form-associated custom elements depend on browser platform support. The repository's browser test exercises successful value submission in headless Chromium, but no cross-browser form-support matrix is published.
+
+**Known form lifecycle gaps:** The original PinballKit base and the utility base do not implement `formResetCallback`, so calling `form.reset()` does not currently restore the custom controls to their initial values. The original PinballKit base also does not implement `formDisabledCallback`; the utility base does. Disabled-fieldset behavior for original form controls is therefore not established and must be tested and fixed before release. No `formStateRestoreCallback` implementation is present in either base.
 
 ## 4. Reduced motion
 
