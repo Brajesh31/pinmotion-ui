@@ -21,6 +21,8 @@ This directory documents the repository as it exists today. It is an implementat
 The diagram source files are stored in [diagrams/](diagrams/). Mermaid sources are editable text. Selected diagrams also have SVG exports for direct viewing in GitHub and other Markdown renderers.
 
 - [System architecture, Mermaid](diagrams/system-architecture.mmd) · [SVG](diagrams/system-architecture.svg)
+- [Component families, Mermaid](diagrams/component-families.mmd) · [SVG](diagrams/component-families.svg)
+- [Visual language and tokens](visuals/visual-language.svg)
 - [Build and publication pipeline, Mermaid](diagrams/build-and-publication.mmd) · [SVG](diagrams/build-and-publication.svg)
 - [Control interaction lifecycle, Mermaid](diagrams/control-lifecycle.mmd)
 

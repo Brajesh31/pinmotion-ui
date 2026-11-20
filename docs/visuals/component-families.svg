@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1080" viewBox="0 0 1600 1080" role="img" aria-labelledby="title desc">
+<title id="title">Pinball UI component family map</title>
+<desc id="desc">Twenty-nine standalone bundles split into seven mechanical WebGL/audio components and twenty-two lightweight CSS/native utility components. The original bumper bundle registers two custom element tags, making thirty tags in total.</desc>
+<defs><style>
+.bg{fill:#f3efe5}.panel{fill:#fffaf0;stroke:#c9bead;stroke-width:2}.dark{fill:#2b2620}.amber{fill:#c9700f}.title{font:700 36px Arial,sans-serif;fill:#2b2620}.sub{font:16px Arial,sans-serif;fill:#756c61}.section{font:700 20px Arial,sans-serif;fill:#2b2620}.note{font:14px Arial,sans-serif;fill:#635b50}.card{fill:#fffdf8;stroke:#c9bead;stroke-width:1.5}.name{font:700 15px Arial,sans-serif;fill:#2b2620}.tag{font:12px Arial,sans-serif;fill:#766d62}
+</style></defs>
+<rect class="bg" width="1600" height="1080"/>
+<text x="64" y="72" class="title">PINBALL UI · COMPONENT SYSTEM</text>
+<text x="64" y="105" class="sub">29 standalone bundles · 30 custom-element tags · one visual language, two runtime families</text>
+<rect class="panel" x="64" y="142" width="1472" height="254" rx="22"/>
+<rect class="dark" x="88" y="166" width="9" height="206" rx="4"/>
+<text x="120" y="204" class="section">MECHANICAL PINBALL CONTROLS</text>
+<text x="120" y="232" class="note">7 bundles · 8 element tags · PinballKit · WebGL · embedded artwork and recorded sound</text>
+<g>
+<rect class="card" x="120" y="260" width="184" height="91" rx="12"/><circle cx="151" cy="291" r="12" fill="#d9d1c1" stroke="#2b2620" stroke-width="3"/><path d="M137 317h28" stroke="#c9700f" stroke-width="4" stroke-linecap="round"/><text x="180" y="294" class="name">Toggle</text><text x="180" y="318" class="tag">pinball-toggle</text>
+<rect class="card" x="320" y="260" width="184" height="91" rx="12"/><path d="M337 319h37" stroke="#2b2620" stroke-width="4" stroke-linecap="round"/><circle cx="362" cy="307" r="10" fill="#bdb5a7"/><text x="390" y="294" class="name">Slider</text><text x="390" y="318" class="tag">pinball-slider</text>
+<rect class="card" x="520" y="260" width="184" height="91" rx="12"/><path d="M541 316v-27m-8 6 8-8 8 8" stroke="#b3322b" stroke-width="4" fill="none" stroke-linecap="round"/><text x="575" y="294" class="name">Plunger</text><text x="575" y="318" class="tag">pinball-plunger</text>
+<rect class="card" x="720" y="260" width="184" height="91" rx="12"/><rect x="738" y="282" width="26" height="30" rx="4" fill="#d9d1c1" stroke="#2b2620"/><text x="780" y="294" class="name">Stepper</text><text x="780" y="318" class="tag">pinball-stepper</text>
+<rect class="card" x="920" y="260" width="184" height="91" rx="12"/><g fill="#c9700f"><rect x="938" y="283" width="8" height="26" rx="2"/><rect x="951" y="283" width="8" height="26" rx="2"/><rect x="964" y="283" width="8" height="26" rx="2"/></g><text x="991" y="294" class="name">Drop Targets</text><text x="991" y="318" class="tag">pinball-targets</text>
+<rect class="card" x="1120" y="260" width="184" height="91" rx="12"/><path d="M1140 283v22q0 12 12 12h18" stroke="#2b2620" stroke-width="4" fill="none"/><circle cx="1170" cy="317" r="6" fill="#c9700f"/><text x="1190" y="294" class="name">Drain</text><text x="1190" y="318" class="tag">pinball-drain</text>
+<rect class="card" x="1320" y="260" width="184" height="91" rx="12"/><circle cx="1348" cy="304" r="13" fill="#b3322b"/><circle cx="1370" cy="304" r="13" fill="#b3322b"/><text x="1395" y="294" class="name">Pop Bumpers</text><text x="1395" y="318" class="tag">2 tags · 1 bundle</text>
+</g>
+<rect class="panel" x="64" y="424" width="1472" height="586" rx="22"/>
+<rect class="amber" x="88" y="448" width="9" height="538" rx="4"/>
+<text x="120" y="488" class="section">LIGHTWEIGHT UTILITY COMPONENTS</text>
+<text x="120" y="516" class="note">22 bundles · PinmotionExtras · native HTML semantics · CSS surfaces · no WebGL or recorded audio</text>
+<g>
+<rect class="card" x="120" y="545" width="310" height="74" rx="12"/><text x="142" y="575" class="name">Checkbox</text><text x="142" y="598" class="tag">pinball-checkbox</text>
+<rect class="card" x="450" y="545" width="310" height="74" rx="12"/><text x="472" y="575" class="name">Radio Group</text><text x="472" y="598" class="tag">pinball-radio-group</text>
+<rect class="card" x="780" y="545" width="310" height="74" rx="12"/><text x="802" y="575" class="name">Segmented Control</text><text x="802" y="598" class="tag">pinball-segmented</text>
+<rect class="card" x="1110" y="545" width="394" height="74" rx="12"/><text x="1132" y="575" class="name">Progress</text><text x="1132" y="598" class="tag">pinball-progress</text>
+<rect class="card" x="120" y="635" width="310" height="74" rx="12"/><text x="142" y="665" class="name">Meter</text><text x="142" y="688" class="tag">pinball-meter</text>
+<rect class="card" x="450" y="635" width="310" height="74" rx="12"/><text x="472" y="665" class="name">Rating</text><text x="472" y="688" class="tag">pinball-rating</text>
+<rect class="card" x="780" y="635" width="310" height="74" rx="12"/><text x="802" y="665" class="name">Tabs</text><text x="802" y="688" class="tag">pinball-tabs</text>
+<rect class="card" x="1110" y="635" width="394" height="74" rx="12"/><text x="1132" y="665" class="name">Accordion</text><text x="1132" y="688" class="tag">pinball-accordion</text>
+<rect class="card" x="120" y="725" width="310" height="74" rx="12"/><text x="142" y="755" class="name">Disclosure</text><text x="142" y="778" class="tag">pinball-disclosure</text>
+<rect class="card" x="450" y="725" width="310" height="74" rx="12"/><text x="472" y="755" class="name">Tooltip</text><text x="472" y="778" class="tag">pinball-tooltip</text>
+<rect class="card" x="780" y="725" width="310" height="74" rx="12"/><text x="802" y="755" class="name">Dialog</text><text x="802" y="778" class="tag">pinball-dialog</text>
+<rect class="card" x="1110" y="725" width="394" height="74" rx="12"/><text x="1132" y="755" class="name">Toast</text><text x="1132" y="778" class="tag">pinball-toast</text>
+<rect class="card" x="120" y="815" width="310" height="74" rx="12"/><text x="142" y="845" class="name">Breadcrumbs</text><text x="142" y="868" class="tag">pinball-breadcrumbs</text>
+<rect class="card" x="450" y="815" width="310" height="74" rx="12"/><text x="472" y="845" class="name">Pagination</text><text x="472" y="868" class="tag">pinball-pagination</text>
+<rect class="card" x="780" y="815" width="310" height="74" rx="12"/><text x="802" y="845" class="name">Search</text><text x="802" y="868" class="tag">pinball-search</text>
+<rect class="card" x="1110" y="815" width="394" height="74" rx="12"/><text x="1132" y="845" class="name">Text Field</text><text x="1132" y="868" class="tag">pinball-text-field</text>
+<rect class="card" x="120" y="905" width="310" height="74" rx="12"/><text x="142" y="935" class="name">Text Area</text><text x="142" y="958" class="tag">pinball-text-area</text>
+<rect class="card" x="450" y="905" width="310" height="74" rx="12"/><text x="472" y="935" class="name">Select</text><text x="472" y="958" class="tag">pinball-select</text>
+<rect class="card" x="780" y="905" width="310" height="74" rx="12"/><text x="802" y="935" class="name">Combobox</text><text x="802" y="958" class="tag">pinball-combobox</text>
+<rect class="card" x="1110" y="905" width="394" height="74" rx="12"/><text x="1132" y="935" class="name">File Drop</text><text x="1132" y="958" class="tag">pinball-file-drop</text>
+</g>
+<text x="120" y="998" class="note">Date Picker · Color Picker complete the 22-component utility family. See each API guide for behavior and limitations.</text>
+<text x="64" y="1055" class="sub">One brand language. Two rendering families. Load only what your application needs.</text>
+</svg>

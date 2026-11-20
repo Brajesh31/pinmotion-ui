@@ -1,0 +1,16 @@
+flowchart TB
+  SET["29 standalone bundles / 30 custom-element tags"]
+  SET --> MECH["Mechanical family · 7 bundles"]
+  SET --> UTIL["Utility family · 22 bundles"]
+  MECH --> PK["PinballKit runtime"]
+  PK --> WEBGL["WebGL renderer + shared clock"]
+  PK --> AUDIO["Web Audio + embedded recordings"]
+  PK --> ART["Embedded WebP plates"]
+  UTIL --> PX["PinmotionExtras base"]
+  PX --> NATIVE["Native HTML controls + ARIA patterns"]
+  PX --> CSS["Shared CSS tokens + states"]
+  MECH --> API1["Component API guide + demo"]
+  UTIL --> API2["Component API guide + demo"]
+  API1 --> REG["Registry + gallery + llms.txt"]
+  API2 --> REG
+  REG --> PAGES["Static GitHub Pages deployment"]

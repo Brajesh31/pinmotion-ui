@@ -123,6 +123,8 @@ Unlike PinballKit, the utility base has no frame clock, WebGL context, shader pi
 
 ## 10. Architecture diagram
 
+The [design system guide](design-system.md) documents the shared visual language and the separate runtime token sets. See the [component-family diagram](diagrams/component-families.svg) for the two-family overview.
+
 ![Pinball UI architecture](diagrams/system-architecture.svg)
 
 Editable sources: [Mermaid diagram](diagrams/system-architecture.mmd).

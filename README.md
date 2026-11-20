@@ -248,7 +248,8 @@ The documentation set below covers the implementation, operational workflows, br
 - [Testing strategy and verification boundaries](docs/testing.md)
 - [GitHub Pages deployment](docs/deployment.md)
 - [Accessibility, rendering requirements, and known limitations](docs/accessibility.md)
-- [Architecture diagram sources](docs/diagrams/)
+- [Design system and visual tokens](docs/design-system.md)
+- [Architecture and component-family diagrams](docs/diagrams/)
 
 ## 🧭 Browser and accessibility status
 
