@@ -115,7 +115,7 @@ for (const component of SPEC) {
 
   for (const [nameText, payloadText] of documentedEvents) {
     const eventName = String(nameText).replaceAll(TICK, '');
-    if (/Plain\s+Event/i.test(payloadText)) {
+    if (/Plain\s+Event/i.test(String(payloadText).replaceAll(TICK, ''))) {
       check(id + ': ' + eventName + ' is documented as a plain Event',
         plainEvents.includes(eventName));
       continue;
