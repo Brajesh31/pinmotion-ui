@@ -17,148 +17,78 @@ This is the high-level project development tracker. For the stricter, complete p
 | Component demo routes | 29 |
 | API guides | 29 |
 | Registry entries | 29 |
-| Defined delivery phases | 10 |
-| Phases fully complete by evidence | 4 / 10 |
-| Phases in progress | 2 / 10 |
-| Phases not started | 4 / 10 |
+| Phase 1, inventory and contract audit | In progress |
+| Phase 2, functional correctness and regression | In progress |
+| Phases fully complete by evidence | 4 / 6 |
+| Phases in progress | 2 / 6 |
+| Phases not started | 0 / 6 |
 
-**Phase completion is a delivery estimate, not a count of components.** Phases 1–4 describe the existing product foundation that is present in the repository. Phases 5–6 are active hardening work. Phases 7–10 remain open. The gallery and deployment fixes in this commit belong to Phase 5.
+**Phase completion is a delivery estimate, not a count of components.** The component families and documentation foundation exist, but the current pre-release sequence treats inventory contracts and functional correctness as separate, evidence-gated phases. Phases 1–2 are active hardening work. The gallery and deployment fixes remain tracked under Phase 0 in [RELEASE-PLAN.md](RELEASE-PLAN.md).
 
-## ✅ Completed phases
+## ✅ Completed foundations
 
-### Phase 1. Product concept and visual foundation
+### Product concept and visual foundation
 **Status: Complete**
-
 - Pinball-inspired design direction and consistent mechanical visual language.
 - Cream, ink, brass/amber, steel and red palette.
 - Original mechanical direction established around real-world pinball mechanisms.
 - Shared sizing and page-reflection conventions documented.
 
-### Phase 2. Original mechanical component family
-**Status: Complete for the current seven-component scope**
+### Original mechanical component family
+**Status: Complete for the current seven-component implementation scope**
+- Toggle, Slider, Plunger, Stepper, Drop Targets, Drain and Pop Bumpers.
+- Seven original bundles use the PinballKit runtime, WebGL rendering, artwork and recorded audio.
+- Component implementation completion does not certify cross-browser behavior or release readiness.
 
-- Toggle
-- Slider
-- Plunger
-- Stepper
-- Drop Targets
-- Drain
-- Pop Bumpers
+### Lightweight utility component family
+**Status: Complete for the current 22-component implementation scope**
+- Checkbox, Radio Group, Segmented Control, Progress, Meter, Rating.
+- Tabs, Accordion, Disclosure, Tooltip, Dialog, Toast.
+- Breadcrumbs, Pagination, Search, Text Field, Text Area.
+- Select, Combobox, File Drop, Date Picker and Color Picker.
+- Utility controls use PinmotionExtras and native/CSS semantics. Implementation completion is not browser certification.
 
-The seven original bundles use the PinballKit runtime, WebGL rendering, artwork and recorded audio. Their visual and browser limitations remain documented.
-
-### Phase 3. Lightweight utility component family
-**Status: Complete for the current 22-component scope**
-
-- Checkbox, Radio Group, Segmented Control
-- Progress, Meter, Rating
-- Tabs, Accordion, Disclosure, Tooltip
-- Dialog, Toast, Breadcrumbs, Pagination
-- Search, Text Field, Text Area
-- Select, Combobox, File Drop
-- Date Picker, Color Picker
-
-The utility family uses the PinmotionExtras helper and native/CSS semantics. This is implementation completion, not a claim that every browser has been certified.
-
-### Phase 4. Documentation and component distribution foundation
+### Documentation and distribution foundation
 **Status: Complete for the current catalogue**
-
-- 29 standalone bundles and 30 custom element tags.
-- 29 generated demo routes and component guides.
+- 29 standalone bundles, 30 custom-element tags, 29 demos, 29 guides and 29 registry entries.
 - Canonical component metadata and documentation generator.
-- Shadcn registry with 29 entries.
 - `llms.txt`, integration skill, technical documentation and architecture diagrams.
 - MIT license naming Brajesh Kumar.
 
-## 🚧 Active phases
+## 🚧 Active hardening phases
 
-### Phase 5. Gallery and release reliability
+### Phase 1. Complete inventory and component contract audit
 **Status: In progress**
+- [x] Inventory 29 bundles, 30 tags, 29 demos, 29 guides and 29 registry items.
+- [x] Source-to-spec checks for registrations, observed attributes, form-association declarations, public member names and event detail-key shapes.
+- [x] Browser verification of all 29 standalone demo routes.
+- [ ] Runtime attribute/property semantics and defaults verified for every component.
+- [ ] Event values, ordering and propagation verified against browser behavior.
+- [ ] Full keyboard/pointer/touch contract coverage.
+- [ ] Full form lifecycle and validity contract reviewed.
+- [ ] Clean consumer validation of all registry entries.
+- [ ] Manual sign-off of all 29 API guides.
 
-- [x] Inspect generated gallery and canonical catalogue.
-- [x] Add live search across names, tags, categories and descriptions.
-- [x] Add All / Original / Utility filters.
-- [x] Add visible loaded/failed component status instead of silently showing an empty gallery.
-- [x] Verify custom element registration and report card initialization failures.
-- [x] Identify deployment failure from actual GitHub Actions logs.
-- [x] Remove workflow-side generated commit/push before Pages deployment.
-- [x] Run validation on pushes to `main`.
-- [ ] Run a fresh successful Pages deployment after the workflow corrections.
-- [ ] Verify the hosted gallery and every component route after deployment.
-- [ ] Run the optional real-browser interaction suite and capture a complete gallery screenshot.
-- [ ] Verify cache behavior and direct refresh/deep links on GitHub Pages.
-
-### Phase 6. Quality, accessibility and browser compatibility
+### Phase 2. Functional correctness and regression coverage
 **Status: In progress**
+- [x] Existing Chromium suite exercises selected core interactions across both component families.
+- [x] Existing suite checks selected form values and Drain's delete/undo/commit lifecycle.
+- [x] Existing suite checks all 29 standalone demo routes.
+- [ ] Add default, changed, disabled, invalid, boundary and reset assertions.
+- [ ] Exercise every documented pointer/touch, keyboard and programmatic path independently.
+- [ ] Assert exact event payloads, order, bubbling/composed behavior and event suppression.
+- [ ] Test validation, disabled-fieldset, reset and state restoration for form-associated controls.
+- [ ] Cover Toast timer, disconnect/reconnect cleanup and asynchronous lifecycle.
+- [ ] Cover solo bundles, mixed runtime load order, full gallery and component failure isolation.
+- [ ] Record the final passing CI run and close all functional regressions.
 
-- [x] Structural, generated-file, metadata and integrity checks exist.
-- [x] Optional Chromium test harness exists.
-- [ ] Make the browser interaction suite part of a reliable CI gate.
-- [ ] Audit keyboard navigation and focus order across all 30 custom element tags.
-- [ ] Audit accessible names, roles, live announcements and form association.
-- [ ] Validate reduced-motion behavior, including the documented Plunger and Progress exceptions.
-- [ ] Test Chrome, Firefox and Safari.
-- [ ] Test representative physical mobile devices and touch behavior.
-- [ ] Add repeatable visual regression snapshots with baseline review.
-- [ ] Publish a truthful browser/accessibility support matrix.
-
-## 🗓️ Remaining phases
-
-### Phase 7. Component library expansion
-**Status: Not started**
-
-Add new patterns only when they can meet the same visual quality, functional completeness and documentation depth as the existing components.
-
-Candidate components:
-- Multi Select
-- Time Picker
-- Date Range Picker
-- Password Field
-- Number Input
-- Switch Group
-- Transfer List
-- Split Pane
-- Lightbox Gallery
-- Color Swatch Palette
-
-Acceptance criteria: each addition has a real interaction model, keyboard and accessibility behavior, documented attributes/properties/events, responsive demo, tests, generated registry item and no regression to the original seven.
-
-### Phase 8. Developer experience and distribution
-**Status: Not started**
-
-- Define the supported shadcn registry install contract and test it in a clean consumer project.
-- Add copyable CDN/version-pinned usage examples.
-- Add a predictable release/versioning policy.
-- Decide whether an npm package is warranted. Do not publish while the package manifest remains private.
-- Add migration and compatibility guidance.
-- Add a component starter/template for future contributions.
-
-### Phase 9. Production readiness and release governance
-**Status: Not started**
-
-- Define release gates and required CI checks.
-- Add release notes and changelog discipline.
-- Add dependency/security/license review automation as dependencies are introduced.
-- Document support policy and deprecation policy.
-- Add reproducible release validation and rollback instructions.
-- Verify registry, demos, docs, bundles and site are version-aligned.
-
-### Phase 10. Community and ecosystem
-**Status: Not started**
-
-- Contribution guide and issue/PR templates.
-- Component request and bug-report workflow.
-- Showcase examples and integration recipes.
-- Contribution review checklist.
-- Project landing page polish and discoverability.
-- Usage feedback loop based on actual developer issues and requests.
+**Evidence ledger:** [Phase 1–2 acceptance matrix](PHASE-1-2-ACCEPTANCE-MATRIX.md) · [Phase 2 test plan](PHASE-2-TEST-PLAN.md).
 
 ## 🎯 Definition of done
 
 A phase is only marked complete when its acceptance criteria are implemented, documented, checked, and the relevant live or release workflow has passed. A green syntax check alone is not enough to call a visual/browser phase complete.
 
 Every component release should satisfy:
-
 1. Functional interaction and state behavior.
 2. Accessible name, role, keyboard behavior and focus handling.
 3. Form behavior documented and tested where applicable.
