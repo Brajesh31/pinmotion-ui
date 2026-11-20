@@ -568,7 +568,7 @@ class PinballPlunger extends K.Base {
         }
         if (this.ball === 'away') this.home();
       }
-      this.bump.x = 0; this.bump.v = 0; this.bump.idle = true;
+      this.bump.x = 0; this.bump.v = 0;
       return;
     }
     if (this.auto && this.ball === 'ready' && this.bt > 0.1) { this.auto = false; this.letGo(); }
