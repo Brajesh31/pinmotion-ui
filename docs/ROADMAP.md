@@ -19,11 +19,11 @@ This is the high-level project development tracker. For the stricter, complete p
 | Registry entries | 29 |
 | Phase 1, inventory and contract audit | In progress |
 | Phase 2, functional correctness and regression | In progress |
-| Phases fully complete by evidence | 4 / 6 |
-| Phases in progress | 2 / 6 |
-| Phases not started | 0 / 6 |
+| Phases fully complete by evidence | 0 / 7 |
+| Phases in progress | 4 / 7 |
+| Phases not started | 3 / 7 |
 
-**Phase completion is a delivery estimate, not a count of components.** The component families and documentation foundation exist, but the current pre-release sequence treats inventory contracts and functional correctness as separate, evidence-gated phases. Phases 1–2 are active hardening work. The gallery and deployment fixes remain tracked under Phase 0 in [RELEASE-PLAN.md](RELEASE-PLAN.md).
+**Phase completion is a delivery estimate, not a count of components.** The component families and documentation foundation exist, but the current pre-release sequence treats inventory contracts and functional correctness as separate, evidence-gated phases. Phases 0–2 and Phase 4 are active hardening work. Phases 3, 5 and 6 have not started. The detailed scope and evidence gates are tracked in [RELEASE-PLAN.md](RELEASE-PLAN.md).
 
 ## ✅ Completed foundations
 
@@ -83,6 +83,18 @@ This is the high-level project development tracker. For the stricter, complete p
 - [ ] Record the final passing CI run and close all functional regressions.
 
 **Evidence ledger:** [Phase 1–2 acceptance matrix](PHASE-1-2-ACCEPTANCE-MATRIX.md) · [Phase 2 test plan](PHASE-2-TEST-PLAN.md).
+
+### Phase 3. Visual quality and interaction polish
+**Status: Not started.** Requires screenshot-based review of all 29 demos and the gallery at supported viewport sizes.
+
+### Phase 4. Accessibility audit and remediation
+**Status: In progress.** Reduced-motion handling for Plunger and indeterminate Progress is implemented and covered by passing Chromium assertions. Full keyboard audit, WCAG review, form lifecycle fixes and screen-reader verification remain open.
+
+### Phase 5. Browser and device compatibility
+**Status: Not started.** Firefox, Safari, physical iOS/Android and assistive-technology combinations remain unverified.
+
+### Phase 6. Distribution and stable release
+**Status: Not started.** Clean-consumer registry installation, release governance and formal release approval remain open.
 
 ## 🎯 Definition of done
 
