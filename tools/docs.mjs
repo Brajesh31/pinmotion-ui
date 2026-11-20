@@ -167,16 +167,16 @@ ${c.api?.runtime==='lightweight'?'':SOUND_JS}
 }
 
 // ---- the gallery: every control live, with its install line and a prompt for a coding agent
-const items = SPEC.map((c) => ({ id: c.id, name: c.name, tag: c.tag, tags: tags(c), kind: c.kind, size: c.size.gallery, html: c.demo.html.replace(' id="el"', '') + (c.extra ? c.extra.gallery : ''), wire: c.wire, docs: c.docs, desc: c.desc }));
+const items = SPEC.map((c) => ({ id: c.id, name: c.name, tag: c.tag, tags: tags(c), kind: c.kind, runtime: c.api?.runtime || 'pinball', size: c.size.gallery, html: c.demo.html.replace(' id="el"', '') + (c.extra ? c.extra.gallery : ''), wire: c.wire, docs: c.docs, desc: c.desc }));
 put('gallery/index.html', `<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Pinball UI</title>
-<meta name="description" content="${Count} ordinary UI controls as real pinball parts: photographed bodies, a live chrome ball, recorded sounds. Each is a single file with no dependencies.">
+<meta name="description" content="${Count} pinball-inspired controls and lightweight Web Components, each distributed as a standalone JavaScript bundle.">
 <meta property="og:title" content="Pinball UI">
-<meta property="og:description" content="${Count} ordinary UI controls as real pinball parts.">
+<meta property="og:description" content="${Count} pinball-inspired controls and lightweight Web Components.">
 <meta property="og:image" content="title.jpg">
 <style>
   ${PAGE}
@@ -200,7 +200,7 @@ put('gallery/index.html', `<!doctype html>
 <body>
 <div class="wrap">
   <header>
-    <img src="title.jpg" width="1600" height="700" alt="Pinball UI: the controls laid out on cream, a chrome-ball toggle and slider, a shooter rod, flipper stepper, drop-target bank, drain and pop bumpers.">
+    <img src="title.jpg" width="1600" height="700" alt="Pinball UI hero artwork showing the original mechanical pinball control collection.">
     <h1 class="label">Pinball UI</h1>
     <p class="lede">${Count} ordinary controls as real pinball parts. The bodies are photographs, the ball is chrome drawn live, and every flip, lamp and chime is a recorded sound. Each is a single file with no dependencies.</p>
     <p class="links">
@@ -210,7 +210,7 @@ put('gallery/index.html', `<!doctype html>
     </p>
   </header>
   <main class="grid" id="grid"></main>
-  <p class="note">Everything here is live: use the controls. Sound starts with your first press. With <code>prefers-reduced-motion</code> the parts go straight to where they end up.</p>
+  <p class="note">Explore the live controls. The original mechanical set initializes sound after the first interaction. Utility components use native inputs and CSS-based presentation. Test reduced-motion and browser behavior in your target environment.</p>
   <p class="sr" aria-live="polite" id="copied"></p>
 </div>
 ${SPEC.map((c) => `<script src="../${c.id}/${c.id}.js"></script>`).join('\n')}
@@ -232,7 +232,7 @@ for (const c of ITEMS) {
   const el = s.querySelector(c.tag), said = s.querySelector('.said');
   WIRE[c.id](el, (t) => { said.textContent = t; });
   const install = 'npx shadcn add ' + REPO + '/' + c.id;
-  const prompt = 'Add the Pinball UI "' + c.name + '" control to this project. It is one plain script with no dependencies that registers ' + c.tags + ': ' + c.desc + '\\n\\n1. Download ' + SITE + '/' + c.id + '/' + c.id + '.js into the folder this project serves static files from (for example public/pinball-ui/' + c.id + '.js), or run: ' + install + '\\n2. Load it with a plain script tag, not as a module, and do not edit, split or re-bundle the file: its photographs and sounds are inside it as data.\\n3. In the page, ' + c.docs + '\\n4. Size it with the CSS variable --pb-size (its height), and set --pb-page to the page background colour as a hex value so the chrome ball reflects it. It plays sound after the first press; add the silent attribute to mute it.\\n\\nFull notes: https://github.com/' + REPO + '/blob/main/' + c.id + '/README.md';
+  const prompt = 'Add the Pinball UI "' + c.name + '" control to this project. It is one plain script with no dependencies that registers ' + c.tags + ': ' + c.desc + '\\n\\n1. Download ' + SITE + '/' + c.id + '/' + c.id + '.js into the folder this project serves static files from (for example public/pinball-ui/' + c.id + '.js), or run: ' + install + '\\n2. Load it with a plain script tag, not as a module, and do not edit, split or re-bundle the file; it contains the standalone control implementation and any required helper.\\n3. In the page, ' + c.docs + '\\n4. Follow the component API guide for the supported properties, methods, keyboard behavior, form handling and styling.\\n\\nFull notes: https://github.com/' + REPO + '/blob/main/' + c.id + '/README.md';
   s.querySelector('[data-a=install]').addEventListener('click', (e) => copy(e.currentTarget, install));
   s.querySelector('[data-a=prompt]').addEventListener('click', (e) => copy(e.currentTarget, prompt));
 }
@@ -247,7 +247,7 @@ put('registry.json', JSON.stringify({
   $schema: 'https://ui.shadcn.com/schema/registry.json', name: 'pinball-ui', homepage: SITE,
   items: SPEC.map((c) => ({
     name: c.id, type: 'registry:file', title: `Pinball UI ${c.name}`,
-    description: `${c.desc} One file of about ${size(c.id)} with its photographs and sounds inside it, no dependencies, defines ${tags(c)}.`,
+    description: `${c.desc} One standalone file of about ${size(c.id)} with no external runtime dependencies; ${c.api?.runtime === 'lightweight' ? 'includes the lightweight helper.' : 'includes PinballKit, artwork and recorded sound.'} Defines ${tags(c)}.`,
     author: AUTHOR, categories: c.categories,
     files: [{ path: `${c.id}/${c.id}.js`, type: 'registry:file', target: `~/public/pinball-ui/${c.id}.js` }],
     docs: `Pinball UI ${c.name} is a plain script that registers a custom element. Load /pinball-ui/${c.id}.js with a script tag (not a module), ${c.docs} Size it with --pb-size. More: ${SITE}`,
@@ -257,14 +257,14 @@ put('registry.json', JSON.stringify({
 // ---- llms.txt
 put('llms.txt', `# Pinball UI
 
-> ${Count} ordinary UI controls as real pinball parts: photographed bodies (a lane, a shooter rod, flippers and a score reel, a drop-target bank, an outhole, pop bumpers), a chrome ball drawn live in WebGL that mirrors what is under it, and recorded sounds (solenoids, relays, chimes, a rolling ball). Each is one plain script that registers a custom element, with its photographs and sounds inside it: no dependencies, no build step, no other files to fetch. License status is unspecified: no root LICENSE file is present, and the private developer package is marked UNLICENSED. No real machine's names, art or logos are used.
+> ${Count} ordinary UI controls as real pinball parts: photographed bodies (a lane, a shooter rod, flippers and a score reel, a drop-target bank, an outhole, pop bumpers), a chrome ball drawn live in WebGL that mirrors what is under it, and recorded sounds (solenoids, relays, chimes, a rolling ball). Each is one plain script that registers a custom element, with its photographs and sounds inside it: no dependencies, no build step, no other files to fetch. Licensed under the MIT License, Copyright (c) 2026 Brajesh Kumar. No real machine's names, art or logos are used.
 
 Live gallery: ${SITE}
 Source: https://github.com/${REPO}
 
 ## Drop-in controls
 
-Each is one plain script that registers a custom element. Load it with a script tag, not as a module. Do not rewrite or split the file: the photographs and sounds are inside it as data. Each file carries a copy of the shared core; the first one loaded sets window.PinballKit and the rest reuse it, so any mix shares one clock and one WebGL context.
+Each is one plain script that registers a custom element. Load it with a script tag, not as a module. Do not rewrite or split the file: the photographs and sounds are inside it as data. The original seven bundles include PinballKit and share its clock, WebGL context and audio controller. The 22 lightweight utility bundles use a separate small guarded helper and do not require WebGL or audio.
 
 ${SPEC.map((c) => `- [${c.name}](${SITE}/${c.id}/${c.id}.js) (${c.kind}, about ${size(c.id)}): ${c.desc} \`${tags(c)}\`: ${c.docs.replace(/^then use /, 'Use ')} [Docs](https://github.com/${REPO}/blob/main/${c.id}/README.md)`).join('\n')}
 
