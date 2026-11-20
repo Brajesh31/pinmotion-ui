@@ -57,7 +57,9 @@ npm run test:browser
 ```
 
 The script uses Chrome DevTools Protocol against headless Chrome/Chromium and currently exercises the original seven mechanical controls. Its test viewport is 390 × 900 CSS pixels with device scale factor 2 and touch emulation enabled. It exercises:
-- presence of all eight custom-element tags;
+- presence of all eight original mechanical tags and all 22 utility custom elements;
+- the 22 utility controls each render their component-specific backglass emblem;
+- the full gallery reuses the already-initialized PinballKit shader for the utility chrome-ball marker;
 - whether the WebGL output has non-transparent pixels;
 - pointer/touch interaction and keyboard behavior;
 - the documented event emissions;
@@ -97,7 +99,7 @@ npm run screenshots -- http://127.0.0.1:8000/gallery/ artifacts/gallery 1280 900
 
 Do not describe the project as cross-browser certified based on the current checks.
 
-- The documented automated browser run is headless Chrome/Chromium.
+- The documented automated browser run is headless Chrome/Chromium. It includes interaction coverage for the original seven mechanical controls and limited visual/runtime assertions for the 22 utility controls; it does not yet exercise every utility control's complete pointer, keyboard, form and validation behavior.
 - Safari and Firefox are not documented as tested.
 - Real phones and tablets are not documented as tested.
 - Screen-reader behavior is not documented as tested.
