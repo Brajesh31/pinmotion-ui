@@ -96,6 +96,18 @@ This is the high-level project development tracker. For the stricter, complete p
 ### Phase 6. Distribution and stable release
 **Status: Not started.** Clean-consumer registry installation, release governance and formal release approval remain open.
 
+### Phase 3. Visual quality and interaction polish
+**Status: Not started.** Requires screenshot-based review of all 29 demos and the gallery at supported viewport sizes.
+
+### Phase 4. Accessibility audit and remediation
+**Status: In progress.** Reduced-motion handling for Plunger and indeterminate Progress is implemented and covered by passing Chromium assertions. Full keyboard audit, WCAG review, form lifecycle fixes and screen-reader verification remain open.
+
+### Phase 5. Browser and device compatibility
+**Status: Not started.** Firefox, Safari, physical iOS/Android and assistive-technology combinations remain unverified.
+
+### Phase 6. Distribution and stable release
+**Status: Not started.** Clean-consumer registry installation, release governance and formal release approval remain open.
+
 ## 🎯 Definition of done
 
 A phase is only marked complete when its acceptance criteria are implemented, documented, checked, and the relevant live or release workflow has passed. A green syntax check alone is not enough to call a visual/browser phase complete.
