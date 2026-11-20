@@ -10,6 +10,7 @@ This directory documents the repository as it exists today. It is an implementat
 | [Design system](design-system.md) | Color tokens, typography, surface styles, runtime families and accessibility conventions |
 | [Renderer parity notes](renderer-parity.md) | Utility backglass artwork, conditional shared WebGL marker, CSS fallback and remaining renderer gaps |
 | [Component reference](component-reference.md) | The 29 bundles, 30 element tags, current attributes, events, methods, sizing, and form participation |
+| [Component inventory and API contract index](component-inventory.md) | Generated source-of-truth inventory for all 29 bundles, 30 tags, attributes, properties, methods, events, keyboard, forms, and styling |
 | [Component API conventions](component-api-conventions.md) | Rules for authoring and keeping API metadata accurate |
 | [Site map](site-map.md) | Every published page path, page-level sections, gallery interactions, and responsive layout behavior |
 | [Development](development.md) | Local setup, npm scripts, source-of-truth files, safe editing workflow, and generated outputs |
