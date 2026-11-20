@@ -276,7 +276,8 @@ for (const component of SPEC) {
   let standaloneReady = false;
   for (let attempt = 0; attempt < 50; attempt++) {
     try {
-      standaloneReady = await ev('document.readyState === "complete" && ' +
+      standaloneReady = await ev('document.readyState === "complete" && window.location.pathname === ' +
+        JSON.stringify('/' + component.id + '/') + ' && ' +
         JSON.stringify(expectedTags) + '.every((tag) => !!customElements.get(tag)) && !!document.querySelector(' + JSON.stringify(component.tag) + ')');
     } catch {}
     if (standaloneReady) break;
