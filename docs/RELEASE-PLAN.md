@@ -233,8 +233,7 @@ Exit gate:
 
 ## 4. Known issues and stop-ship policy
 
-- `formResetCallback` and `formStateRestoreCallback` are not implemented by either base class.
-- The original PinballKit base lacks `formDisabledCallback`; disabled-fieldset behavior for the four original form controls is not established.
+- Full per-control form lifecycle and cross-browser verification remains open despite the shared callback implementation and representative Chromium coverage.
 - Drop Targets' `bonus` event is not emitted in reduced-motion mode; rely on its change-state payload for application logic.
 - Full WCAG 2.2 AA review and NVDA, VoiceOver and TalkBack testing remain outstanding.
 - Firefox, Safari, physical phones/tablets and screen readers are not represented by current automated browser evidence.
