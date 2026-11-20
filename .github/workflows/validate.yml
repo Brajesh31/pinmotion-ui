@@ -30,8 +30,14 @@ jobs:
       - name: Build bundles and generated documentation before checking parity
         run: npm run build && npm run docs && npm run check
 
-      - name: Smoke-test the local static server
+      - name: Set up Chrome for first-load and interaction tests
+        id: setup-chrome
+        uses: browser-actions/setup-chrome@v2.2.0
+
+      - name: Smoke-test the local static server and real browser
         shell: bash
+        env:
+          CHROME: ${{ steps.setup-chrome.outputs.chrome-path }}
         run: |
           set -euo pipefail
           node tools/serve.mjs > "$RUNNER_TEMP/pinmotion-server.log" 2>&1 &
@@ -56,3 +62,5 @@ jobs:
             echo "Hidden repository metadata must not be served."
             exit 1
           fi
+
+          npm run test:browser
