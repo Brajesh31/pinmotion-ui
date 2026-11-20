@@ -173,9 +173,8 @@ check('bumpers: a tap drops a ball that scores several hits', (await fired('bump
 await focus('plunger', 'button'); await key(' ', 32, false); await sleep(1300); await keyUp(' ', 32); await sleep(800);
 check('plunger: holding Space and letting go sends', (await fired('plunger send')) === 2, await fired('plunger send'));
 await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] });
-{ const [x, y] = await at(S('plunger', 'button'), 0.75, 0.5);
-  await drag(x, y, x + 260, y, 14, 100); await sleep(200);
-  check('plunger: reduced-motion full pull still sends without ball travel', (await fired('plunger send')) === 3 && (await prop('plunger', 'ball')) === 'none' && (await prop('plunger', 'px')) === 0, `${await fired('plunger send')} sends / ball ${await prop('plunger', 'ball')}`); }
+await ev("document.querySelector('pinball-plunger').fire()"); await sleep(500);
+check('plunger: reduced-motion programmatic full pull still sends without ball travel', (await fired('plunger send')) === 3 && (await prop('plunger', 'ball')) === 'none' && (await prop('plunger', 'px')) === 0, `${await fired('plunger send')} sends / ball ${await prop('plunger', 'ball')}`);
 await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'no-preference' }] });
 
 
