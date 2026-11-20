@@ -307,11 +307,33 @@ function rollSound() {
 // its name attribute, and calls this.syncForm() whenever its value changes.
 class Base extends HTMLElement {
   constructor() { super(); this.root = this.attachShadow({ mode: 'open', delegatesFocus: true }); try { this.internals = this.constructor.formAssociated ? this.attachInternals() : null; } catch { this.internals = null; } }
-  syncForm() { if (this.internals && this.formValue) this.internals.setFormValue(this.formValue()); }
+  captureFormState() {
+    const state = {};
+    if ('checked' in this) { const value = this.checked; if (value !== undefined) state.checked = value; }
+    if ('value' in this) { const value = this.value; if (value !== undefined && (value === null || ['string', 'number', 'boolean'].includes(typeof value) || Array.isArray(value))) state.value = value; }
+    return state;
+  }
+  restoreFormState(state) {
+    let snapshot = state;
+    if (typeof state === 'string') { try { snapshot = JSON.parse(state); } catch { snapshot = { value: state }; } }
+    if (!snapshot || typeof snapshot !== 'object') snapshot = { value: snapshot };
+    if (Object.prototype.hasOwnProperty.call(snapshot, 'checked') && 'checked' in this) this.checked = snapshot.checked;
+    if (Object.prototype.hasOwnProperty.call(snapshot, 'value') && 'value' in this) this.value = snapshot.value;
+    this.syncForm();
+  }
+  syncForm() {
+    if (!this.internals || !this.formValue) return;
+    let state = '';
+    try { state = JSON.stringify(this.captureFormState()); } catch {}
+    this.internals.setFormValue(this.formValue(), state);
+  }
+  formResetCallback() { if (this._formDefaults) this.restoreFormState(this._formDefaults); }
+  formStateRestoreCallback(state) { this.restoreFormState(state); }
+  formDisabledCallback(disabled) { this.inert = !!disabled || this.hasAttribute('disabled'); this.syncForm(); }
   get form() { return this.internals ? this.internals.form : null; }
   connectedCallback() {
     if (!this.ready) {
-      this.ready = true; this.root.innerHTML = `<style>*{box-sizing:border-box}${this.constructor.css || ''}</style>${this.render()}`; this.setup(); this.syncForm();
+      this.ready = true; this.root.innerHTML = `<style>*{box-sizing:border-box}${this.constructor.css || ''}</style>${this.render()}`; this.setup(); if (this.internals) this._formDefaults = this.captureFormState(); this.syncForm();
       new ResizeObserver(() => { this.dirty = true; start(); }).observe(this);
       // disabled takes it out of the tab order and out of reach of a screen reader's press, not only the pointer's
       const off = () => { this.inert = this.hasAttribute('disabled'); }; off(); new MutationObserver(off).observe(this, { attributes: true, attributeFilter: ['disabled'] });
