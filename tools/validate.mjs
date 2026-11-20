@@ -41,6 +41,7 @@ const requiredFiles = [
   'registry.json',
   'llms.txt',
   'docs/component-api-conventions.md',
+  'docs/component-inventory.md',
   'LICENSE',
   'tools/extra-core.js',
   'tools/extras-spec.mjs',
@@ -76,6 +77,63 @@ const allTags = SPEC.flatMap(component => component.api?.tags || [`<${component.
 check('all 30 custom element tags are unique', allTags.length === 30 && new Set(allTags).size === allTags.length);
 
 for (const component of SPEC) {
+  const isUtility = EXTRA_NAMES.includes(component.id);
+  const implementationPath = isUtility ? `extras-src/${component.id}.js` : `${component.id}/${component.id}.js`;
+  const implementation = read(implementationPath);
+  const registrationPattern = isUtility
+    ? /customElements\\.define\\(\\s*['"]([^'"]+)['"]/g
+    : /K\\.define\\(\\s*['"]([^'"]+)['"]/g;
+  const registeredTags = [...implementation.matchAll(registrationPattern)].map((match) => match[1]);
+  const documentedTags = component.api?.tags?.map((tag) => tag.replace(/^<|>$/g, '')) || [];
+  check(`source registrations match the API tags: ${component.id}`,
+    JSON.stringify(registeredTags) === JSON.stringify(documentedTags),
+    `source: ${registeredTags.join(', ') || 'none'}; docs: ${documentedTags.join(', ') || 'none'}`);
+
+  const observedMatch = implementation.match(/(?:static\\s+observedAttributes\\s*=\\s*\\[|static\\s+get\\s+observedAttributes\\s*\\(\\s*\\)\\s*\\{\\s*return\\s*\\[)([\\s\\S]*?)\\]/);
+  const sourceObserved = observedMatch
+    ? [...observedMatch[1].matchAll(/['"]([^'"]+)['"]/g)].map((match) => match[1])
+    : [];
+  const documentedAttributes = component.api?.attributes || [];
+  const documentedAttributeNames = documentedAttributes.map((attribute) => attribute[0]);
+  const missingObserved = documentedAttributes
+    .filter((attribute) => /Observed/i.test(attribute[3] || '') &&
+      !/shared base/i.test(attribute[3] || '') &&
+      !sourceObserved.includes(attribute[0]))
+    .map((attribute) => attribute[0]);
+  const undocumentedObserved = sourceObserved.filter((attribute) => !documentedAttributeNames.includes(attribute));
+  check(`observed attributes match the API contract: ${component.id}`,
+    missingObserved.length === 0 && undocumentedObserved.length === 0,
+    `missing from source: ${missingObserved.join(', ') || 'none'}; missing from docs: ${undocumentedObserved.join(', ') || 'none'}`);
+
+  const documentedEvents = (component.api?.events || []).map(([name]) => String(name).replaceAll('`', ''));
+  const missingEvents = documentedEvents.filter((name) =>
+    !implementation.includes(`'${name}'`) && !implementation.includes(`"${name}"`));
+  const sourceEvents = [...implementation.matchAll(/\\.emit\\(\\s*['"]([^'"]+)['"]/g)].map((match) => match[1]);
+  const undocumentedEvents = [...new Set(sourceEvents)].filter((name) => !documentedEvents.includes(name));
+  check(`event names match the API contract: ${component.id}`,
+    missingEvents.length === 0 && undocumentedEvents.length === 0,
+    `missing from source: ${missingEvents.join(', ') || 'none'}; missing from docs: ${undocumentedEvents.join(', ') || 'none'}`);
+
+  const documentedProperties = (component.api?.properties || [])
+    .flatMap(([names]) => String(names).replaceAll('`', '').split(',').map((name) => name.trim()))
+    .filter(Boolean);
+  const missingProperties = documentedProperties.filter((name) => !new RegExp(`\\b${name}\\b`).test(implementation));
+  check(`documented property names exist in source: ${component.id}`,
+    missingProperties.length === 0,
+    missingProperties.join(', ') || '');
+
+  const documentedMethods = (component.api?.methods || [])
+    .map(([signature]) => String(signature).replaceAll('`', '').split('(')[0].trim())
+    .filter(Boolean);
+  const missingMethods = documentedMethods.filter((name) =>
+    !new RegExp(`\\b${name.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\for (const component of SPEC) {
+  check(`API metadata exists: ${component.id}`, Boolean(component.api));')}\\s*\\(`).test(implementation));
+  check(`documented method names exist in source: ${component.id}`,
+    missingMethods.length === 0,
+    missingMethods.join(', ') || '');
+
+  check(`API tags are unique within source: ${component.id}`,
+    new Set(registeredTags).size === registeredTags.length);
   check(`API metadata exists: ${component.id}`, Boolean(component.api));
   check(`API sections are complete: ${component.id}`, Boolean(
     component.api?.attributes?.length &&
@@ -94,6 +152,14 @@ for (const component of SPEC) {
   check(`generated guide contains event contract: ${component.id}`, guide.includes('### Events'));
   check(`generated guide contains form behavior: ${component.id}`, guide.includes('## 📝 Form integration'));
 }
+
+const inventory = read('docs/component-inventory.md');
+check('component inventory records all 29 component IDs', ids.every((id) => inventory.includes(`(${id})`)));
+check('component inventory records the original and utility families',
+  inventory.includes('Original mechanical controls (7)') &&
+  inventory.includes('Lightweight utility controls (22)'));
+check('component inventory documents the static audit boundary',
+  inventory.includes('This static audit does **not** prove event timing or payload semantics'));
 
 const rootIndex = read('index.html');
 check('root page redirects to the gallery', /url\s*=\s*gallery\//i.test(rootIndex) && rootIndex.includes('href="gallery/"'));
