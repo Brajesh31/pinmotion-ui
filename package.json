@@ -19,8 +19,9 @@
     "validate": "node tools/validate.mjs",
     "test": "npm run validate",
     "test:browser": "node tools/test.mjs http://127.0.0.1:8000/gallery/",
-    "check": "npm run build:check && npm run docs:check && npm run validate",
-    "screenshots": "node tools/shot.mjs"
+    "check": "npm run build:check && npm run docs:check && npm run validate && npm run integrity",
+    "screenshots": "node tools/shot.mjs",
+    "integrity": "node tools/integrity.mjs"
   },
   "repository": {
     "type": "git",

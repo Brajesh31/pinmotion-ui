@@ -56,6 +56,7 @@ const requiredFiles = [
   'tools/shot.mjs',
   'tools/serve.mjs',
   'tools/validate.mjs',
+  'tools/integrity.mjs',
   'package.json',
   'package-lock.json'
 ];
@@ -151,6 +152,7 @@ const syntaxFiles = [
   'tools/shot.mjs',
   'tools/serve.mjs',
   'tools/validate.mjs',
+  'tools/integrity.mjs',
   'skills/pinball-ui/core.js',
   'skills/pinball-ui/look.mjs'
 ];

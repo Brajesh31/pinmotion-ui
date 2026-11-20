@@ -37,8 +37,9 @@ The local server binds to `127.0.0.1` by default. Set `HOST` or `PORT`, or use `
 | `npm run docs` | `tools/docs.mjs` | Generate component docs, demo pages, gallery, registry, and LLM guide |
 | `npm run docs:check` | `tools/docs.mjs --check` | Check generated documentation parity |
 | `npm run validate` | `tools/validate.mjs` | Run read-only structural, metadata, and JavaScript syntax checks |
+| `npm run integrity` | `tools/integrity.mjs` | Verify runtime-family boundaries, bundle/API/registry alignment, links and visual asset integrity |
 | `npm test` | `npm run validate` | Alias for the structural validator; not the Chrome interaction suite |
-| `npm run check` | build check + docs check + validate | Main local quality gate |
+| `npm run check` | build check + docs check + validate + integrity | Main local quality gate |
 | `npm run test:browser` | `tools/test.mjs` | Optional real-input test in headless Chrome/Chromium |
 | `npm run screenshots -- ...` | `tools/shot.mjs` | Capture a page or a timed film sequence |
 
