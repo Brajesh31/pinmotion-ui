@@ -17,8 +17,7 @@ The workflow is [`.github/workflows/deploy-pages.yml`](../.github/workflows/depl
 
 ### Trigger
 
-- Push to `main`;
-- manual `workflow_dispatch`.
+- Manual `workflow_dispatch` only. Automatic pushes use the Generate and publish workflow, which regenerates the source outputs and deploys them in one ordered run.
 
 ### Build job
 

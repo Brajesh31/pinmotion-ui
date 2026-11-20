@@ -6,9 +6,9 @@ The repository has three GitHub Actions workflows:
 
 | Workflow | Trigger | What it does |
 | --- | --- | --- |
-| [Validate](../.github/workflows/validate.yml) | Push to `main`, pull request targeting `main`, or manual dispatch | Runs npm install/checks and static-server smoke tests |
-| [Deploy to GitHub Pages](../.github/workflows/deploy-pages.yml) | Push to `main` or manual dispatch | Verifies static files, syntax and registry JSON, then deploys the site |
-| [Generate and publish components](../.github/workflows/generate-components.yml) | Push to `main` or manual dispatch | Builds all 29 bundles, generates guides/demos/registry, runs checks, smoke-tests routes, and deploys Pages |
+| [Validate](../.github/workflows/validate.yml) | Pull request targeting `main` or manual dispatch | Runs npm install/checks and static-server smoke tests |
+| [Deploy to GitHub Pages](../.github/workflows/deploy-pages.yml) | Manual dispatch only | Verifies static files, syntax and registry JSON, then deploys the current committed site |
+| [Generate and publish components](../.github/workflows/generate-components.yml) | Push to `main` or manual dispatch | Builds all 29 bundles, generates guides/demos/registry, runs checks, smoke-tests routes, commits generated outputs, and deploys Pages |
 
 The two workflows are independently triggered by their configured events. The Pages workflow does not declare a dependency on the Validate workflow.
 
