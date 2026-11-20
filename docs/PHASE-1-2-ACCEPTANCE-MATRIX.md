@@ -1,8 +1,15 @@
 # 🧪 Phase 1–2 acceptance matrix
 
 > **Purpose:** Evidence ledger for the contract audit (Phase 1) and functional regression coverage (Phase 2).
-> **Baseline reviewed:** `main` at `61420811c12b199a8de3d2bf2c894daf03a30d0d` (21 November 2026).
+> **Baseline reviewed:** `main` at `f54d1e4f9ce1e989691ddf707179c8764c67c3f9` (21 November 2026).
 > **Rule:** A check is complete only when an executable test or dated manual evidence exists. Source presence and a successful build are not behavioral proof.
+
+## Latest CI evidence
+
+- **Validate:** [run 44833625705](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44833625705) passed on `f54d1e4f9ce1e989691ddf707179c8764c67c3f9`, including the browser suite.
+- **GitHub Pages generation/deployment:** [run 44833625348](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44833625348) passed on the same commit.
+- Added browser assertions cover programmatic checkbox event suppression, checkbox event bubbling/composed payload, selected utility boundary normalization, and native required-field validity.
+- This evidence confirms the current suite passes. It does not close the broader Phase 1/2 exit criteria or manual real-device checks.
 
 ## Evidence labels
 
