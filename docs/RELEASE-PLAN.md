@@ -153,7 +153,6 @@ Known implementation gaps are not passes:
 - `formResetCallback` is absent from both component bases, so native form reset does not restore custom component values.
 - `formStateRestoreCallback` is absent from both bases.
 - Disabled-fieldset support is present in the PinmotionExtras base but absent in the original PinballKit base.
-- Plunger pull/shot and indeterminate Progress animation do not fully honor reduced-motion preferences.
 - Drop Targets' `bonus` event is tied to a normal-motion impact callback; consumers should use `change.detail.allChecked` for state logic.
 
 Exit gate:
@@ -185,7 +184,7 @@ Exit gate:
 - Approved screenshots exist for every component family and the complete gallery.
 
 ### Phase 4 · Accessibility audit and remediation
-**Status: Not started**
+**Status: In progress · Plunger and indeterminate Progress now honor reduced-motion preferences with passing Chromium regression coverage; full WCAG review and assistive-technology evidence remain open**
 
 **Target:** WCAG 2.2 Level AA for the complete project site and its documented interactive examples. This is a target, not a conformance claim. WCAG conformance applies to complete pages and responsive variants, not isolated controls. See the [W3C WCAG 2.2 Recommendation](https://www.w3.org/TR/WCAG22/).
 
@@ -193,7 +192,9 @@ Scope:
 - Audit semantic HTML, accessible names, roles, states and relationships.
 - Verify keyboard interaction, focus order, visible focus, dialogs and live announcements.
 - Test form error messages and validation announcements.
-- Test reduced-motion behavior for all interactions.
+- [x] Add reduced-motion handling for Plunger spring/ball travel and indeterminate Progress animation.
+- [x] Add Chromium assertions for reduced-motion Progress and Plunger behavior. Evidence: [Validate run 44835256653](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44835256653), commit `a47c5b40eeb5fb9f5232c51863531d3300a7c847`.
+- [ ] Review reduced-motion behavior for every remaining animated component and verify dynamic preference changes.
 - Test with representative screen readers and browser combinations.
 - Record findings, remediation, retest evidence and known limitations.
 
@@ -232,8 +233,8 @@ Exit gate:
 
 - `formResetCallback` and `formStateRestoreCallback` are not implemented by either base class.
 - The original PinballKit base lacks `formDisabledCallback`; disabled-fieldset behavior for the four original form controls is not established.
-- Plunger and Progress have documented reduced-motion gaps.
 - Drop Targets' `bonus` event is not emitted in reduced-motion mode; rely on its change-state payload for application logic.
+- Full WCAG 2.2 AA review and NVDA, VoiceOver and TalkBack testing remain outstanding.
 - Firefox, Safari, physical phones/tablets and screen readers are not represented by current automated browser evidence.
 
 These issues must be resolved or explicitly accepted before stable publication. Never infer support from the presence of a custom element, ARIA attribute, or demo route.
