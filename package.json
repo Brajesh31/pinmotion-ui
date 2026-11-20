@@ -1,0 +1,43 @@
+{
+  "name": "pinmotion-ui",
+  "version": "0.0.0-private",
+  "private": true,
+  "description": "Pinball-inspired standalone Web Components for browser interfaces.",
+  "author": "Brajesh Kumar",
+  "license": "UNLICENSED",
+  "type": "module",
+  "engines": {
+    "node": ">=22.0.0",
+    "npm": ">=10.0.0"
+  },
+  "scripts": {
+    "build": "node tools/build.mjs",
+    "build:check": "node tools/build.mjs --check",
+    "docs": "node tools/docs.mjs",
+    "docs:check": "node tools/docs.mjs --check",
+    "serve": "node tools/serve.mjs",
+    "validate": "node tools/validate.mjs",
+    "test": "npm run validate",
+    "test:browser": "node tools/test.mjs http://127.0.0.1:8000/gallery/",
+    "check": "npm run build:check && npm run docs:check && npm run validate",
+    "screenshots": "node tools/shot.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Brajesh31/pinmotion-ui.git"
+  },
+  "homepage": "https://brajesh31.github.io/pinmotion-ui/",
+  "bugs": {
+    "url": "https://github.com/Brajesh31/pinmotion-ui/issues"
+  },
+  "keywords": [
+    "web-components",
+    "custom-elements",
+    "pinball",
+    "ui-components",
+    "webgl",
+    "canvas",
+    "animation",
+    "vanilla-javascript"
+  ]
+}
