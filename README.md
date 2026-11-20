@@ -1,5 +1,7 @@
 # Pinball UI
 
+> 🚦 **Release status: NO-GO · Not released.** The stable release is locked until every mandatory phase and item in the [release plan](docs/RELEASE-PLAN.md) and [release checklist](docs/RELEASE-CHECKLIST.md) passes. The GitHub Pages site is a development preview, not a stable release.
+
 Twenty-nine standalone interface bundles: seven original controls rebuilt as pinball-machine mechanisms, plus 22 lightweight utility components. Each bundle registers custom elements and has no external runtime package dependencies.
 
 ![Pinball UI control collection](gallery/title.jpg)
@@ -8,7 +10,7 @@ Twenty-nine standalone interface bundles: seven original controls rebuilt as pin
 [![Deploy to GitHub Pages](https://github.com/Brajesh31/pinmotion-ui/actions/workflows/deploy-pages.yml/badge.svg?branch=main)](https://github.com/Brajesh31/pinmotion-ui/actions/workflows/deploy-pages.yml)
 [![GitHub stars](https://img.shields.io/github/stars/Brajesh31/pinmotion-ui?style=flat)](https://github.com/Brajesh31/pinmotion-ui/stargazers)
 
-**[Open the live gallery](https://brajesh31.github.io/pinmotion-ui/gallery/)** · [Source code](https://github.com/Brajesh31/pinmotion-ui) · [Component registry](registry.json) · [LLM guide](llms.txt) · [MIT License](LICENSE)
+**[Open the live gallery](https://brajesh31.github.io/pinmotion-ui/gallery/)** · [Release plan](docs/RELEASE-PLAN.md) · [Release checklist](docs/RELEASE-CHECKLIST.md) · [Source code](https://github.com/Brajesh31/pinmotion-ui) · [Component registry](registry.json) · [LLM guide](llms.txt) · [MIT License](LICENSE)
 
 ## 🎮 What is included
 
