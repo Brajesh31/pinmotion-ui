@@ -57,6 +57,8 @@ For applicable controls assert:
 - `form.reset()` restores the documented initial value.
 - Browser state restoration has a documented contract and tested behavior if supported.
 
+**Implemented baseline:** Both shared bases now capture writable `checked`/`value` state after setup, serialize it as the ElementInternals restoration state, implement `formResetCallback` and `formStateRestoreCallback`, and propagate disabled-fieldset state. The browser suite now includes representative reset, state-restore and fieldset assertions. Extend this baseline across every form-associated control and browser before closing Phase 2.
+
 ### E. Asynchronous behavior and cleanup
 
 - Drain deletion, undo window, commit and replacement-ball lifecycle.
