@@ -88,7 +88,7 @@ This is the high-level project development tracker. For the stricter, complete p
 **Status: Not started.** Requires screenshot-based review of all 29 demos and the gallery at supported viewport sizes.
 
 ### Phase 4. Accessibility audit and remediation
-**Status: In progress.** Reduced-motion handling for Plunger and indeterminate Progress is implemented and covered by passing Chromium assertions. Full keyboard audit, WCAG review, form lifecycle fixes and screen-reader verification remain open.
+**Status: In progress.** Reduced-motion handling for Plunger and indeterminate Progress is implemented and covered by passing Chromium assertions. Full keyboard audit, WCAG review, per-control form lifecycle verification and screen-reader testing remain open.
 
 ### Phase 5. Browser and device compatibility
 **Status: Not started.** Firefox, Safari, physical iOS/Android and assistive-technology combinations remain unverified.
