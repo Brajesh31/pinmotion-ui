@@ -547,8 +547,30 @@ class PinballPlunger extends K.Base {
   spot(at = SPOT) { const s = this.clientHeight / BOX[3], x = (at - BOX[0]) * s; return [this.flipped ? this.clientWidth - x : x, (YC - BOX[1]) * s, s]; }
 
   step(h) {
-    // the plunger
+    // The plunger
     if (this.key || this.auto) this.pull = Math.min(1, this.pull + h / 0.4);
+    if (K.calm) {
+      // Reduced motion keeps direct input responsive but removes spring, drop, bounce and travel animations.
+      if (this.held) {
+        this.px = this.pull * PULL; this.pv = 0;
+        if (this.px > 0.97 * PULL && this.ball === 'none') {
+          this.ball = 'ready'; this.bt = 0; this.bounced = 2; this.at = SPOT + this.px; this.ballDirty = true;
+        }
+      }
+      if (this.auto && this.ball === 'ready') { this.auto = false; this.letGo(); }
+      if (this.wait && this.ball === 'ready') this.letGo();
+      if (!this.held) {
+        this.px = 0; this.pv = 0;
+        if (!this.struck) {
+          this.struck = true;
+          if (this.ball === 'ready' && this.power > 0.15) this.shoot();
+          else this.power = 0;
+        }
+        if (this.ball === 'away') this.home();
+      }
+      this.bump.x = 0; this.bump.v = 0; this.bump.idle = true;
+      return;
+    }
     if (this.auto && this.ball === 'ready' && this.bt > 0.1) { this.auto = false; this.letGo(); }
     if (this.wait && this.ball === 'ready') this.letGo();
     if (this.held) { const to = this.pull * PULL; this.pv = 0; this.px += (to - this.px) * (1 - Math.exp(-h / 0.02)); }
