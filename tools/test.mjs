@@ -261,6 +261,73 @@ check('date picker: ISO date value is reflected', await prop('date-picker','valu
 await ev("document.querySelector('pinball-color-picker').value='#ff0000'");
 check('color picker: hex value and readout stay synchronized', await prop('color-picker','value') === '#ff0000' && await ev("document.querySelector('pinball-color-picker').shadowRoot.querySelector('.hex').textContent") === '#FF0000', await prop('color-picker','value'));
 
+
+ // Phase 2 contract smoke checks: state normalization, event contract and propagation.
+ const eventContract = await ev(`(() => {
+   const e = document.querySelector('pinball-checkbox');
+   const before = e.checked;
+   let got = null;
+   const listener = (event) => { got = { detail: event.detail, bubbles: event.bubbles, composed: event.composed, ctor: event.constructor.name }; };
+   e.addEventListener('change', listener, { once: true });
+   e.checked = !before;
+   const programmaticEvents = got;
+   e.checked = before;
+   e.dispatchEvent(new CustomEvent('phase2-probe', { bubbles: true, composed: true }));
+   return JSON.stringify({ programmaticEvents, hostConnected: e.isConnected, shadow: !!e.shadowRoot });
+ })()`);
+ const contractData = JSON.parse(eventContract);
+ check('phase 2: programmatic checkbox property updates do not emit user change events',
+   contractData.programmaticEvents === null, JSON.stringify(contractData.programmaticEvents));
+ check('phase 2: utility custom elements remain connected with an open shadow root',
+   contractData.hostConnected && contractData.shadow);
+
+ const propagation = await ev(`(() => {
+   const e = document.querySelector('pinball-checkbox');
+   let observed = null;
+   const listener = (event) => { observed = { bubbles: event.bubbles, composed: event.composed, detail: event.detail }; };
+   e.addEventListener('change', listener, { once: true });
+   e.shadowRoot.querySelector('.check').click();
+   return JSON.stringify(observed);
+ })()`);
+ const propagated = JSON.parse(propagation);
+ check('phase 2: checkbox change bubbles and crosses the shadow boundary',
+   propagated?.bubbles === true && propagated?.composed === true &&
+   propagated?.detail?.checked === true && propagated?.detail?.value === 'email',
+   JSON.stringify(propagated));
+
+ const utilityState = await ev(`(() => {
+   const checks = {};
+   const q = (tag) => document.querySelector('pinball-' + tag);
+   const rating = q('rating'); rating.value = 999;
+   checks.ratingMaximumClamped = rating.value === Number(rating.getAttribute('max') || 5);
+   const progress = q('progress'); progress.value = 999;
+   checks.progressBounded = progress.shadowRoot.querySelector('.track').getAttribute('aria-valuenow') === String(progress.max);
+   const date = q('date-picker'); date.setAttribute('min', '2026-11-21'); date.setAttribute('max', '2026-11-21');
+   date.value = '2026-11-21'; checks.dateISOValue = date.value === '2026-11-21';
+   const tabs = q('tabs'); tabs.activeIndex = 999;
+   checks.tabsIndexClamped = tabs.activeIndex === 2;
+   const radio = q('radio-group'); const oldRadio = radio.value; radio.value = '__missing__';
+   checks.radioRejectsUnknownValue = radio.value === oldRadio;
+   const segmented = q('segmented'); const oldSegmented = segmented.value; segmented.value = '__missing__';
+   checks.segmentedRejectsUnknownValue = segmented.value === oldSegmented;
+   return JSON.stringify(checks);
+ })()`);
+ const states = JSON.parse(utilityState);
+ for (const [name, passed] of Object.entries(states)) {
+   check('phase 2 state boundary: ' + name, passed, JSON.stringify(states));
+ }
+ 
+ const nativeValidity = await ev(`(() => {
+   const e = document.querySelector('pinball-text-field');
+   e.setAttribute('required', '');
+   const input = e.shadowRoot.querySelector('input');
+   input.value = '';
+   return JSON.stringify({ valueMissing: input.validity.valueMissing, invalid: !input.checkValidity() });
+ })()`);
+ const validity = JSON.parse(nativeValidity);
+ check('phase 2 forms: required text field exposes native valueMissing validity',
+   validity.valueMissing && validity.invalid, JSON.stringify(validity));
+
 // disabled
 await ev(`${E('toggle')}.setAttribute('disabled', '')`); await sleep(50);
 check('disabled: the toggle is inert', (await ev(`${E('toggle')}.inert`)) === true);
