@@ -283,6 +283,7 @@ check('color picker: hex value and readout stay synchronized', await prop('color
 
  const propagation = await ev(`(() => {
    const e = document.querySelector('pinball-checkbox');
+   e.checked = false;
    let observed = null;
    const listener = (event) => { observed = { bubbles: event.bubbles, composed: event.composed, detail: event.detail }; };
    e.addEventListener('change', listener, { once: true });
