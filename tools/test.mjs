@@ -34,7 +34,7 @@ const keyUp = (k, code) => send('Input.dispatchKeyEvent', { type: 'keyUp', key: 
 const focus = (tag, sel) => ev(`${S(tag, sel)}.focus()`);
 const prop = (tag, p) => ev(`${E(tag)}.${p}`);
 // count the events each element fires, so a check can ask whether change really reached the page
-await ev(`window.__n = {}; for (const t of ['input', 'change', 'send', 'bonus', 'delete', 'undo', 'commit', 'reset', 'hit']) document.addEventListener(t, (e) => { if (!e.target.localName.startsWith('pinball-')) return; const k = e.target.localName.slice(8) + ' ' + t; __n[k] = (__n[k] || 0) + 1; })`);
+await ev(`window.__n = {}; for (const t of ['input', 'change', 'send', 'bonus', 'delete', 'undo', 'commit', 'reset', 'hit', 'show', 'dismiss', 'search', 'open', 'close', 'cancel', 'toggle']) document.addEventListener(t, (e) => { if (!e.target.localName.startsWith('pinball-')) return; const k = e.target.localName.slice(8) + ' ' + t; __n[k] = (__n[k] || 0) + 1; })`);
 const fired = (k) => ev(`__n[${JSON.stringify(k)}] || 0`);
 // put the gallery's grid inside a form, once, to read what a form would send (the controls are form-associated)
 await ev(`(() => { const f = document.createElement('form'); f.id = 'f'; const g = document.getElementById('grid'); g.before(f); f.appendChild(g); for (const t of ['toggle', 'slider', 'stepper', 'targets']) document.querySelector('pinball-' + t).setAttribute('name', t); })()`); await sleep(600);
@@ -101,6 +101,92 @@ check('bumpers: a tap drops a ball that scores several hits', (await fired('bump
   check('plunger: a full pull and release sends once', (await fired('plunger send')) === 1, await fired('plunger send')); }
 await focus('plunger', 'button'); await key(' ', 32, false); await sleep(1300); await keyUp(' ', 32); await sleep(800);
 check('plunger: holding Space and letting go sends', (await fired('plunger send')) === 2, await fired('plunger send'));
+
+
+check('all 22 lightweight elements connect and attach Shadow DOM', await ev("['checkbox','radio-group','segmented','progress','meter','rating','tabs','accordion','disclosure','tooltip','dialog','toast','breadcrumbs','pagination','search','text-field','text-area','select','combobox','file-drop','date-picker','color-picker'].every(id => { const e=document.querySelector('pinball-'+id); return !!(e && e.shadowRoot); })") === true);
+
+// Checkbox, radio group and segmented selector.
+await ev("document.querySelector('pinball-checkbox').setAttribute('name','extra-checkbox')");
+await tap('checkbox','.check');
+check('checkbox: pointer toggles and emits change', await prop('checkbox','checked') === true && await fired('checkbox change') === 1, await prop('checkbox','checked'));
+check('checkbox: checked value participates in form', await formValue('extra-checkbox') === 'on', await formValue('extra-checkbox'));
+
+await ev("document.querySelector('pinball-radio-group').setAttribute('name','extra-radio')");
+await tap('radio-group','button[data-value="team"]');
+check('radio group: selecting an option updates value', await prop('radio-group','value') === 'team' && await fired('radio-group change') === 1, await prop('radio-group','value'));
+check('radio group: selected value participates in form', await formValue('extra-radio') === 'team', await formValue('extra-radio'));
+
+await ev("document.querySelector('pinball-segmented').setAttribute('name','extra-range')");
+await tap('segmented','button[data-value="month"]');
+check('segmented: clicking a segment updates selection', await prop('segmented','value') === 'month' && await fired('segmented change') === 1, await prop('segmented','value'));
+check('segmented: selected value participates in form', await formValue('extra-range') === 'month', await formValue('extra-range'));
+
+// Informational displays.
+await ev("document.querySelector('pinball-progress').value = 65");
+check('progress: value updates its progressbar aria state', await ev("document.querySelector('pinball-progress').shadowRoot.querySelector('.track').getAttribute('aria-valuenow')") === '65');
+await ev("document.querySelector('pinball-meter').value = 72");
+check('meter: value updates its meter aria state', await ev("document.querySelector('pinball-meter').shadowRoot.querySelector('.track').getAttribute('aria-valuenow')") === '72');
+
+// Rating, tabs and accordion.
+await ev("document.querySelector('pinball-rating').setAttribute('name','extra-rating')");
+await tap('rating','button[data-value="5"]');
+check('rating: selecting a star updates value and emits change', await prop('rating','value') === 5 && await fired('rating change') === 1, await prop('rating','value'));
+check('rating: rating participates in form submission', await formValue('extra-rating') === '5', await formValue('extra-rating'));
+
+await tap('tabs','button[data-index="1"]');
+check('tabs: selecting the second tab updates activeIndex', await prop('tabs','activeIndex') === 1 && await fired('tabs change') === 1, await prop('tabs','activeIndex'));
+
+await tap('accordion','button[data-index="1"]');
+check('accordion: opening a section updates expanded state', (await prop('accordion','expanded')).includes(1) && await fired('accordion change') === 1, JSON.stringify(await prop('accordion','expanded')));
+
+// Disclosure, tooltip, native dialog and toast feedback.
+await tap('disclosure','summary');
+check('disclosure: summary toggles the native disclosure', await prop('disclosure','open') === true && await fired('disclosure toggle') === 1, await prop('disclosure','open'));
+
+await focus('tooltip','.tip');
+check('tooltip: keyboard focus displays the description', await ev("document.querySelector('pinball-tooltip').shadowRoot.querySelector('.bubble').getAttribute('data-open')") === 'true');
+
+await ev("document.querySelector('pinball-dialog').showModal()");
+check('dialog: showModal opens the native dialog', await prop('dialog','open') === true && await fired('dialog open') === 1);
+await ev("document.querySelector('pinball-dialog').close()");
+await sleep(100);
+check('dialog: close closes the native dialog', await prop('dialog','open') === false && await fired('dialog close') === 1);
+
+await ev("document.querySelector('pinball-toast').show('Browser test toast', 0)");
+check('toast: show reveals the status message', await ev("document.querySelector('pinball-toast').shadowRoot.querySelector('.shell').hidden") === false && await fired('toast show') === 1);
+await ev("document.querySelector('pinball-toast').dismiss()");
+check('toast: dismiss hides the status message', await ev("document.querySelector('pinball-toast').shadowRoot.querySelector('.shell').hidden") === true && await fired('toast dismiss') === 1);
+
+// Navigation and search.
+check('breadcrumbs: final item is marked as the current page', await ev("document.querySelector('pinball-breadcrumbs').shadowRoot.querySelector('[aria-current=page]').textContent") === 'Breadcrumbs');
+
+await tap('pagination','button[data-page="5"]');
+check('pagination: selecting a page updates the page property', await prop('pagination','page') === 5 && await fired('pagination change') === 1, await prop('pagination','page'));
+
+await ev("(() => { const e=document.querySelector('pinball-search'); const i=e.shadowRoot.querySelector('input'); i.value='pinball'; i.dispatchEvent(new Event('input',{bubbles:true})); e.shadowRoot.querySelector('form').requestSubmit(); })()");
+check('search: submit emits the search event', await fired('search search') === 1);
+
+// Text, selection, file and native input controls.
+await ev("(() => { const e=document.querySelector('pinball-text-field'); e.setAttribute('name','extra-text'); const i=e.shadowRoot.querySelector('input'); i.value='Ada'; i.dispatchEvent(new Event('input',{bubbles:true})); })()");
+check('text field: input updates the value and form data', await prop('text-field','value') === 'Ada' && await formValue('extra-text') === 'Ada', await prop('text-field','value'));
+
+await ev("(() => { const e=document.querySelector('pinball-text-area'); const i=e.shadowRoot.querySelector('textarea'); i.value='A longer note'; i.dispatchEvent(new Event('input',{bubbles:true})); })()");
+check('text area: multiline input updates value', await prop('text-area','value') === 'A longer note', await prop('text-area','value'));
+
+await ev("(() => { const e=document.querySelector('pinball-select'); const s=e.shadowRoot.querySelector('select'); s.value='hard'; s.dispatchEvent(new Event('change',{bubbles:true})); })()");
+check('select: native selection updates custom value', await prop('select','value') === 'hard' && await fired('select change') === 1, await prop('select','value'));
+
+await ev("(() => { const e=document.querySelector('pinball-combobox'); const i=e.shadowRoot.querySelector('input'); i.value='amber'; i.dispatchEvent(new Event('input',{bubbles:true})); e.shadowRoot.querySelector('.option')?.click(); })()");
+check('combobox: filtered option selection commits a value', await prop('combobox','value') === 'amber' && await fired('combobox change') === 1, await prop('combobox','value'));
+
+await ev("(() => { const e=document.querySelector('pinball-file-drop'); const f=new File(['x'],'tiny.txt',{type:'text/plain'}); e.setFiles([f]); })()");
+check('file drop: selected files are exposed to the host', await ev("document.querySelector('pinball-file-drop').files[0].name") === 'tiny.txt' && await fired('file-drop change') === 1);
+
+await ev("document.querySelector('pinball-date-picker').value='2026-11-20'");
+check('date picker: ISO date value is reflected', await prop('date-picker','value') === '2026-11-20', await prop('date-picker','value'));
+
+await ev("document.querySelector('pinball-color-picker').value='#ff0000'");
+check('color picker: hex value and readout stay synchronized', await prop('color-picker','value') === '#ff0000' && await ev("document.querySelector('pinball-color-picker').shadowRoot.querySelector('.hex').textContent") === '#FF0000', await prop('color-picker','value'));
 
 // disabled
 await ev(`${E('toggle')}.setAttribute('disabled', '')`); await sleep(50);
