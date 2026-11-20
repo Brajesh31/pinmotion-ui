@@ -234,13 +234,44 @@ put('gallery/index.html', `<!doctype html>
   <p class="note">Explore the live controls. The original mechanical set initializes sound after the first interaction. Utility components use native inputs and CSS-based presentation. Test reduced-motion and browser behavior in your target environment.</p>
   <p class="sr" aria-live="polite" id="copied"></p>
 </div>
+<script>
+(() => {
+  const status = document.getElementById('gallery-status');
+  const grid = document.getElementById('grid');
+  const fail = (message) => {
+    if (status) {
+      status.textContent = 'Gallery startup failed: ' + message + '. Refresh the page or check the browser console for details.';
+      status.dataset.state = 'error';
+    }
+    if (grid) grid.setAttribute('aria-busy', 'false');
+    console.error('[Pinmotion UI] Gallery startup failed:', message);
+  };
+  window.addEventListener('error', (event) => {
+    if (event.target instanceof HTMLScriptElement) {
+      fail('a component script could not load (' + event.target.src + ')');
+    } else if (event instanceof ErrorEvent) {
+      fail(event.message || 'a JavaScript error prevented the gallery from starting');
+    }
+  }, true);
+  window.addEventListener('unhandledrejection', (event) => {
+    fail(event.reason?.message || String(event.reason || 'an unhandled asynchronous error occurred'));
+  });
+  window.addEventListener('DOMContentLoaded', () => {
+    window.setTimeout(() => {
+      if (grid?.getAttribute('aria-busy') === 'true') {
+        fail('the gallery bootstrap did not finish');
+      }
+    }, 8000);
+  }, { once: true });
+})();
+</script>
 ${SPEC.map((c) => `<script src="../${c.id}/${c.id}.js"></script>`).join('\n')}
 <script>
 // The gallery: every control live on one page, with its install line and a prompt that hands a coding agent the real file.
 const REPO = '${REPO}', SITE = '${SITE}';
 const ITEMS = ${JSON.stringify(items.map(({ wire, ...rest }) => rest), null, 2)};
 const WIRE = {
-${items.map((c) => `  ${c.id}: (el, say) => { ${c.wire} },`).join('\n')}
+${items.map((c) => `  ${JSON.stringify(c.id)}: (el, say) => { ${c.wire} },`).join('\n')}
 };
 const grid = document.getElementById('grid'), copied = document.getElementById('copied');
 const status = document.getElementById('gallery-status'), search = document.getElementById('component-search');
