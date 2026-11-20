@@ -34,12 +34,20 @@ function read(path) {
 function namesFromPayload(text) {
   const match = String(text).match(/\{([^{}]*)\}/);
   if (!match) return null;
-  return [...match[1].matchAll(/(?:^|,)\s*([A-Za-z_$][\w$]*)\s*:/g)]
-    .map((item) => item[1]).sort();
+  return match[1].split(',').map((part) => {
+    const key = part.trim().match(/^([A-Za-z_$][\w$]*)\s*(?::|$)/);
+    return key ? key[1] : null;
+  }).filter(Boolean).sort();
 }
 
 function sameNames(left, right) {
   return JSON.stringify([...left].sort()) === JSON.stringify([...right].sort());
+}
+
+function claimsFormAssociated(text) {
+  const value = String(text || '');
+  if (!/\bform-associated\b/i.test(value)) return false;
+  return !/\b(?:not|neither|no)\b[^.!?]{0,80}\bform-associated\b/i.test(value);
 }
 
 const allTags = [];
@@ -89,9 +97,9 @@ for (const component of SPEC) {
     'missing from source=' + missingObserved.join(', ') +
     '; missing from docs=' + undocumentedObserved.join(', '));
 
-  const declaredFormAssociated = /^\s*static\s+formAssociated\s*=\s*true\s*;?/m.test(source);
-  const declaredFormValue = /^\s*formValue\s*\([^)]*\)\s*\{/m.test(source);
-  const documentedFormAssociated = /\bform-associated\b/i.test(api.forms || '');
+  const declaredFormAssociated = /static\s+formAssociated\s*=\s*true\s*;/.test(source);
+  const declaredFormValue = /\bformValue\s*\([^)]*\)\s*\{/.test(source);
+  const documentedFormAssociated = claimsFormAssociated(api.forms);
   check(id + ': form association matches the API guide',
     declaredFormAssociated === documentedFormAssociated,
     'source=' + declaredFormAssociated + '; docs=' + documentedFormAssociated);
@@ -112,7 +120,8 @@ for (const component of SPEC) {
         plainEvents.includes(eventName));
       continue;
     }
-    const expectedKeys = namesFromPayload(payloadText);
+    let expectedKeys = namesFromPayload(payloadText);
+    if (/empty detail/i.test(payloadText)) expectedKeys = [];
     const candidates = emitted.filter((event) => event.name === eventName);
     const matched = expectedKeys === null
       ? candidates.length > 0
