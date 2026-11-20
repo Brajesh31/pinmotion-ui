@@ -73,6 +73,37 @@
   <p class="note">Explore the live controls. The original mechanical set initializes sound after the first interaction. Utility components use native inputs and CSS-based presentation. Test reduced-motion and browser behavior in your target environment.</p>
   <p class="sr" aria-live="polite" id="copied"></p>
 </div>
+<script>
+(() => {
+  const status = document.getElementById('gallery-status');
+  const grid = document.getElementById('grid');
+  const fail = (message) => {
+    if (status) {
+      status.textContent = 'Gallery startup failed: ' + message + '. Refresh the page or check the browser console for details.';
+      status.dataset.state = 'error';
+    }
+    if (grid) grid.setAttribute('aria-busy', 'false');
+    console.error('[Pinmotion UI] Gallery startup failed:', message);
+  };
+  window.addEventListener('error', (event) => {
+    if (event.target instanceof HTMLScriptElement) {
+      fail('a component script could not load (' + event.target.src + ')');
+    } else if (event instanceof ErrorEvent) {
+      fail(event.message || 'a JavaScript error prevented the gallery from starting');
+    }
+  }, true);
+  window.addEventListener('unhandledrejection', (event) => {
+    fail(event.reason?.message || String(event.reason || 'an unhandled asynchronous error occurred'));
+  });
+  window.addEventListener('DOMContentLoaded', () => {
+    window.setTimeout(() => {
+      if (grid?.getAttribute('aria-busy') === 'true') {
+        fail('the gallery bootstrap did not finish');
+      }
+    }, 8000);
+  }, { once: true });
+})();
+</script>
 <script src="../toggle/toggle.js"></script>
 <script src="../slider/slider.js"></script>
 <script src="../plunger/plunger.js"></script>
@@ -456,35 +487,35 @@ const ITEMS = [
   }
 ];
 const WIRE = {
-  toggle: (el, say) => { el.addEventListener('change', (e) => say(e.detail.checked ? 'On' : 'Off')); },
-  slider: (el, say) => { el.addEventListener('input', (e) => say(String(e.detail.value))); },
-  plunger: (el, say) => { let n = 0; el.addEventListener('send', () => say('Sent ' + ++n)); },
-  stepper: (el, say) => { el.addEventListener('input', (e) => say(String(e.detail.value).padStart(2, '0'))); },
-  targets: (el, say) => { const show = () => say(el.selected.length ? el.selected.join(' · ') : 'None'); el.addEventListener('change', show); el.addEventListener('bonus', () => say('All four')); show(); },
-  drain: (el, say) => { el.addEventListener('delete', () => say('Deleted. Undo?')); el.addEventListener('undo', () => say('Saved')); el.addEventListener('commit', () => { say('Gone'); setTimeout(() => { el.reset(); say(''); }, 1600); }); },
-  bumper: (el, say) => { el.addEventListener('hit', (e) => say('+' + e.detail.points + ' · ' + e.detail.score.toLocaleString())); },
-  checkbox: (el, say) => { el.addEventListener('change', e => say(e.detail.checked ? 'Checked' : 'Unchecked')); },
-  radio-group: (el, say) => { el.addEventListener('change', e => say('Selected: ' + e.detail.value)); },
-  segmented: (el, say) => { el.addEventListener('change', e => say('Range: ' + e.detail.value)); },
-  progress: (el, say) => { say(el.value + '% complete'); },
-  meter: (el, say) => { say('Meter value: ' + el.value); },
-  rating: (el, say) => { el.addEventListener('change', e => say('Rating: ' + e.detail.value + ' / ' + e.detail.max)); },
-  tabs: (el, say) => { el.addEventListener('change', e => say('Tab: ' + e.detail.label)); },
-  accordion: (el, say) => { el.addEventListener('change', e => say(e.detail.open ? 'Opened section ' + (e.detail.index + 1) : 'Closed section ' + (e.detail.index + 1))); },
-  disclosure: (el, say) => { el.addEventListener('toggle', e => say(e.detail.open ? 'Expanded' : 'Collapsed')); },
-  tooltip: (el, say) => { say('Tooltip component ready'); },
-  dialog: (el, say) => { el.addEventListener('open', () => say('Dialog opened')); el.addEventListener('close', () => say('Dialog closed')); },
-  toast: (el, say) => { el.addEventListener('show', e => say(e.detail.message)); el.addEventListener('dismiss', () => say('Notification dismissed')); },
-  breadcrumbs: (el, say) => { say('Breadcrumb navigation rendered'); },
-  pagination: (el, say) => { el.addEventListener('change', e => say('Page ' + e.detail.page + ' of ' + e.detail.pages)); },
-  search: (el, say) => { el.addEventListener('search', e => say('Searching: ' + e.detail.value)); },
-  text-field: (el, say) => { el.addEventListener('input', e => say(e.detail.value)); },
-  text-area: (el, say) => { el.addEventListener('input', e => say(e.detail.value.length + ' characters')); },
-  select: (el, say) => { el.addEventListener('change', e => say('Difficulty: ' + e.detail.value)); },
-  combobox: (el, say) => { el.addEventListener('change', e => say('Selected: ' + e.detail.label)); },
-  file-drop: (el, say) => { el.addEventListener('change', e => say(e.detail.files.length + ' file(s) selected')); },
-  date-picker: (el, say) => { el.addEventListener('change', e => say('Date: ' + e.detail.value)); },
-  color-picker: (el, say) => { el.addEventListener('change', e => say('Colour: ' + e.detail.value.toUpperCase())); },
+  "toggle": (el, say) => { el.addEventListener('change', (e) => say(e.detail.checked ? 'On' : 'Off')); },
+  "slider": (el, say) => { el.addEventListener('input', (e) => say(String(e.detail.value))); },
+  "plunger": (el, say) => { let n = 0; el.addEventListener('send', () => say('Sent ' + ++n)); },
+  "stepper": (el, say) => { el.addEventListener('input', (e) => say(String(e.detail.value).padStart(2, '0'))); },
+  "targets": (el, say) => { const show = () => say(el.selected.length ? el.selected.join(' · ') : 'None'); el.addEventListener('change', show); el.addEventListener('bonus', () => say('All four')); show(); },
+  "drain": (el, say) => { el.addEventListener('delete', () => say('Deleted. Undo?')); el.addEventListener('undo', () => say('Saved')); el.addEventListener('commit', () => { say('Gone'); setTimeout(() => { el.reset(); say(''); }, 1600); }); },
+  "bumper": (el, say) => { el.addEventListener('hit', (e) => say('+' + e.detail.points + ' · ' + e.detail.score.toLocaleString())); },
+  "checkbox": (el, say) => { el.addEventListener('change', e => say(e.detail.checked ? 'Checked' : 'Unchecked')); },
+  "radio-group": (el, say) => { el.addEventListener('change', e => say('Selected: ' + e.detail.value)); },
+  "segmented": (el, say) => { el.addEventListener('change', e => say('Range: ' + e.detail.value)); },
+  "progress": (el, say) => { say(el.value + '% complete'); },
+  "meter": (el, say) => { say('Meter value: ' + el.value); },
+  "rating": (el, say) => { el.addEventListener('change', e => say('Rating: ' + e.detail.value + ' / ' + e.detail.max)); },
+  "tabs": (el, say) => { el.addEventListener('change', e => say('Tab: ' + e.detail.label)); },
+  "accordion": (el, say) => { el.addEventListener('change', e => say(e.detail.open ? 'Opened section ' + (e.detail.index + 1) : 'Closed section ' + (e.detail.index + 1))); },
+  "disclosure": (el, say) => { el.addEventListener('toggle', e => say(e.detail.open ? 'Expanded' : 'Collapsed')); },
+  "tooltip": (el, say) => { say('Tooltip component ready'); },
+  "dialog": (el, say) => { el.addEventListener('open', () => say('Dialog opened')); el.addEventListener('close', () => say('Dialog closed')); },
+  "toast": (el, say) => { el.addEventListener('show', e => say(e.detail.message)); el.addEventListener('dismiss', () => say('Notification dismissed')); },
+  "breadcrumbs": (el, say) => { say('Breadcrumb navigation rendered'); },
+  "pagination": (el, say) => { el.addEventListener('change', e => say('Page ' + e.detail.page + ' of ' + e.detail.pages)); },
+  "search": (el, say) => { el.addEventListener('search', e => say('Searching: ' + e.detail.value)); },
+  "text-field": (el, say) => { el.addEventListener('input', e => say(e.detail.value)); },
+  "text-area": (el, say) => { el.addEventListener('input', e => say(e.detail.value.length + ' characters')); },
+  "select": (el, say) => { el.addEventListener('change', e => say('Difficulty: ' + e.detail.value)); },
+  "combobox": (el, say) => { el.addEventListener('change', e => say('Selected: ' + e.detail.label)); },
+  "file-drop": (el, say) => { el.addEventListener('change', e => say(e.detail.files.length + ' file(s) selected')); },
+  "date-picker": (el, say) => { el.addEventListener('change', e => say('Date: ' + e.detail.value)); },
+  "color-picker": (el, say) => { el.addEventListener('change', e => say('Colour: ' + e.detail.value.toUpperCase())); },
 };
 const grid = document.getElementById('grid'), copied = document.getElementById('copied');
 const status = document.getElementById('gallery-status');
