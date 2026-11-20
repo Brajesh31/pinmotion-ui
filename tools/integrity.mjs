@@ -73,7 +73,13 @@ for (const component of SPEC) {
     }
   } else {
     check(`${id}: lightweight runtime is present`, bundle.includes('window.PinmotionExtras'));
-    check(`${id}: PinballKit is not bundled`, !bundle.includes('window.PinballKit'));
+    // Utility bundles may call PinballKit.sfx when the original runtime is already present,
+    // but must not initialize or embed the WebGL/audio runtime themselves.
+    check(`${id}: no embedded PinballKit runtime`,
+      !bundle.includes('if (window.PinballKit) return;') &&
+      !bundle.includes('window.PinballKit =') &&
+      !bundle.includes('const SOUNDS =') &&
+      !bundle.includes('function getGL()'));
     check(`${id}: matching lightweight source exists`, existsSync(resolve(ROOT, 'extras-src', `${id}.js`)));
     const source = read(`extras-src/${id}.js`);
     check(`${id}: bundle contains its source implementation`, bundle.includes(source.trim()));

@@ -100,3 +100,27 @@ To add or update a utility component:
 5. Verify its demo route, form behavior, keyboard behavior and events in a browser before relying on it in production.
 
 Keep the utility bundle small and self-contained. Do not embed the full PinballKit runtime simply to reuse its visual style.
+
+
+## 9. Mandatory visual language for every new component
+
+Every new component must look and feel like it belongs to the original seven controls. Do not ship a generic browser-widget skin, default shadcn look, flat SaaS card, or unrelated design language.
+
+Required visual language:
+- a brushed-metal or painted-machine control deck with a dark inset playfield;
+- visible fasteners, mechanical edging or equivalent hardware details;
+- a chrome-ball or polished-steel visual detail;
+- amber pilot lamps and illuminated state feedback;
+- raised brass/steel action controls with a physical pressed state;
+- warm cream, mechanical ink, steel, amber and restrained red palette;
+- visible focus states and the same readable keyboard/form semantics as the original controls.
+
+The 22 lightweight utility components implement this language through `PinmotionExtras` and the shared `.pinball-deck` skin. They may reuse PinballKit's recorded sound effects only when PinballKit has already been initialized by another bundle. They must not initialize or embed the WebGL/audio runtime solely to achieve the visual look.
+
+When adding future components:
+1. Reuse the shared mechanical skin from `tools/extra-core.js`.
+2. Add component-specific pinball metaphors, for example score reels, target lamps, ball lanes, flippers, plungers, relays, chutes or backglass panels.
+3. Retain native semantic elements and documented keyboard behavior.
+4. Add the component's guide, demo, registry entry, gallery card and interaction checks.
+5. Update the visual system only when a genuine new token or reusable pattern is required.
+6. Do not modify the original seven components while extending the library unless explicitly authorized.
