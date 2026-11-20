@@ -28,7 +28,7 @@ Plunger, Drain, and Pop bumpers are action controls and do not document native f
 
 Form-associated custom elements depend on browser platform support. The repository's browser test exercises successful value submission in headless Chromium, but no cross-browser form-support matrix is published.
 
-**Current form lifecycle implementation:** Both bases now capture writable initial state after component setup, restore that state through `formResetCallback`, serialize the current state for browser restoration, and implement `formStateRestoreCallback`. Both also respond to disabled-fieldset changes. Representative Chromium regression tests have been added. Full per-control and cross-browser verification remains outstanding.
+**Current form lifecycle implementation:** Both bases now capture writable initial state after component setup, restore that state through `formResetCallback`, serialize the current state for browser restoration, and implement `formStateRestoreCallback`. Both also respond to disabled-fieldset changes. Representative Chromium regression tests pass in [Validate run 44839251769](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44839251769). Full per-control and cross-browser verification remains outstanding.
 
 ## 4. Reduced motion
 
