@@ -334,14 +334,14 @@ class Base extends HTMLElement {
   }
   formResetCallback() { if (this._formDefaults) this.restoreFormState(this._formDefaults); }
   formStateRestoreCallback(state) { this.restoreFormState(state); }
-  formDisabledCallback(disabled) { this.inert = !!disabled || this.hasAttribute('disabled'); this.syncForm(); }
+  formDisabledCallback(disabled) { this._formDisabled = !!disabled; this.inert = this._formDisabled || this.hasAttribute('disabled'); this.syncForm(); }
   get form() { return this.internals ? this.internals.form : null; }
   connectedCallback() {
     if (!this.ready) {
       this.ready = true; this.root.innerHTML = `<style>*{box-sizing:border-box}${this.constructor.css || ''}</style>${this.render()}`; this.setup(); if (this.internals) this._formDefaults = this.captureFormState(); this.syncForm();
       new ResizeObserver(() => { this.dirty = true; start(); }).observe(this);
       // disabled takes it out of the tab order and out of reach of a screen reader's press, not only the pointer's
-      const off = () => { this.inert = this.hasAttribute('disabled'); }; off(); new MutationObserver(off).observe(this, { attributes: true, attributeFilter: ['disabled'] });
+      const off = () => { this.inert = this.hasAttribute('disabled') || !!this._formDisabled; this.syncForm(); }; off(); new MutationObserver(off).observe(this, { attributes: true, attributeFilter: ['disabled'] });
     }
     this.dirty = true; this.tickFn ||= (dt) => this.frame(dt); frames.add(this.tickFn); start();
   }
