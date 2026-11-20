@@ -15,16 +15,16 @@ const put = (rel, next) => {
 const bytes = (id) => statSync(join(root, id, id + '.js')).size;
 const size = (id) => `${Math.round(bytes(id) / 1024)} KB`;
 const table = (head, rows) => `| ${head.join(' | ')} |\n|${head.map(() => '---').join('|')}|\n` + rows.map((r) => `| ${r.join(' | ')} |`).join('\n');
-const COUNT = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve'][SPEC.length];
-const Count = COUNT[0].toUpperCase() + COUNT.slice(1);
+const COUNT = String(SPEC.length);
+const Count = COUNT;
 const tags = (c) => (c.extra ? `<pinball-bumper> and <${c.tag}>` : `<${c.tag}>`);
 
 function componentReadme(c,size,table,Count,COMMON_LIMITS){
-  const a=c.api;
+  const a=c.api, lightweight=a.runtime==='lightweight', sharedLimits=a.commonLimits??COMMON_LIMITS;
   const attrTable=table(["Attribute","Type","Default","Applies to / update behavior"],a.attributes);
   const propTable=a.properties.length?table(["Property","Type","Access","Details"],a.properties):"No additional public properties are documented.";
   const methodTable=a.methods.length?table(["Method","Details"],a.methods):"No additional public methods are documented.";
-  const eventTable=table(["Event","Payload and trigger"],a.events.map(([name,detail,trigger])=>[name,`${detail} ${trigger}`]));
+  const eventTable=a.events.length?table(["Event","Payload and trigger"],a.events.map(([name,detail,trigger])=>[name,`${detail} ${trigger}`])):"No public events are documented.";
   return `# ${c.name}
 
 ${a.overview}
@@ -33,7 +33,7 @@ ${a.overview}
 
 - **Bundle:** \`${c.id}/${c.id}.js\`, approximately ${size}.
 - **Custom elements:** ${a.tags.map(tag=>`\`${tag}\``).join(", ")}.
-- **Dependencies:** no external runtime packages. The selected bundle embeds its shared runtime, artwork, and sound data.
+- **Dependencies:** no external runtime packages. ${lightweight?'The bundle embeds the lightweight helper and component implementation; it does not include WebGL or audio.':'The selected bundle embeds its shared runtime, artwork, and sound data.'}
 
 ## 🚀 Quick start
 
@@ -49,7 +49,7 @@ Listen to the documented events and read the current properties:
 ${a.example}
 \`\`\`
 
-The component bundle is a plain script, not an ES module. Do not split it or remove its embedded artwork/runtime data. See [the repository README](../README.md) for the shadcn registry route and local development commands.
+${lightweight?'The component bundle is a plain script, not an ES module. It embeds the lightweight helper and this control; it has no external runtime dependencies.':'The component bundle is a plain script, not an ES module. Do not split it or remove its embedded artwork/runtime data. See [the repository README](../README.md) for the shadcn registry route and local development commands.'}
 
 ## 🧩 API reference
 
@@ -101,7 +101,7 @@ ${table(["Action","Result"],a.happens)}
 
 ## ⚠️ Implementation notes and limits
 
-${[...a.notes,...a.limits,...COMMON_LIMITS].map(note=>`- ${note}`).join("\n")}
+${[...a.notes,...a.limits,...sharedLimits].map(note=>`- ${note}`).join("\n")}
 `;
 }
 // the page the set was photographed for: warm cream, dark ink, the lamps' amber and the bumpers' red
@@ -148,7 +148,7 @@ for (const c of SPEC) {
   </div>
   <p class="said label" aria-hidden="true"></p>
   <p class="hint">${c.demo.hint}</p>
-  <p class="tools">${SOUND_PILL}</p>
+  ${c.api?.runtime==='lightweight'?'':'<p class="tools">'+SOUND_PILL+'</p>'}
   <p class="hint back"><a href="../gallery/">All ${COUNT}</a> · <a href="https://github.com/${REPO}/blob/main/${c.id}/README.md">Docs</a></p>
 </main>
 <script src="${c.id}.js"></script>
@@ -159,7 +159,7 @@ const Q = new URLSearchParams(location.search), el = document.getElementById('el
 if (Q.get('embed') === '1') { document.documentElement.classList.add('embed'); document.querySelector('.back').hidden = true; }
 const say = (t) => { said.textContent = t; };
 ${c.wire}${c.extra ? "\ndocument.getElementById('one').addEventListener('hit', (e) => say('Clap ' + e.detail.count));" : ''}
-${SOUND_JS}
+${c.api?.runtime==='lightweight'?'':SOUND_JS}
 </script>
 </body>
 </html>
