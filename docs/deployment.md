@@ -55,7 +55,7 @@ For the Actions deployment flow to publish successfully, check the repository's 
 - Keep the artifact path at the repository root unless the site is deliberately reorganized.
 - Keep `.nojekyll` present so static files and folders beginning with underscores are not subject to Jekyll processing behavior.
 
-The current workflow uploads the repository root; it does not run `npm run build` or `npm run docs` during deployment. Generated bundles and pages therefore need to be committed before the workflow runs.
+The generator workflow runs `npm run build` and `npm run docs` before validation and upload. The generated files must be committed with their source changes before the push-triggered workflow runs. The workflow is read-only with respect to repository contents, avoiding a mid-run commit that can make the deployment artifact ambiguous.
 
 ## 5. Published URL structure
 
@@ -74,4 +74,4 @@ No custom domain, DNS configuration, CDN, cache invalidation workflow, or runtim
 
 ## 8. Component generation workflow
 
-The [Generate and publish components workflow](../.github/workflows/generate-components.yml) is the reproducible component update path. It builds both runtime families, regenerates component guides and demo routes, runs the full repository check, smoke-tests all 29 routes and bundles, commits generated outputs, and deploys the Pages artifact.
+The [Generate and publish components workflow](../.github/workflows/generate-components.yml) is the reproducible component update path. It builds both runtime families, regenerates component guides and demo routes, runs the full repository check, smoke-tests all 29 routes and bundles, then uploads and deploys the artifact from the triggering commit. It must not push a second commit from inside the deployment run, because the Pages deployment action must consume the artifact associated with the same workflow run and commit.
