@@ -172,6 +172,11 @@ check('bumpers: a tap drops a ball that scores several hits', (await fired('bump
   check('plunger: a full pull and release sends once', (await fired('plunger send')) === 1, await fired('plunger send')); }
 await focus('plunger', 'button'); await key(' ', 32, false); await sleep(1300); await keyUp(' ', 32); await sleep(800);
 check('plunger: holding Space and letting go sends', (await fired('plunger send')) === 2, await fired('plunger send'));
+await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] });
+{ const [x, y] = await at(S('plunger', 'button'), 0.75, 0.5);
+  await drag(x, y, x + 260, y, 14, 100); await sleep(200);
+  check('plunger: reduced-motion full pull still sends without ball travel', (await fired('plunger send')) === 3 && (await prop('plunger', 'ball')) === 'none' && (await prop('plunger', 'px')) === 0, `${await fired('plunger send')} sends / ball ${await prop('plunger', 'ball')}`); }
+await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'no-preference' }] });
 
 
 check('all 22 lightweight elements connect and attach Shadow DOM', await ev("['checkbox','radio-group','segmented','progress','meter','rating','tabs','accordion','disclosure','tooltip','dialog','toast','breadcrumbs','pagination','search','text-field','text-area','select','combobox','file-drop','date-picker','color-picker'].every(id => { const e=document.querySelector('pinball-'+id); return !!(e && e.shadowRoot); })") === true);
