@@ -4,7 +4,7 @@
   "private": true,
   "description": "Pinball-inspired standalone Web Components for browser interfaces.",
   "author": "Brajesh Kumar",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "type": "module",
   "engines": {
     "node": ">=22.0.0",

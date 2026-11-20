@@ -13,6 +13,8 @@ export const COMMON_LIMITS = [
   '**Browser coverage.** The repository includes an optional headless Chromium interaction script with touch and keyboard input at a mobile-width viewport. The regular CI workflow does not run it. Safari, Firefox, physical devices, and screen-reader behavior are not documented as tested.',
 ];
 
+import { EXTRA_SPEC } from './extras-spec.mjs';
+
 export const SPEC = [
   {
     id: 'toggle', name: 'Toggle', tag: 'pinball-toggle', kind: 'switch', categories: ['switch', 'toggle', 'pinball', 'webgl', 'animation'],
@@ -954,3 +956,6 @@ export const SPEC = [
     extra: { gallery: '<pinball-bumper cap="+1" points="1" label="Clap" style="--pb-size: min(84px, 22vw)"></pinball-bumper>', page: '<pinball-bumper id="one" cap="+1" points="1" label="Clap" style="--pb-size: min(96px, 22vw)"></pinball-bumper>' },
   },
 ];
+
+// Preserve the original seven controls first, then append the lightweight utility family.
+SPEC.push(...EXTRA_SPEC);

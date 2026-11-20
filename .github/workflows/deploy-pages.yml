@@ -29,8 +29,10 @@ jobs:
           test -f gallery/title.jpg
           test -f registry.json
           test -f .nojekyll
+          test -f LICENSE
 
-          for component in toggle slider plunger stepper targets drain bumper; do
+          components="$(node --input-type=module -e "import('./tools/spec.mjs').then(({SPEC}) => console.log(SPEC.map(c => c.id).join(' ')))")"
+          for component in $components; do
             test -f "$component/index.html"
             test -f "$component/README.md"
             test -s "$component/$component.js"
@@ -38,7 +40,8 @@ jobs:
 
       - name: Check JavaScript syntax
         run: |
-          for file in toggle/toggle.js slider/slider.js plunger/plunger.js stepper/stepper.js targets/targets.js drain/drain.js bumper/bumper.js; do
+          component_scripts="$(node --input-type=module -e "import('./tools/spec.mjs').then(({SPEC}) => console.log(SPEC.map(c => c.id + '/' + c.id + '.js').join(' ')))")"
+          for file in $component_scripts extras-src/*.js tools/extra-core.js; do
             node --check "$file"
           done
 
