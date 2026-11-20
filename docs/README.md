@@ -6,7 +6,7 @@ This directory documents the repository as it exists today. It is an implementat
 
 | Document | What it explains |
 | --- | --- |
-| [Roadmap and phase tracker](ROADMAP.md) | Delivery phases, completed scope, active reliability work, remaining milestones and acceptance criteria |\n| [Architecture](architecture.md) | Static site structure, standalone bundles, shared runtime, rendering, animation, sound, and custom-element lifecycle |
+| [Roadmap and phase tracker](ROADMAP.md) | Product foundations and delivery phase summary |\n| [Release plan](RELEASE-PLAN.md) | Full pre-release phases, known issue register, no-go policy and stable release gate |\n| [Release checklist](RELEASE-CHECKLIST.md) | Evidence-based final go/no-go checklist for a frozen release candidate |\n| [Architecture](architecture.md) | Static site structure, standalone bundles, shared runtime, rendering, animation, sound, and custom-element lifecycle |
 | [Design system](design-system.md) | Color tokens, typography, surface styles, runtime families and accessibility conventions |
 | [Renderer parity notes](renderer-parity.md) | Utility backglass artwork, conditional shared WebGL marker, CSS fallback and remaining renderer gaps |
 | [Component reference](component-reference.md) | The 29 bundles, 30 element tags, current attributes, events, methods, sizing, and form participation |
