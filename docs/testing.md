@@ -42,7 +42,7 @@ The Validate workflow:
 
 The static-server smoke tests exercise HTTP behavior and basic file availability. They do not simulate component user input.
 
-## 4. Optional browser interaction suite
+## 4. Mandatory browser interaction suite
 
 Run the local server in one terminal:
 
@@ -56,7 +56,7 @@ Then in a second terminal:
 npm run test:browser
 ```
 
-The script uses Chrome DevTools Protocol against headless Chrome/Chromium. It first checks that the gallery creates all 29 cards, clears its loading state, initializes every card and registers all 30 custom-element tags. It then exercises the original seven mechanical controls and selected utility interactions. Its test viewport is 390 × 900 CSS pixels with device scale factor 2 and touch emulation enabled. It exercises:
+The Validate GitHub Actions workflow installs stable Chrome and runs this suite as a mandatory gate. The script uses Chrome DevTools Protocol against headless Chrome/Chromium. It first checks that the gallery creates all 29 cards, clears its loading state, initializes every card and registers all 30 custom-element tags. It then exercises the original seven mechanical controls and selected utility interactions. Its test viewport is 390 × 900 CSS pixels with device scale factor 2 and touch emulation enabled. It exercises:
 - presence of all eight original mechanical tags and all 22 utility custom elements;
 - the 22 utility controls each render their component-specific backglass emblem;
 - the full gallery reuses the already-initialized PinballKit shader for the utility chrome-ball marker;
@@ -70,7 +70,7 @@ The script uses Chrome DevTools Protocol against headless Chrome/Chromium. It fi
 - disabled-state behavior;
 - horizontal overflow at the mobile-width viewport.
 
-The default browser executable is `chromium`. Set `CHROME` to the executable path when needed. This browser suite is optional and is not part of the current CI workflow or the `npm test` alias.
+The default browser executable is `chromium`. Set `CHROME` to the executable path when needed. The browser suite is run by the Validate CI workflow after the static-server checks. The `npm test` alias still runs the read-only Node validator only; use `npm run test:browser` for the complete browser suite while the local server is running.
 
 ## 5. Screenshot and film tooling
 
