@@ -59,7 +59,7 @@ Then in a second terminal:
 npm run test:browser
 ```
 
-The Validate GitHub Actions workflow installs Chrome and runs this suite as a mandatory gate on every push to `main` and every pull request targeting `main`. The script uses Chrome DevTools Protocol against headless Chrome/Chromium. It first checks that the gallery creates all 29 cards, clears its loading state, initializes every card and registers all 30 custom-element tags. It then tests the original seven mechanical controls and functional states across all 22 utility controls. Its test viewport is 390 × 900 CSS pixels with device scale factor 2 and touch emulation enabled. It exercises:
+The Validate GitHub Actions workflow installs Chrome and runs this suite as a mandatory gate on every push to `main` and every pull request targeting `main`. The script uses Chrome DevTools Protocol against headless Chrome/Chromium. It first checks that the gallery creates all 29 cards, clears its loading state, initializes every card and registers all 30 custom-element tags. It then tests the original seven mechanical controls and functional states across all 22 utility controls. Finally, it navigates to each of the 29 standalone demo routes, verifies the matching URL is loaded, and checks that the page registers the expected component tag or tags and renders its demo element. Its test viewport is 390 × 900 CSS pixels with device scale factor 2 and touch emulation enabled. It exercises:
 - presence of all eight original mechanical tags and all 22 utility custom elements;
 - the 22 utility controls each render their component-specific backglass emblem;
 - the full gallery reuses the already-initialized PinballKit shader for the utility chrome-ball marker;
