@@ -142,7 +142,9 @@ Phase 2 coverage to add:
 - [ ] Pointer, touch, keyboard and programmatic behavior tested independently against the documented API.
 - [ ] Exact event payload values, order, bubbling/composed flags and programmatic dispatch/suppression.
 - [x] Shared form bases implement default-state capture, native reset restoration, serialized state restoration and disabled-fieldset callbacks.
-- [x] Chromium regression coverage added for original and utility controls, including form data participation.
+- [x] Chromium regression coverage added for original and utility controls, including form data participation, native reset, serialized state restoration, and disabled-fieldset exclusion/restoration.
+- [x] Passing evidence: [Validate run 44839251769](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44839251769), commit `8a5e80e95866c317ab473fca08bcc7cc4cd5d1dc`.
+- [x] Passing Pages evidence: [Deployment run 44839251772](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44839251772), same commit.
 - [ ] Full per-control validity, successful submission, disabled-fieldset, reset and browser-driven state-restore matrix.
 - [ ] Timers, undo/commit, toast auto-dismiss, repeated operations and disconnect/reconnect cleanup.
 - [ ] Solo bundle behavior plus mixed bundle order and full-gallery regression tests.
