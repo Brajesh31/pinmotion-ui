@@ -37,7 +37,7 @@ The core reads `prefers-reduced-motion: reduce` and updates its `calm` state whe
 - Toggle, Slider, Stepper, Drain, and Pop bumpers snap moving visuals to their final state while retaining the resulting control state.
 - **Drop targets** also snap their targets and lamps. Its `bonus` event is tied to the normal-motion impact callback and is not emitted in reduced-motion mode; use `change.detail.allChecked` for application logic.
 - **Progress indeterminate animation** is disabled when reduced motion is requested.
-- **Plunger remains an exception.** Its pull and shot continue to animate when reduced motion is requested.
+- **Plunger** now keeps direct pull input responsive while snapping the spring return and ball-drop/shot travel to their final states when reduced motion is requested.
 
 Do not claim full reduced-motion coverage until Plunger behavior is addressed and retested.
 
