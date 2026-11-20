@@ -1,0 +1,70 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Verify static website files
+        run: |
+          test -f index.html
+          test -f gallery/index.html
+          test -f gallery/title.jpg
+          test -f registry.json
+          test -f .nojekyll
+
+          for component in toggle slider plunger stepper targets drain bumper; do
+            test -f "$component/index.html"
+            test -f "$component/README.md"
+            test -s "$component/$component.js"
+          done
+
+      - name: Check JavaScript syntax
+        run: |
+          for file in toggle/toggle.js slider/slider.js plunger/plunger.js stepper/stepper.js targets/targets.js drain/drain.js bumper/bumper.js; do
+            node --check "$file"
+          done
+
+      - name: Validate component registry JSON
+        run: python3 -m json.tool registry.json > /dev/null
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload static website
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: .
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy website
+        id: deployment
+        uses: actions/deploy-pages@v4
