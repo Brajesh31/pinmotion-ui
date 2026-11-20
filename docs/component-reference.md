@@ -1,6 +1,6 @@
 # 🧩 Component API reference
 
-This index covers all 29 standalone bundles and 30 registered custom-element tags. Each linked README is the authoritative component-level API guide.
+This index covers all 29 standalone bundles and 30 registered custom-element tags. Each linked README is the authoritative component-level API guide. For the full generated source-to-contract inventory, see the [component inventory](component-inventory.md).
 
 ## 🎱 Original mechanical controls
 
