@@ -389,6 +389,19 @@ check('color picker: hex value and readout stay synchronized', await prop('color
    await ev('__fieldsetControl.inert') === false && await formValue('fieldset-toggle') === 'on',
    `${await ev('__fieldsetControl.inert')} / ${await formValue('fieldset-toggle')}`);
 
+ await ev(`(() => {
+   const fieldset=document.createElement('fieldset'); fieldset.disabled=true;
+   const control=document.createElement('pinball-checkbox'); control.setAttribute('checked',''); control.setAttribute('name','fieldset-checkbox');
+   fieldset.append(control); document.getElementById('f').append(fieldset); window.__fieldsetCheckbox=control; window.__fieldsetCheckboxGroup=fieldset;
+ })()`); await sleep(100);
+ check('phase 2 forms: disabled fieldset disables utility custom controls',
+   await ev('__fieldsetCheckbox.inert') === true && await formValue('fieldset-checkbox') === null,
+   `${await ev('__fieldsetCheckbox.inert')} / ${await formValue('fieldset-checkbox')}`);
+ await ev('__fieldsetCheckboxGroup.disabled=false'); await sleep(100);
+ check('phase 2 forms: enabling utility fieldset restores form participation',
+   await ev('__fieldsetCheckbox.inert') === false && await formValue('fieldset-checkbox') === 'on',
+   `${await ev('__fieldsetCheckbox.inert')} / ${await formValue('fieldset-checkbox')}`);
+
 
 // disabled
 await ev(`${E('toggle')}.setAttribute('disabled', '')`); await sleep(50);
