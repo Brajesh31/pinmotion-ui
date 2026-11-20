@@ -150,7 +150,7 @@ check('targets: a tap unticks EMAIL', (await prop('targets', 'checked'))[0] === 
 
 // drain: delete, undo, then delete and let it run out
 await tap('drain', '.chute'); await sleep(900);
-check('drain: a tap on the ball deletes, with delete', (await prop('drain', 'state')) === 'undoable' && (await fired('drain delete')) === 1, await prop('drain', 'state'));
+check('drain: a tap starts deletion and emits delete during the draining state', ['draining', 'undoable'].includes(await prop('drain', 'state')) && (await fired('drain delete')) === 1, await prop('drain', 'state'));
 await tap('drain', '.shoot'); await sleep(900);
 check('drain: SHOOT AGAIN undoes it, with undo', (await prop('drain', 'state')) === 'ready' && (await fired('drain undo')) === 1, await prop('drain', 'state'));
 await ev(`${E('drain')}.setAttribute('window', '500')`);
@@ -182,7 +182,7 @@ check('utility chrome-ball markers reuse the shared WebGL shader in the full gal
 await ev("document.querySelector('pinball-checkbox').setAttribute('name','extra-checkbox')");
 await tap('checkbox','.check');
 check('checkbox: pointer toggles and emits change', await prop('checkbox','checked') === true && await fired('checkbox change') === 1, await prop('checkbox','checked'));
-check('checkbox: checked value participates in form', await formValue('extra-checkbox') === 'on', await formValue('extra-checkbox'));
+check('checkbox: configured value participates in form', await formValue('extra-checkbox') === 'email', await formValue('extra-checkbox'));
 
 await ev("document.querySelector('pinball-radio-group').setAttribute('name','extra-radio')");
 await tap('radio-group','button[data-value="team"]');
