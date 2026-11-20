@@ -106,7 +106,7 @@ const fired = (k) => ev(`__n[${JSON.stringify(k)}] || 0`);
 // put the gallery's grid inside a form, once, to read what a form would send (the controls are form-associated)
 await ev(`(() => { const f = document.createElement('form'); f.id = 'f'; const g = document.getElementById('grid'); g.before(f); f.appendChild(g); for (const t of ['toggle', 'slider', 'stepper', 'targets']) document.querySelector('pinball-' + t).setAttribute('name', t); })()`); await sleep(600);
 const formValue = (n) => ev(`new FormData(document.getElementById('f')).get(${JSON.stringify(n)})`);
-await ev(`window.__formDefaults = {
+await ev(`window.window.__formDefaults = {
   toggle: document.querySelector('pinball-toggle').checked,
   slider: document.querySelector('pinball-slider').value,
   stepper: document.querySelector('pinball-stepper').value,
@@ -360,12 +360,12 @@ check('color picker: hex value and readout stay synchronized', await prop('color
    textField: document.querySelector('pinball-text-field').value
  })`));
  check('phase 2 forms: reset restores original PinballKit control defaults',
-   resetState.toggle === __formDefaults.toggle && resetState.slider === __formDefaults.slider &&
-   resetState.stepper === __formDefaults.stepper && JSON.stringify(resetState.targets) === JSON.stringify(__formDefaults.targets),
+   resetState.toggle === window.__formDefaults.toggle && resetState.slider === window.__formDefaults.slider &&
+   resetState.stepper === window.__formDefaults.stepper && JSON.stringify(resetState.targets) === JSON.stringify(window.__formDefaults.targets),
    JSON.stringify(resetState));
  check('phase 2 forms: reset restores utility control defaults',
-   resetState.checkbox === __formDefaults.checkbox && resetState.radio === __formDefaults.radio &&
-   resetState.segmented === __formDefaults.segmented && resetState.textField === __formDefaults.textField,
+   resetState.checkbox === window.__formDefaults.checkbox && resetState.radio === window.__formDefaults.radio &&
+   resetState.segmented === window.__formDefaults.segmented && resetState.textField === window.__formDefaults.textField,
    JSON.stringify(resetState));
 
  await ev(`document.querySelector('pinball-toggle').formStateRestoreCallback(JSON.stringify({checked:true}), 'restore')`);
