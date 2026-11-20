@@ -228,6 +228,10 @@ Set `CHROME` to the Chrome or Chromium executable when it is not available as `c
 | `npm run validate` | Run read-only repository structure and metadata checks |
 | `npm run screenshots -- <url> <output-prefix> <width> <height> <scale>` | Capture a page using headless Chrome or Chromium |
 
+## 🧪 Phase acceptance and regression evidence
+
+The current hardening work is tracked independently from implementation inventory. Phase 1 (component contract audit) and Phase 2 (functional correctness/regression coverage) remain in progress until their behavioral acceptance criteria have evidence. See the [Phase 1–2 acceptance matrix](docs/PHASE-1-2-ACCEPTANCE-MATRIX.md), [Phase 2 test plan](docs/PHASE-2-TEST-PLAN.md), and [controlling release plan](docs/RELEASE-PLAN.md).
+
 ## 🧭 Roadmap and delivery status
 
 See the [phase roadmap](docs/ROADMAP.md) for the completed foundations, active gallery/deployment and quality work, remaining component expansion, release milestones, and clear acceptance criteria. Phase counts are evidence-based and distinguish implemented components from production validation.
