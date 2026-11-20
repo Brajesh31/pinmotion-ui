@@ -6,7 +6,7 @@ The repository has three GitHub Actions workflows:
 
 | Workflow | Trigger | What it does |
 | --- | --- | --- |
-| [Validate](../.github/workflows/validate.yml) | Push or pull request targeting `main`, or manual dispatch | Runs `npm ci`, builds bundles, regenerates docs/gallery, checks generated parity, parses the gallery runtime and smoke-tests the static server |
+| [Validate](../.github/workflows/validate.yml) | Push or pull request targeting `main`, or manual dispatch | Runs `npm ci`, builds bundles, regenerates docs/gallery, runs the component source-to-contract audit, checks generated parity, smoke-tests the static server, and runs the mandatory headless Chrome suite |
 | [Deploy to GitHub Pages](../.github/workflows/deploy-pages.yml) | Manual dispatch only | Verifies static files, syntax and registry JSON, then deploys the current committed site |
 | [Generate and publish components](../.github/workflows/generate-components.yml) | Push to `main` or manual dispatch | Builds all 29 bundles, generates guides/demos/registry, runs checks, smoke-tests routes and bundles, uploads a per-attempt artifact, and deploys Pages from the triggering commit |
 
@@ -25,7 +25,8 @@ npm run check
 
 1. `npm run build:check` ensures the seven PinballKit bundles match embedded core/art and the 22 utility bundles match `tools/extra-core.js` plus `extras-src/`.
 2. `npm run docs:check` ensures the generated component docs, demos, gallery, registry, and `llms.txt` match `tools/spec.mjs` and current bundle sizes.
-3. `npm run validate` checks required files, 29 component IDs, unique IDs/tags, generated page and registry relationships, package/lockfile metadata, JavaScript syntax, and GitHub Pages action settings.
+3. `npm run validate` checks required files, 29 component IDs, unique IDs/tags, generated page and registry relationships, package/lockfile metadata, JavaScript syntax, and GitHub Pages action settings. It also runs `tools/audit-components.mjs` to compare source registrations, observed attributes, documented member/event names, component demos/guides, and registry coverage.
+4. `npm run integrity` checks bundled source and generated artifact integrity.
 
 The check scripts are intended to detect stale output; use the non-check commands only when you intend to regenerate files.
 
@@ -38,7 +39,9 @@ The Validate workflow:
 - runs `npm run build && npm run docs && npm run check`;
 - starts `tools/serve.mjs` in the background;
 - checks the root page, gallery, toggle demo, component script response, and gallery artwork response;
-- verifies that a request for `.git/config` is not served.\n- parses the generated inline gallery runtime before browser execution.\n- verifies that the generated gallery error monitor and quoted component wire keys exist.
+- verifies that a request for `.git/config` is not served.\n- parses the generated inline gallery runtime before browser execution;
+- verifies that the generated gallery error monitor and quoted component wire keys exist;
+- runs the mandatory headless Chrome suite against the locally served gallery.
 
 The static-server smoke tests exercise HTTP behavior and basic file availability. They do not simulate component user input.
 
@@ -56,7 +59,7 @@ Then in a second terminal:
 npm run test:browser
 ```
 
-The Validate GitHub Actions workflow installs stable Chrome and runs this suite as a mandatory gate. The script uses Chrome DevTools Protocol against headless Chrome/Chromium. It first checks that the gallery creates all 29 cards, clears its loading state, initializes every card and registers all 30 custom-element tags. It then exercises the original seven mechanical controls and selected utility interactions. Its test viewport is 390 × 900 CSS pixels with device scale factor 2 and touch emulation enabled. It exercises:
+The Validate GitHub Actions workflow installs Chrome and runs this suite as a mandatory gate on every push to `main` and every pull request targeting `main`. The script uses Chrome DevTools Protocol against headless Chrome/Chromium. It first checks that the gallery creates all 29 cards, clears its loading state, initializes every card and registers all 30 custom-element tags. It then tests the original seven mechanical controls and functional states across all 22 utility controls. Its test viewport is 390 × 900 CSS pixels with device scale factor 2 and touch emulation enabled. It exercises:
 - presence of all eight original mechanical tags and all 22 utility custom elements;
 - the 22 utility controls each render their component-specific backglass emblem;
 - the full gallery reuses the already-initialized PinballKit shader for the utility chrome-ball marker;
@@ -104,6 +107,6 @@ Do not describe the project as cross-browser certified based on the current chec
 - Real phones and tablets are not documented as tested.
 - Screen-reader behavior is not documented as tested.
 - Sound playback has not been verified on a physical phone.
-- The optional browser suite is not currently run by GitHub Actions.
+- The browser suite is a mandatory Validate workflow step. A passing Chrome run is not evidence of Safari, Firefox, real-device, or screen-reader support.
 
 These gaps are tracked as explicit validation work, not assumed passes.
