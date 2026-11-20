@@ -27,8 +27,8 @@ jobs:
       - name: Install from npm lockfile
         run: npm ci
 
-      - name: Check generated runtime and documentation
-        run: npm run check
+      - name: Build bundles and generated documentation before checking parity
+        run: npm run build && npm run docs && npm run check
 
       - name: Smoke-test the local static server
         shell: bash
