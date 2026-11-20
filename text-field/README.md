@@ -4,7 +4,7 @@ A single-line text input with label, placeholder, required state and form-associ
 
 ## 📦 Bundle and elements
 
-- **Bundle:** `text-field/text-field.js`, approximately 5 KB.
+- **Bundle:** `text-field/text-field.js`, approximately 13 KB.
 - **Custom elements:** `<pinball-text-field>`.
 - **Dependencies:** no external runtime packages. The bundle embeds the lightweight helper and component implementation; it does not include WebGL or audio.
 
@@ -71,9 +71,9 @@ Form-associated. With name set, submits the current value. Required state is del
 
 ## 🎨 Styling, rendering, and sound
 
-Use the shared --pui-* custom properties to tune the warm input panel and focus ring.
+The component sits in the shared Pinball UI metal deck with brushed-steel edges, four recessed fasteners, a chrome ball marker, an amber pilot lamp and a dark inset playfield. Use the shared --pui-* custom properties to tune the warm input panel and focus ring.
 
-This standalone file embeds the small guarded Pinmotion Extras base and this component implementation. It does not load the PinballKit WebGL renderer, recorded audio, or external packages.
+This standalone file embeds the compact Pinmotion Extras base and this component implementation. Its metal deck, chrome fasteners, amber pilot lamp and brass control styling follow the original PinballKit family. It does not load WebGL or recorded audio. When PinballKit is already present on the page, user actions reuse its recorded mechanical sound effects; when used alone, the component remains self-contained and silent.
 
 ## ♿ Motion and accessibility
 

@@ -4,7 +4,7 @@ A color picker using the native browser color input, with a synchronized upperca
 
 ## 📦 Bundle and elements
 
-- **Bundle:** `color-picker/color-picker.js`, approximately 5 KB.
+- **Bundle:** `color-picker/color-picker.js`, approximately 12 KB.
 - **Custom elements:** `<pinball-color-picker>`.
 - **Dependencies:** no external runtime packages. The bundle embeds the lightweight helper and component implementation; it does not include WebGL or audio.
 
@@ -68,9 +68,9 @@ Form-associated. With name set, submits the hexadecimal color string.
 
 ## 🎨 Styling, rendering, and sound
 
-A native color swatch sits beside an uppercase monospace hexadecimal readout.
+The component sits in the shared Pinball UI metal deck with brushed-steel edges, four recessed fasteners, a chrome ball marker, an amber pilot lamp and a dark inset playfield. A native color swatch sits beside an uppercase monospace hexadecimal readout.
 
-This standalone file embeds the small guarded Pinmotion Extras base and this component implementation. It does not load the PinballKit WebGL renderer, recorded audio, or external packages.
+This standalone file embeds the compact Pinmotion Extras base and this component implementation. Its metal deck, chrome fasteners, amber pilot lamp and brass control styling follow the original PinballKit family. It does not load WebGL or recorded audio. When PinballKit is already present on the page, user actions reuse its recorded mechanical sound effects; when used alone, the component remains self-contained and silent.
 
 ## ♿ Motion and accessibility
 

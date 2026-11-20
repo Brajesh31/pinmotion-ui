@@ -4,7 +4,7 @@ A star rating control where each star behaves like an illuminated target. It sup
 
 ## 📦 Bundle and elements
 
-- **Bundle:** `rating/rating.js`, approximately 6 KB.
+- **Bundle:** `rating/rating.js`, approximately 13 KB.
 - **Custom elements:** `<pinball-rating>`.
 - **Dependencies:** no external runtime packages. The bundle embeds the lightweight helper and component implementation; it does not include WebGL or audio.
 
@@ -69,9 +69,9 @@ Form-associated. With name set, submits the selected rating as a string.
 
 ## 🎨 Styling, rendering, and sound
 
-Star indicators use amber illumination for selected values and muted steel-grey for unselected values.
+The component sits in the shared Pinball UI metal deck with brushed-steel edges, four recessed fasteners, a chrome ball marker, an amber pilot lamp and a dark inset playfield. Star indicators use amber illumination for selected values and muted steel-grey for unselected values.
 
-This standalone file embeds the small guarded Pinmotion Extras base and this component implementation. It does not load the PinballKit WebGL renderer, recorded audio, or external packages.
+This standalone file embeds the compact Pinmotion Extras base and this component implementation. Its metal deck, chrome fasteners, amber pilot lamp and brass control styling follow the original PinballKit family. It does not load WebGL or recorded audio. When PinballKit is already present on the page, user actions reuse its recorded mechanical sound effects; when used alone, the component remains self-contained and silent.
 
 ## ♿ Motion and accessibility
 

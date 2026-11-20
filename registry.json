@@ -165,7 +165,7 @@
       "name": "checkbox",
       "type": "registry:file",
       "title": "Pinball UI Checkbox",
-      "description": "A single checkbox with a physical-style lamp and a recessed mechanical button. It exposes a boolean checked state and participates in forms. One standalone file of about 5 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-checkbox>.",
+      "description": "A single checkbox with a physical-style lamp and a recessed mechanical button. It exposes a boolean checked state and participates in forms. One standalone file of about 13 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-checkbox>.",
       "author": "Brajesh Kumar (maintainer)",
       "categories": [
         "web-components",
@@ -185,7 +185,7 @@
       "name": "radio-group",
       "type": "registry:file",
       "title": "Pinball UI Radio Group",
-      "description": "A single-choice group rendered as a row of mechanical radio selectors. The selected value is reflected in the component property and optional form value. One standalone file of about 6 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-radio-group>.",
+      "description": "A single-choice group rendered as a row of mechanical radio selectors. The selected value is reflected in the component property and optional form value. One standalone file of about 14 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-radio-group>.",
       "author": "Brajesh Kumar (maintainer)",
       "categories": [
         "web-components",
@@ -205,7 +205,7 @@
       "name": "segmented",
       "type": "registry:file",
       "title": "Pinball UI Segmented Control",
-      "description": "A compact segmented selector for mutually exclusive values. One segment is visibly latched at a time, with a form value and change event. One standalone file of about 5 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-segmented>.",
+      "description": "A compact segmented selector for mutually exclusive values. One segment is visibly latched at a time, with a form value and change event. One standalone file of about 13 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-segmented>.",
       "author": "Brajesh Kumar (maintainer)",
       "categories": [
         "web-components",
@@ -225,7 +225,7 @@
       "name": "progress",
       "type": "registry:file",
       "title": "Pinball UI Progress",
-      "description": "A determinate or indeterminate progress bar styled as a row of mechanical lane markings. It communicates task progress without being an input. One standalone file of about 5 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-progress>.",
+      "description": "A determinate or indeterminate progress bar styled as a row of mechanical lane markings. It communicates task progress without being an input. One standalone file of about 13 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-progress>.",
       "author": "Brajesh Kumar (maintainer)",
       "categories": [
         "web-components",
@@ -245,7 +245,7 @@
       "name": "meter",
       "type": "registry:file",
       "title": "Pinball UI Meter",
-      "description": "A read-only scalar meter with a mechanical needle over low, middle and high zones. It exposes an accessible meter value and is not an input. One standalone file of about 5 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-meter>.",
+      "description": "A read-only scalar meter with a mechanical needle over low, middle and high zones. It exposes an accessible meter value and is not an input. One standalone file of about 13 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-meter>.",
       "author": "Brajesh Kumar (maintainer)",
       "categories": [
         "web-components",
@@ -265,7 +265,7 @@
       "name": "rating",
       "type": "registry:file",
       "title": "Pinball UI Rating",
-      "description": "A star rating control where each star behaves like an illuminated target. It supports a configurable count, read-only presentation and form submission. One standalone file of about 6 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-rating>.",
+      "description": "A star rating control where each star behaves like an illuminated target. It supports a configurable count, read-only presentation and form submission. One standalone file of about 13 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-rating>.",
       "author": "Brajesh Kumar (maintainer)",
       "categories": [
         "web-components",
@@ -285,7 +285,7 @@
       "name": "tabs",
       "type": "registry:file",
       "title": "Pinball UI Tabs",
-      "description": "A tab set with keyboard navigation and named content slots. Each tab selects one corresponding panel while preserving light-DOM content. One standalone file of about 6 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-tabs>.",
+      "description": "A tab set with keyboard navigation and named content slots. Each tab selects one corresponding panel while preserving light-DOM content. One standalone file of about 13 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-tabs>.",
       "author": "Brajesh Kumar (maintainer)",
       "categories": [
         "web-components",
@@ -305,7 +305,7 @@
       "name": "accordion",
       "type": "registry:file",
       "title": "Pinball UI Accordion",
-      "description": "An accordion with up to eight expandable sections, optional multiple-open behavior and named slotted panel content. One standalone file of about 6 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-accordion>.",
+      "description": "An accordion with up to eight expandable sections, optional multiple-open behavior and named slotted panel content. One standalone file of about 14 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-accordion>.",
       "author": "Brajesh Kumar (maintainer)",
       "categories": [
         "web-components",
@@ -325,7 +325,7 @@
       "name": "disclosure",
       "type": "registry:file",
       "title": "Pinball UI Disclosure",
-      "description": "A simple disclosure built on the native details and summary elements. It exposes an open property and a composed toggle event. One standalone file of about 5 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-disclosure>.",
+      "description": "A simple disclosure built on the native details and summary elements. It exposes an open property and a composed toggle event. One standalone file of about 12 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-disclosure>.",
       "author": "Brajesh Kumar (maintainer)",
       "categories": [
         "web-components",
@@ -345,7 +345,7 @@
       "name": "tooltip",
       "type": "registry:file",
       "title": "Pinball UI Tooltip",
-      "description": "A small contextual tooltip that appears on pointer hover or keyboard focus. The trigger content is provided through the default slot. One standalone file of about 5 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-tooltip>.",
+      "description": "A small contextual tooltip that appears on pointer hover or keyboard focus. The trigger content is provided through the default slot. One standalone file of about 13 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-tooltip>.",
       "author": "Brajesh Kumar (maintainer)",
       "categories": [
         "web-components",
@@ -365,7 +365,7 @@
       "name": "dialog",
       "type": "registry:file",
       "title": "Pinball UI Dialog",
-      "description": "A modal dialog that uses the native HTML dialog element, a trigger button and a close action. Title and body content remain in light DOM slots. One standalone file of about 5 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-dialog>.",
+      "description": "A modal dialog that uses the native HTML dialog element, a trigger button and a close action. Title and body content remain in light DOM slots. One standalone file of about 13 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-dialog>.",
       "author": "Brajesh Kumar (maintainer)",
       "categories": [
         "web-components",
@@ -385,7 +385,7 @@
       "name": "toast",
       "type": "registry:file",
       "title": "Pinball UI Toast",
-      "description": "A dismissible notification with a status announcement, severity variant and optional automatic timeout. One standalone file of about 5 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-toast>.",
+      "description": "A dismissible notification with a status announcement, severity variant and optional automatic timeout. One standalone file of about 13 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-toast>.",
       "author": "Brajesh Kumar (maintainer)",
       "categories": [
         "web-components",
@@ -405,7 +405,7 @@
       "name": "breadcrumbs",
       "type": "registry:file",
       "title": "Pinball UI Breadcrumbs",
-      "description": "A responsive breadcrumb navigation trail generated from a compact label and URL list. The final item is marked as the current page. One standalone file of about 5 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-breadcrumbs>.",
+      "description": "A responsive breadcrumb navigation trail generated from a compact label and URL list. The final item is marked as the current page. One standalone file of about 12 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-breadcrumbs>.",
       "author": "Brajesh Kumar (maintainer)",
       "categories": [
         "web-components",
@@ -425,7 +425,7 @@
       "name": "pagination",
       "type": "registry:file",
       "title": "Pinball UI Pagination",
-      "description": "A compact pagination control with previous/next actions, current-page state and a limited set of nearby page numbers. One standalone file of about 5 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-pagination>.",
+      "description": "A compact pagination control with previous/next actions, current-page state and a limited set of nearby page numbers. One standalone file of about 13 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-pagination>.",
       "author": "Brajesh Kumar (maintainer)",
       "categories": [
         "web-components",
@@ -445,7 +445,7 @@
       "name": "search",
       "type": "registry:file",
       "title": "Pinball UI Search",
-      "description": "A compact search field with a dedicated submit action. It emits live query updates and a search event when submitted. One standalone file of about 5 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-search>.",
+      "description": "A compact search field with a dedicated submit action. It emits live query updates and a search event when submitted. One standalone file of about 12 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-search>.",
       "author": "Brajesh Kumar (maintainer)",
       "categories": [
         "web-components",
@@ -465,7 +465,7 @@
       "name": "text-field",
       "type": "registry:file",
       "title": "Pinball UI Text Field",
-      "description": "A single-line text input with label, placeholder, required state and form-associated value synchronization. One standalone file of about 5 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-text-field>.",
+      "description": "A single-line text input with label, placeholder, required state and form-associated value synchronization. One standalone file of about 13 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-text-field>.",
       "author": "Brajesh Kumar (maintainer)",
       "categories": [
         "web-components",
@@ -485,7 +485,7 @@
       "name": "text-area",
       "type": "registry:file",
       "title": "Pinball UI Text Area",
-      "description": "A multi-line text input with resizable height, optional maximum length and form-associated value synchronization. One standalone file of about 5 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-text-area>.",
+      "description": "A multi-line text input with resizable height, optional maximum length and form-associated value synchronization. One standalone file of about 13 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-text-area>.",
       "author": "Brajesh Kumar (maintainer)",
       "categories": [
         "web-components",
@@ -505,7 +505,7 @@
       "name": "select",
       "type": "registry:file",
       "title": "Pinball UI Select",
-      "description": "A native select control in a custom pinball-styled panel. Options are configured from compact value:label pairs and the selected value can participate in a form. One standalone file of about 5 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-select>.",
+      "description": "A native select control in a custom pinball-styled panel. Options are configured from compact value:label pairs and the selected value can participate in a form. One standalone file of about 13 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-select>.",
       "author": "Brajesh Kumar (maintainer)",
       "categories": [
         "web-components",
@@ -525,7 +525,7 @@
       "name": "combobox",
       "type": "registry:file",
       "title": "Pinball UI Combobox",
-      "description": "An editable combobox with text filtering, a listbox of matching options, keyboard selection and form-associated string value. One standalone file of about 7 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-combobox>.",
+      "description": "An editable combobox with text filtering, a listbox of matching options, keyboard selection and form-associated string value. One standalone file of about 15 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-combobox>.",
       "author": "Brajesh Kumar (maintainer)",
       "categories": [
         "web-components",
@@ -545,7 +545,7 @@
       "name": "file-drop",
       "type": "registry:file",
       "title": "Pinball UI File Drop",
-      "description": "A keyboard-accessible file chooser and drag-and-drop target. It reports selected File objects to application code but does not upload them. One standalone file of about 5 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-file-drop>.",
+      "description": "A keyboard-accessible file chooser and drag-and-drop target. It reports selected File objects to application code but does not upload them. One standalone file of about 13 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-file-drop>.",
       "author": "Brajesh Kumar (maintainer)",
       "categories": [
         "web-components",
@@ -565,7 +565,7 @@
       "name": "date-picker",
       "type": "registry:file",
       "title": "Pinball UI Date Picker",
-      "description": "A date field that delegates parsing, calendar presentation and constraints to the browser’s native date input. One standalone file of about 5 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-date-picker>.",
+      "description": "A date field that delegates parsing, calendar presentation and constraints to the browser’s native date input. One standalone file of about 12 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-date-picker>.",
       "author": "Brajesh Kumar (maintainer)",
       "categories": [
         "web-components",
@@ -585,7 +585,7 @@
       "name": "color-picker",
       "type": "registry:file",
       "title": "Pinball UI Color Picker",
-      "description": "A color picker using the native browser color input, with a synchronized uppercase hex value display and form support. One standalone file of about 5 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-color-picker>.",
+      "description": "A color picker using the native browser color input, with a synchronized uppercase hex value display and form support. One standalone file of about 12 KB with no external runtime dependencies; includes the lightweight helper. Defines <pinball-color-picker>.",
       "author": "Brajesh Kumar (maintainer)",
       "categories": [
         "web-components",

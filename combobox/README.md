@@ -4,7 +4,7 @@ An editable combobox with text filtering, a listbox of matching options, keyboar
 
 ## 📦 Bundle and elements
 
-- **Bundle:** `combobox/combobox.js`, approximately 7 KB.
+- **Bundle:** `combobox/combobox.js`, approximately 15 KB.
 - **Custom elements:** `<pinball-combobox>`.
 - **Dependencies:** no external runtime packages. The bundle embeds the lightweight helper and component implementation; it does not include WebGL or audio.
 
@@ -73,9 +73,9 @@ Form-associated. With name set, submits the current value string.
 
 ## 🎨 Styling, rendering, and sound
 
-A warm input surface opens a floating listbox with amber active-row feedback.
+The component sits in the shared Pinball UI metal deck with brushed-steel edges, four recessed fasteners, a chrome ball marker, an amber pilot lamp and a dark inset playfield. A warm input surface opens a floating listbox with amber active-row feedback.
 
-This standalone file embeds the small guarded Pinmotion Extras base and this component implementation. It does not load the PinballKit WebGL renderer, recorded audio, or external packages.
+This standalone file embeds the compact Pinmotion Extras base and this component implementation. Its metal deck, chrome fasteners, amber pilot lamp and brass control styling follow the original PinballKit family. It does not load WebGL or recorded audio. When PinballKit is already present on the page, user actions reuse its recorded mechanical sound effects; when used alone, the component remains self-contained and silent.
 
 ## ♿ Motion and accessibility
 

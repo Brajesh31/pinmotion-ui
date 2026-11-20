@@ -4,7 +4,7 @@ A read-only scalar meter with a mechanical needle over low, middle and high zone
 
 ## 📦 Bundle and elements
 
-- **Bundle:** `meter/meter.js`, approximately 5 KB.
+- **Bundle:** `meter/meter.js`, approximately 13 KB.
 - **Custom elements:** `<pinball-meter>`.
 - **Dependencies:** no external runtime packages. The bundle embeds the lightweight helper and component implementation; it does not include WebGL or audio.
 
@@ -68,9 +68,9 @@ Does not contribute a form value.
 
 ## 🎨 Styling, rendering, and sound
 
-A segmented colour band and high-contrast needle show the current position. The value is displayed numerically alongside the meter.
+The component sits in the shared Pinball UI metal deck with brushed-steel edges, four recessed fasteners, a chrome ball marker, an amber pilot lamp and a dark inset playfield. A segmented colour band and high-contrast needle show the current position. The value is displayed numerically alongside the meter.
 
-This standalone file embeds the small guarded Pinmotion Extras base and this component implementation. It does not load the PinballKit WebGL renderer, recorded audio, or external packages.
+This standalone file embeds the compact Pinmotion Extras base and this component implementation. Its metal deck, chrome fasteners, amber pilot lamp and brass control styling follow the original PinballKit family. It does not load WebGL or recorded audio. When PinballKit is already present on the page, user actions reuse its recorded mechanical sound effects; when used alone, the component remains self-contained and silent.
 
 ## ♿ Motion and accessibility
 

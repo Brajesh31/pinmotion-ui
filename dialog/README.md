@@ -4,7 +4,7 @@ A modal dialog that uses the native HTML dialog element, a trigger button and a 
 
 ## 📦 Bundle and elements
 
-- **Bundle:** `dialog/dialog.js`, approximately 5 KB.
+- **Bundle:** `dialog/dialog.js`, approximately 13 KB.
 - **Custom elements:** `<pinball-dialog>`.
 - **Dependencies:** no external runtime packages. The bundle embeds the lightweight helper and component implementation; it does not include WebGL or audio.
 
@@ -71,9 +71,9 @@ Does not contribute a form value. Use a separate form control inside the slotted
 
 ## 🎨 Styling, rendering, and sound
 
-The modal uses a cream panel, darkened backdrop, amber trigger and compact action footer.
+The component sits in the shared Pinball UI metal deck with brushed-steel edges, four recessed fasteners, a chrome ball marker, an amber pilot lamp and a dark inset playfield. The modal uses a cream panel, darkened backdrop, amber trigger and compact action footer.
 
-This standalone file embeds the small guarded Pinmotion Extras base and this component implementation. It does not load the PinballKit WebGL renderer, recorded audio, or external packages.
+This standalone file embeds the compact Pinmotion Extras base and this component implementation. Its metal deck, chrome fasteners, amber pilot lamp and brass control styling follow the original PinballKit family. It does not load WebGL or recorded audio. When PinballKit is already present on the page, user actions reuse its recorded mechanical sound effects; when used alone, the component remains self-contained and silent.
 
 ## ♿ Motion and accessibility
 

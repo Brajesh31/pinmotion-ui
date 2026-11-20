@@ -4,7 +4,7 @@ A multi-line text input with resizable height, optional maximum length and form-
 
 ## 📦 Bundle and elements
 
-- **Bundle:** `text-area/text-area.js`, approximately 5 KB.
+- **Bundle:** `text-area/text-area.js`, approximately 13 KB.
 - **Custom elements:** `<pinball-text-area>`.
 - **Dependencies:** no external runtime packages. The bundle embeds the lightweight helper and component implementation; it does not include WebGL or audio.
 
@@ -72,9 +72,9 @@ Form-associated. With name set, submits the current text value. Required and max
 
 ## 🎨 Styling, rendering, and sound
 
-The textarea sits in a warm cream panel and can be vertically resized.
+The component sits in the shared Pinball UI metal deck with brushed-steel edges, four recessed fasteners, a chrome ball marker, an amber pilot lamp and a dark inset playfield. The textarea sits in a warm cream panel and can be vertically resized.
 
-This standalone file embeds the small guarded Pinmotion Extras base and this component implementation. It does not load the PinballKit WebGL renderer, recorded audio, or external packages.
+This standalone file embeds the compact Pinmotion Extras base and this component implementation. Its metal deck, chrome fasteners, amber pilot lamp and brass control styling follow the original PinballKit family. It does not load WebGL or recorded audio. When PinballKit is already present on the page, user actions reuse its recorded mechanical sound effects; when used alone, the component remains self-contained and silent.
 
 ## ♿ Motion and accessibility
 
