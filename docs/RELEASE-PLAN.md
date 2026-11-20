@@ -152,9 +152,7 @@ Phase 2 coverage to add:
 - [ ] Expand the new smoke assertions into the complete per-component state/input/event/form matrix.
 
 Known implementation gaps are not passes:
-- `formResetCallback` is absent from both component bases, so native form reset does not restore custom component values.
-- `formStateRestoreCallback` is absent from both bases.
-- Disabled-fieldset support is present in the PinmotionExtras base but absent in the original PinballKit base.
+- Both component bases now implement `formResetCallback`, `formStateRestoreCallback`, and disabled-fieldset callbacks. Representative Chromium tests cover reset, serialized state restoration, and disabled-fieldset participation; full per-control and cross-browser verification remains open.
 - Drop Targets' `bonus` event is tied to a normal-motion impact callback; consumers should use `change.detail.allChecked` for state logic.
 
 Exit gate:
