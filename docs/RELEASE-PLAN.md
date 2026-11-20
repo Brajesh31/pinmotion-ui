@@ -83,20 +83,35 @@ Exit gate:
 - Latest CI and Pages workflows pass.
 
 ### Phase 1 · Complete inventory and component contract audit
-**Status: Not started**
+**Status: In progress · generated inventory and static source-to-contract checks added; behavioral and manual review outstanding**
 
-Scope:
-- Inventory every one of the 29 bundles, all 30 custom tags, all 29 demo pages and all 29 guides.
-- Compare source behavior with documented attributes, properties, methods, events, keyboard support, form behavior and styling hooks.
-- Confirm bundle independence and shared-runtime behavior.
-- Check duplicate registrations, import order, custom-element naming and collisions.
-- Identify controls whose API or behavior is inconsistent with the documented contract.
+Completed in this phase:
+- [x] Inventory all 29 component bundles, 30 custom-element tags, 29 dedicated demos, 29 component guides, and 29 registry entries.
+- [x] Generate a detailed component inventory from `tools/spec.mjs` and `tools/extras-spec.mjs`.
+- [x] Preserve the original seven mechanical controls as a separate runtime and visual family.
+- [x] Document the 22 lightweight utility controls and their separate PinmotionExtras runtime.
+- [x] Add source registration checks against each component's declared custom-element tags.
+- [x] Add static checks for documented observed attributes, property names, method names, and event names.
+- [x] Add checks for each component source, generated bundle, demo, guide, and registry entry.
+- [x] Integrate the source-to-contract audit into the mandatory repository validation workflow.
+
+Still required:
+- [ ] Verify exact attribute defaults, reflection, connection-time configuration, and update timing against implementation.
+- [ ] Verify property accessors, method parameters, return values, and programmatic event behavior.
+- [ ] Verify event payload shapes, ordering, bubbling, composed behavior, and dispatch conditions.
+- [ ] Verify keyboard navigation and pointer/touch behavior for every component.
+- [ ] Verify form association, submitted values, constraint validation, reset, restore, and disabled behavior in supported browsers.
+- [ ] Review styling hooks, responsive limits, WebGL fallback, audio behavior, and reduced-motion statements against implementation.
+- [ ] Check duplicate registration, independent bundle loading, mixed bundle order, and collision behavior in standalone demos and the full gallery.
+- [ ] Test every registry entry from a clean consumer project.
+- [ ] Complete manual review of all 29 component guides and record evidence for each contract.
 
 Exit gate:
-- One verified source-of-truth inventory.
-- No undocumented public API behavior.
-- No duplicate or missing tags, scripts, guides, demos or registry entries.
-
+- One generated, source-controlled inventory covers all bundles, tags, demos, guides, and registry entries.
+- CI checks every source registration and static API name against the specification.
+- Every behavioral contract is verified against implementation and interaction evidence.
+- No duplicate or missing tags, scripts, guides, demos, or registry entries remain.
+- All unresolved contract discrepancies are fixed or explicitly documented and approved.
 ### Phase 2 · Functional correctness and regression coverage
 **Status: Not started**
 
