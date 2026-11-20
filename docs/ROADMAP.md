@@ -4,7 +4,7 @@
 > **Branch:** `main`  
 > **Baseline inventory:** 7 original mechanical controls, 22 lightweight utility controls, 29 standalone bundles, 30 custom element tags.
 
-This is the project-level delivery roadmap. The status labels below distinguish what is present in the repository from what has been tested in a real browser or released. A component existing in the catalogue does not, by itself, mean its UX, accessibility, browser support, or production readiness is complete.
+This is the high-level project development tracker. For the stricter, complete pre-release sequence and formal stop-ship policy, follow [RELEASE-PLAN.md](RELEASE-PLAN.md). Stable release is currently NO-GO. The release can proceed only after every mandatory phase and item in [RELEASE-CHECKLIST.md](RELEASE-CHECKLIST.md) has evidence. The status labels below distinguish what is present in the repository from what has been tested in a real browser or released. A component existing in the catalogue does not, by itself, mean its UX, accessibility, browser support, or production readiness is complete.
 
 ## 📊 Current progress
 
