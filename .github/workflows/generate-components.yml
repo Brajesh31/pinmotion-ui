@@ -1,0 +1,81 @@
+name: Generate and publish component library
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: component-generation
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          package-manager-cache: false
+      - name: Install from npm lockfile
+        run: npm ci
+      - name: Build standalone bundles
+        run: npm run build
+      - name: Generate documentation, demos and registry
+        run: npm run docs
+      - name: Run complete repository checks
+        run: npm run check
+      - name: Smoke-test the expanded local gallery
+        shell: bash
+        run: |
+          set -euo pipefail
+          node tools/serve.mjs > /tmp/pinmotion-serve.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:8000/gallery/ >/dev/null; then break; fi
+            sleep 1
+          done
+          test "$(node --input-type=module -e "import('./tools/spec.mjs').then(({SPEC})=>process.stdout.write(String(SPEC.length)))")" = "29"
+          for component in $(node --input-type=module -e "import('./tools/spec.mjs').then(({SPEC})=>process.stdout.write(SPEC.map(c=>c.id).join(' ')))"); do
+            curl --fail --silent "http://127.0.0.1:8000/$component/" >/dev/null
+            curl --fail --silent "http://127.0.0.1:8000/$component/$component.js" >/dev/null
+          done
+          curl --fail --silent http://127.0.0.1:8000/registry.json | python3 -c "import json,sys; d=json.load(sys.stdin); assert len(d['items']) == 29"
+          echo "Expanded site smoke test passed: 29 component routes and bundles."
+      - name: Commit generated bundles and documentation
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Generated files are already current."
+          else
+            git commit -m "build: generate 29 standalone components and docs"
+            git push origin HEAD:main
+          fi
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+      - name: Upload website artifact
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: .
+          include-hidden-files: true
+      - name: Deploy website
+        id: deployment
+        uses: actions/deploy-pages@v5
