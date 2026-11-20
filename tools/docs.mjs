@@ -87,7 +87,7 @@ ${a.forms}
 
 ${a.styling}
 
-The shared chrome ball and lamps use WebGL. Set the instance's \`silent\` attribute to mute that element, or set \`PinballKit.sound = false\` to mute the shared page audio. Audio initializes after the first pointer or keyboard interaction, as browsers require.
+${lightweight?a.runtimeNotes:"The shared chrome ball and lamps use WebGL. Set the instance's `silent` attribute to mute that element, or set `PinballKit.sound = false` to mute the shared page audio. Audio initializes after the first pointer or keyboard interaction, as browsers require."}
 
 ## ♿ Motion and accessibility
 
@@ -202,7 +202,7 @@ put('gallery/index.html', `<!doctype html>
   <header>
     <img src="title.jpg" width="1600" height="700" alt="Pinball UI hero artwork showing the original mechanical pinball control collection.">
     <h1 class="label">Pinball UI</h1>
-    <p class="lede">${Count} ordinary controls as real pinball parts. The bodies are photographs, the ball is chrome drawn live, and every flip, lamp and chime is a recorded sound. Each is a single file with no dependencies.</p>
+    <p class="lede">${Count} standalone interface components. The original pinball controls use photographed mechanisms, a live chrome ball and recorded sounds; the expanded utility controls use lightweight CSS and native browser semantics. No runtime package dependencies.</p>
     <p class="links">
       <a class="pill" href="https://github.com/${REPO}" target="_blank" rel="noopener">The repo on GitHub</a>
       <a class="pill" href="https://github.com/Brajesh31" target="_blank" rel="noopener">@crtvTeknologist on X</a>
@@ -264,13 +264,13 @@ Source: https://github.com/${REPO}
 
 ## Drop-in controls
 
-Each is one plain script that registers a custom element. Load it with a script tag, not as a module. Do not rewrite or split the file: the photographs and sounds are inside it as data. The original seven bundles include PinballKit and share its clock, WebGL context and audio controller. The 22 lightweight utility bundles use a separate small guarded helper and do not require WebGL or audio.
+Each is one plain script that registers a custom element. Load it with a script tag, not as a module. The original seven bundles include PinballKit, WebGL artwork and recorded sounds; the 22 utility bundles use a separate lightweight CSS/native helper and do not require WebGL or audio.
 
 ${SPEC.map((c) => `- [${c.name}](${SITE}/${c.id}/${c.id}.js) (${c.kind}, about ${size(c.id)}): ${c.desc} \`${tags(c)}\`: ${c.docs.replace(/^then use /, 'Use ')} [Docs](https://github.com/${REPO}/blob/main/${c.id}/README.md)`).join('\n')}
 
 Install any one with the shadcn CLI: \`npx shadcn add ${REPO}/NAME\`, where NAME is ${SPEC.map((c) => c.id).join(', ')}. The file lands in \`public/pinball-ui/\`.
 
-Size each with the CSS variable --pb-size (its height). Set --pb-page to the page background as a hex colour so the ball's reflections match (default cream, #f3efe5). Attributes set the starting state; use properties and methods after that. Value controls (toggle, slider, stepper, targets) work in a form with a name. Sound plays after the first press on the page; the silent attribute mutes one control and PinballKit.sound = false mutes all. With prefers-reduced-motion the parts go straight to where they end up.
+Follow each component README for its supported attributes, properties, events, styling and form behavior. The original mechanical controls use --pb-size and --pb-page, and their sound can be muted with silent or PinballKit.sound = false. Form-associated utility controls use ElementInternals where browser support permits.
 
 ## The skill
 
