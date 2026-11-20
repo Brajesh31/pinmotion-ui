@@ -29,3 +29,30 @@ jobs:
 
       - name: Check generated runtime and documentation
         run: npm run check
+
+      - name: Smoke-test the local static server
+        shell: bash
+        run: |
+          set -euo pipefail
+          node tools/serve.mjs > "$RUNNER_TEMP/pinmotion-server.log" 2>&1 &
+          SERVER_PID=$!
+          trap 'kill "$SERVER_PID" 2>/dev/null || true' EXIT
+
+          BASE_URL="http://127.0.0.1:8000"
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent "$BASE_URL/gallery/" >/dev/null; then
+              break
+            fi
+            sleep 1
+          done
+
+          curl --fail --silent --show-error "$BASE_URL/" >/dev/null
+          curl --fail --silent --show-error "$BASE_URL/gallery/" | grep -q "Pinball UI"
+          curl --fail --silent --show-error "$BASE_URL/toggle/" | grep -q "pinball-toggle"
+          curl --fail --silent --show-error --head "$BASE_URL/toggle/toggle.js" | grep -qi "200 OK"
+          curl --fail --silent --show-error --head "$BASE_URL/gallery/title.jpg" | grep -qi "200 OK"
+
+          if curl --fail --silent "$BASE_URL/.git/config" >/dev/null; then
+            echo "Hidden repository metadata must not be served."
+            exit 1
+          fi
