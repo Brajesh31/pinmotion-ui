@@ -6,9 +6,9 @@ The repository has three GitHub Actions workflows:
 
 | Workflow | Trigger | What it does |
 | --- | --- | --- |
-| [Validate](../.github/workflows/validate.yml) | Pull request targeting `main` or manual dispatch | Runs npm install/checks and static-server smoke tests |
+| [Validate](../.github/workflows/validate.yml) | Push or pull request targeting `main`, or manual dispatch | Runs `npm ci`, builds bundles, regenerates docs/gallery, checks generated parity, parses the gallery runtime and smoke-tests the static server |
 | [Deploy to GitHub Pages](../.github/workflows/deploy-pages.yml) | Manual dispatch only | Verifies static files, syntax and registry JSON, then deploys the current committed site |
-| [Generate and publish components](../.github/workflows/generate-components.yml) | Push to `main` or manual dispatch | Builds all 29 bundles, generates guides/demos/registry, runs checks, smoke-tests routes, commits generated outputs, and deploys Pages |
+| [Generate and publish components](../.github/workflows/generate-components.yml) | Push to `main` or manual dispatch | Builds all 29 bundles, generates guides/demos/registry, runs checks, smoke-tests routes and bundles, uploads a per-attempt artifact, and deploys Pages from the triggering commit |
 
 The two workflows are independently triggered by their configured events. The Pages workflow does not declare a dependency on the Validate workflow.
 
@@ -35,12 +35,12 @@ The Validate workflow:
 - checks out the repository;
 - sets up Node.js 22;
 - runs `npm ci`;
-- runs `npm run check`;
+- runs `npm run build && npm run docs && npm run check`;
 - starts `tools/serve.mjs` in the background;
 - checks the root page, gallery, toggle demo, component script response, and gallery artwork response;
-- verifies that a request for `.git/config` is not served.
+- verifies that a request for `.git/config` is not served.\n- parses the generated inline gallery runtime before browser execution.\n- verifies that the generated gallery error monitor and quoted component wire keys exist.
 
-The smoke tests exercise HTTP behavior and basic file availability. They do not simulate component user input.
+The static-server smoke tests exercise HTTP behavior and basic file availability. They do not simulate component user input.
 
 ## 4. Optional browser interaction suite
 
@@ -56,7 +56,7 @@ Then in a second terminal:
 npm run test:browser
 ```
 
-The script uses Chrome DevTools Protocol against headless Chrome/Chromium and currently exercises the original seven mechanical controls. Its test viewport is 390 × 900 CSS pixels with device scale factor 2 and touch emulation enabled. It exercises:
+The script uses Chrome DevTools Protocol against headless Chrome/Chromium. It first checks that the gallery creates all 29 cards, clears its loading state, initializes every card and registers all 30 custom-element tags. It then exercises the original seven mechanical controls and selected utility interactions. Its test viewport is 390 × 900 CSS pixels with device scale factor 2 and touch emulation enabled. It exercises:
 - presence of all eight original mechanical tags and all 22 utility custom elements;
 - the 22 utility controls each render their component-specific backglass emblem;
 - the full gallery reuses the already-initialized PinballKit shader for the utility chrome-ball marker;
