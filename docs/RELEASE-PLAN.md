@@ -363,6 +363,8 @@ Only after formal GO:
 | QA-001 | P1 | Browser interaction suite was not a mandatory CI gate | Make browser tests a release gate | CI gate committed; final rerun pending |
 | QA-002 | P1 | Full first-load gallery behavior was not asserted by browser tests | Test all 29 cards and 30 tags | First-load assertions passed; full suite rerun pending |
 | QA-003 | P1 | Full cross-browser and real-device evidence is missing | Complete Phase 5 matrix | Open |
+| QA-004 | P1 | The 14 form-associated controls have no `formResetCallback` in either shared base | Implement deterministic reset-to-initial-value behavior and test all applicable controls in Chromium and the supported-browser matrix | Confirmed source gap; Phase 2 fix required |
+| QA-005 | P1 | The original PinballKit base has no `formDisabledCallback` for disabled fieldsets | Implement and test fieldset-driven disabled state for Toggle, Slider, Stepper and Drop targets | Confirmed source gap; Phase 2 fix required |
 | A11Y-001 | P1 | WCAG 2.2 AA conformance has not been demonstrated | Complete Phase 4 audit and remediation | Open |
 | A11Y-002 | P1 | Plunger reduced-motion behavior is a documented exception | Implement and retest a reduced-motion alternative | Open |
 | A11Y-003 | P2 | Drop Targets bonus event differs under reduced motion | Align behavior or clearly define and test the event contract | Open |
