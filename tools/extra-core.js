@@ -219,7 +219,6 @@
     }
     formResetCallback(){if(this._formDefaults)this.restoreFormState(this._formDefaults)}
     formStateRestoreCallback(state){this.restoreFormState(state)}
-    formDisabledCallback(disabled){this._formDisabled=!!disabled;this.inert=this._formDisabled||this.hasAttribute('disabled');this.syncForm()}
     connectedCallback(){
       if(!this.ready){
         this.ready=true;
@@ -317,7 +316,7 @@
 
     syncDisabled(){this.inert=this.hasAttribute('disabled')||!!this._formDisabled;this.syncForm()}
     syncForm(){if(!this.internals||typeof this.formValue!=='function')return;try{this.internals.setFormValue(this.hasAttribute('disabled')?null:this.formValue(),JSON.stringify(this.captureFormState()))}catch{}}
-    formDisabledCallback(disabled){this.inert=!!disabled||this.hasAttribute('disabled')}
+    formDisabledCallback(disabled){this._formDisabled=!!disabled;this.inert=this._formDisabled||this.hasAttribute('disabled');this.syncForm()}
     render(){return ''} setup(){}
   }
   window.PinmotionExtras=Object.freeze({Base,esc,clamp,safeURL,baseCSS,mechanicalCSS});
