@@ -99,7 +99,8 @@ const rootIndex = read('index.html');
 check('root page redirects to the gallery', /url\s*=\s*gallery\//i.test(rootIndex) && rootIndex.includes('href="gallery/"'));
 
 const gallery = read('gallery/index.html');
-const galleryRuntime = gallery.match(/<script>\s*([\s\S]*?)<\/script>\s*<\/body>/);
+const galleryInlineScripts = [...gallery.matchAll(/<script>\s*([\s\S]*?)<\/script>/g)];
+const galleryRuntime = galleryInlineScripts.at(-1);
 let galleryRuntimeError = '';
 try {
   if (!galleryRuntime) throw new Error('the inline gallery runtime script was not found');
