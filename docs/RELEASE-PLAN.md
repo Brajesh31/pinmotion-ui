@@ -141,7 +141,9 @@ Phase 2 coverage to add:
 - [ ] Default, changed, disabled, invalid, min/max, empty and reset states for every applicable component.
 - [ ] Pointer, touch, keyboard and programmatic behavior tested independently against the documented API.
 - [ ] Exact event payload values, order, bubbling/composed flags and programmatic dispatch/suppression.
-- [ ] Form validity, successful submission, disabled-fieldset, reset and state-restore behavior.
+- [x] Shared form bases implement default-state capture, native reset restoration, serialized state restoration and disabled-fieldset callbacks.
+- [x] Chromium regression coverage added for original and utility controls, including form data participation.
+- [ ] Full per-control validity, successful submission, disabled-fieldset, reset and browser-driven state-restore matrix.
 - [ ] Timers, undo/commit, toast auto-dismiss, repeated operations and disconnect/reconnect cleanup.
 - [ ] Solo bundle behavior plus mixed bundle order and full-gallery regression tests.
 - [ ] Fault isolation: one component initialization exception must not prevent unrelated cards rendering and reporting ready.
