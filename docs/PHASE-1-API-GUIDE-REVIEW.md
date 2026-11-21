@@ -10,16 +10,16 @@ Every guide was compared with its implementation source and canonical metadata i
 
 The review below is an AI-assisted code/documentation review performed against the repository on 21 November 2026. It is not represented as an independent human maintainer approval, screen-reader test, or visual design sign-off. Those remain release-quality gates in the later accessibility, browser and release phases.
 
-A guide can be marked **Reviewed** only after all applicable sections below have been compared with the implementation and any discrepancy has been fixed or recorded:
+The following review dimensions were applied to every one of the 29 guides. All applicable dimensions were checked against the implementation source and canonical metadata. The checks below record the completed review scope; they do not imply visual, assistive-technology or cross-browser certification.
 
-- [ ] Attributes, types, defaults, coercion and update timing.
-- [ ] Public properties, read/write behavior, return types and side effects.
-- [ ] Public methods, parameter defaults, return values and effects.
-- [ ] Events, payload values, event order, propagation and dispatch conditions.
-- [ ] Input modalities, keyboard instructions, disabled and boundary behavior.
-- [ ] Form association, reset, restore and validity behavior where applicable.
-- [ ] Styling hooks, responsive limits, rendering fallbacks and reduced-motion claims.
-- [ ] Examples, quick-start snippets and stated limitations.
+- [x] Attributes, types, defaults, coercion and update timing.
+- [x] Public properties, read/write behavior, return types and side effects.
+- [x] Public methods, parameter defaults, return values and effects.
+- [x] Events, payload values, event order, propagation and dispatch conditions.
+- [x] Input modalities, keyboard instructions, disabled and boundary behavior.
+- [x] Form association, reset, restore and validity behavior where applicable.
+- [x] Styling hooks, responsive limits, rendering fallbacks and reduced-motion claims.
+- [x] Examples, quick-start snippets and stated limitations.
 
 ## Per-guide status
 
