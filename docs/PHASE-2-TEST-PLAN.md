@@ -62,9 +62,10 @@ For applicable controls assert:
 ### E. Asynchronous behavior and cleanup
 
 - Drain deletion, undo window, commit and replacement-ball lifecycle.
-- Toast show, manual dismiss, auto-dismiss and re-show behavior.
+- [x] Toast manual dismiss, timed auto-dismiss, timer replacement, disconnect cleanup and reconnect behavior. Evidence: [Validate run 44843352695](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44843352695), commit `f34a32e0f7fe9414c20d14e33eedb3e39b4593ed`.
 - Dialog open, cancel, close and repeated invocation.
-- Disconnect a component while it has an active timer/animation, then reconnect it.
+- [x] Toast disconnects with an active auto-dismiss timer and reconnects without firing a stale dismissal.
+- [ ] Disconnect other components during active timers/animations, then reconnect them.
 - Ensure callbacks do not target disconnected or replaced DOM.
 - Confirm an exception from one bundle or card is visible but does not stop independent cards.
 
