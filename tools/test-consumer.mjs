@@ -48,7 +48,12 @@ const contractMemberPlans = (component) => {
     const clean = String(signature).split(tick).join('');
     return { name: clean.split('(')[0].trim(), tag: scope(signature, description) };
   });
-  return { properties, methods };
+  const observedAttributes = (component.api?.attributes || []).flatMap(([names, type, defaultValue, observation]) => {
+    const mode = String(observation || '').toLowerCase();
+    if (!mode.includes('observed') || mode.includes('shared base')) return [];
+    return parseNames(names);
+  });
+  return { properties, methods, observedAttributes };
 };
 
 const temp = mkdtempSync(join(tmpdir(), 'pinmotion-consumer-'));
@@ -82,7 +87,7 @@ check('registry has exactly the 29 canonical component entries',
 
 const htmlPage = (scripts, tags, mixed = false) => {
   const contractScript = !mixed && ((scripts[0]?.properties?.length || 0) + (scripts[0]?.methods?.length || 0) > 0)
-    ? '<script>window.__contractProperties=' + JSON.stringify(scripts[0].properties || []) + ';window.__contractMethods=' + JSON.stringify(scripts[0].methods || []) + ';</script>'
+    ? '<script>window.__contractProperties=' + JSON.stringify(scripts[0].properties || []) + ';window.__contractMethods=' + JSON.stringify(scripts[0].methods || []) + ';window.__contractObservedAttributes=' + JSON.stringify((scripts[0].observedAttributes || []).map(name => ({tag:scripts[0].tags[0],name}))) + ';</script>'
     : '';
   const snapshots = mixed
     ? '<script>window.__loaded=[];window.__errors=[];window.__runtimeObjects=new WeakMap();window.__nextRuntimeId=0;window.__runtimeId=value=>{if(!value||(typeof value!=="object"&&typeof value!=="function"))return null;if(!window.__runtimeObjects.has(value))window.__runtimeObjects.set(value,++window.__nextRuntimeId);return window.__runtimeObjects.get(value)};addEventListener("error",e=>window.__errors.push(e.message||"script error"));addEventListener("unhandledrejection",e=>window.__errors.push(String(e.reason)));</script>'
@@ -253,6 +258,12 @@ try {
     const methodResults = JSON.parse(await evaluate(methodExpression));
     for (const method of methodResults) {
       check(item.id + ': runtime public method ' + method.name, method.ok, JSON.stringify(method));
+    }
+
+    const observedResults = JSON.parse(await evaluate('JSON.stringify((window.__contractObservedAttributes||[]).map(plan => {const definition=customElements.get(plan.tag);const actual=definition?.observedAttributes||[];return {tag:plan.tag,name:plan.name,registered:!!definition,observed:actual.includes(plan.name),actual};}))'));
+    for (const observed of observedResults) {
+      check(item.id + ': runtime observedAttributes includes ' + observed.name,
+        observed.registered && observed.observed, JSON.stringify(observed));
     }
   }
 
