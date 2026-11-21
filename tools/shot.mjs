@@ -17,7 +17,7 @@ const PORT = await new Promise((resolve) => {
 });
 const PROFILE = mkdtempSync(join(tmpdir(), 'pinmotion-shot-'));
 const chromeOutput = [];
-const chrome = spawn(process.env.CHROME || 'chromium', [
+const chromeArgs = [
   '--headless=new',
   '--no-sandbox',
   '--disable-setuid-sandbox',
@@ -33,7 +33,9 @@ const chrome = spawn(process.env.CHROME || 'chromium', [
   '--force-color-profile=srgb',
   `--window-size=${W},${H}`,
   'about:blank',
-], { stdio: ['ignore', 'ignore', 'pipe'] });
+];
+if (process.env.DISABLE_WEBGL === '1') chromeArgs.push('--disable-webgl', '--disable-3d-apis');
+const chrome = spawn(process.env.CHROME || 'chromium', chromeArgs, { stdio: ['ignore', 'ignore', 'pipe'] });
 chrome.stderr.setEncoding('utf8');
 chrome.stderr.on('data', (chunk) => {
   chromeOutput.push(...chunk.split(/\\r?\\n/).filter(Boolean));
@@ -83,6 +85,9 @@ const evaluate = async (expr) => { const r = await send('Runtime.evaluate', { ex
 await send('Runtime.enable');
 await send('Emulation.setDeviceMetricsOverride', { width: +W, height: +H, deviceScaleFactor: +SCALE, mobile: !!process.env.MOBILE });
 await send('Page.enable');
+if (process.env.REDUCED_MOTION === '1') {
+  await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] });
+}
 await send('Page.navigate', { url: URL_ });
 await sleep(900);
 const snap = async (name, full) => {
@@ -98,7 +103,12 @@ if (TIMES) {
     await snap(`${OUT}-${String(target).replace('.', '_')}.png`);
   }
 } else {
-  if (process.env.JS) { await evaluate(process.env.JS); await sleep(+(process.env.WAIT || 1500)); }
+  if (process.env.JS) await evaluate(process.env.JS);
+  if (process.env.KEYBOARD_FOCUS === '1') {
+    await send('Input.dispatchKeyEvent', { type: 'keyDown', key: 'Shift', code: 'ShiftLeft', windowsVirtualKeyCode: 16 });
+    await send('Input.dispatchKeyEvent', { type: 'keyUp', key: 'Shift', code: 'ShiftLeft', windowsVirtualKeyCode: 16 });
+  }
+  await sleep(+(process.env.WAIT || 1500));
   await snap(`${OUT}.png`, true);
 }
 if (logs.length) console.log(logs.join("\n")); if (process.env.PRINT) console.log(await evaluate(process.env.PRINT));

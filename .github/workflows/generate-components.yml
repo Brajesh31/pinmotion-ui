@@ -143,6 +143,9 @@ jobs:
             MOBILE=1 JS="$READY_JS" WAIT=500 node tools/shot.mjs "$BASE_URL/$component/" "$OUTPUT_DIR/$component-mobile" 390 844 2
           done
           JS='document.querySelector("pinball-toggle").checked = true' WAIT=1200 node tools/shot.mjs "$BASE_URL/toggle/" "$OUTPUT_DIR/toggle-on-desktop" 1440 1000 1
+          JS='document.querySelector("pinball-toggle").shadowRoot.querySelector("button").focus()' KEYBOARD_FOCUS=1 WAIT=350 PRINT='document.querySelector("pinball-toggle").shadowRoot.querySelector("button").matches(":focus-visible")' node tools/shot.mjs "$BASE_URL/toggle/" "$OUTPUT_DIR/toggle-focus-visible-desktop" 1440 1000 1
+          JS='const t=document.querySelector("pinball-toggle"); t.checked=true; t.setAttribute("disabled","")' WAIT=350 node tools/shot.mjs "$BASE_URL/toggle/" "$OUTPUT_DIR/toggle-disabled-on-desktop" 1440 1000 1
+          REDUCED_MOTION=1 JS='document.querySelector("pinball-toggle").checked = true' WAIT=350 node tools/shot.mjs "$BASE_URL/toggle/" "$OUTPUT_DIR/toggle-reduced-motion-on-desktop" 1440 1000 1
           JS='document.querySelector("pinball-slider").value = 75' WAIT=1200 node tools/shot.mjs "$BASE_URL/slider/" "$OUTPUT_DIR/slider-75-desktop" 1440 1000 1
           for screenshot in "$OUTPUT_DIR"/*.png; do test -s "$screenshot"; done
       - name: Upload Phase 0 visual evidence
