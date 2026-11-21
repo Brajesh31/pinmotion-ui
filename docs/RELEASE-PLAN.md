@@ -143,12 +143,12 @@ Phase 2 coverage to add:
 - [ ] Exact event payload values, order, bubbling/composed flags and programmatic dispatch/suppression.
 - [x] Shared form bases implement default-state capture, native reset restoration, serialized state restoration and disabled-fieldset callbacks.
 - [x] Chromium regression coverage added for original and utility controls, including form data participation, native reset, serialized state restoration, and disabled-fieldset exclusion/restoration.
-- [x] Passing evidence: [Validate run 44842279022](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44842279022), commit `75cf604966551d5132aacd19a4a6f75e5aa7470b`.
+- [x] Passing evidence: [Validate run 44842827810](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44842827810), commit `be4211811526d2f2a8f8f046102201e1f5de32b5`.
 - [x] Passing Pages evidence: [Deployment run 44842279023](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44842279023), same commit.
 - [x] Native reset and submitted form values verified for all 14 form-associated controls in Chromium.
 - [x] Disabled-fieldset exclusion/restoration verified for both component bases.
 - [x] Representative serialized state restoration verified for checked and scalar-value controls.
-- [x] Chromium verifies Text Field, Text Area and Date Picker required/type/range validity propagation into `ElementInternals`, plus recovery after correction.
+- [x] Chromium verifies Text Field, Text Area and Date Picker required/type/range validity propagation into `ElementInternals`, plus recovery after correction and host-targeted invalid events. Utility state restoration is also covered.
 - [ ] Full per-control validity/constraint validation and cross-browser state-restore matrix.
 - [ ] Timers, undo/commit, toast auto-dismiss, repeated operations and disconnect/reconnect cleanup.
 - [ ] Solo bundle behavior plus mixed bundle order and full-gallery regression tests.
