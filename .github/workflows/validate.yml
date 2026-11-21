@@ -64,3 +64,8 @@ jobs:
           fi
 
           npm run test:browser
+
+      - name: Verify clean registry consumer installs and mixed bundle load orders
+        env:
+          CHROME: ${{ steps.setup-chrome.outputs.chrome-path }}
+        run: npm run test:consumer

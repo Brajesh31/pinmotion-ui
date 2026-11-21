@@ -21,7 +21,8 @@
     "test:browser": "node tools/test.mjs http://127.0.0.1:8000/gallery/",
     "check": "npm run build:check && npm run docs:check && npm run validate && npm run integrity",
     "screenshots": "node tools/shot.mjs",
-    "integrity": "node tools/integrity.mjs"
+    "integrity": "node tools/integrity.mjs",
+    "test:consumer": "node tools/test-consumer.mjs"
   },
   "repository": {
     "type": "git",
