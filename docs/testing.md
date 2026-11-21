@@ -109,7 +109,7 @@ Do not describe the project as cross-browser certified based on the current chec
 - Sound playback has not been verified on a physical phone.
 - The browser suite is a mandatory Validate workflow step. A passing Chrome run is not evidence of Safari, Firefox, real-device, or screen-reader support.
 - Native `form.reset()` and submitted values are covered for all 14 form-associated controls in Chromium. Serialized state restoration is covered with representative checked and scalar-value controls.
-- Disabled-fieldset exclusion and re-enablement are covered for both component bases. Per-control constraint validation and cross-browser form lifecycle behavior remain open. See [Phase 2 test plan](PHASE-2-TEST-PLAN.md) and [acceptance matrix](PHASE-1-2-ACCEPTANCE-MATRIX.md).
-- Latest passing form lifecycle evidence: [Validate run 44841618203](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44841618203), commit `1d6eaf3ac358d7c19d5e4a3eacae29e683af1cbe`.
+- Disabled-fieldset exclusion and re-enablement are covered for both component bases. Text Field, Text Area and Date Picker expose required, type-mismatch and date-range validity through `ElementInternals`; Chromium verifies invalid-state propagation and recovery. Exhaustive per-control constraint validation and cross-browser form lifecycle behavior remain open. See [Phase 2 test plan](PHASE-2-TEST-PLAN.md) and [acceptance matrix](PHASE-1-2-ACCEPTANCE-MATRIX.md).
+- Latest passing form lifecycle evidence: [Validate run 44842279022](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44842279022), commit `75cf604966551d5132aacd19a4a6f75e5aa7470b`.
 
 These gaps are tracked as explicit validation work, not assumed passes.
