@@ -339,3 +339,8 @@ Do not say "complete" without evidence. Do not skip ahead because a phase is tak
 - CI/CD and GitHub Actions: [Workflow plan](WORKFLOW-PLAN.md)
 - Reported defects: [Defect register](quality/DEFECT-REGISTER.md)
 - Visual acceptance: [Visual baseline](quality/VISUAL-BASELINE.md)
+
+
+## Per-component evidence files
+
+Use [the component audit report template](quality/COMPONENT-AUDIT-TEMPLATE.md). Create each component's filled report at `docs/component-audits/<component-id>.md` only when that component's batch starts. The completed report must be committed in the same phase as its code, demo, guide, skill and regression tests.
