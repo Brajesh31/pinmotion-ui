@@ -14,6 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 25
     permissions:
+      actions: read
       contents: read
       pages: write
       id-token: write
@@ -65,6 +66,24 @@ jobs:
           name: github-pages-${{ github.run_attempt }}
           path: .
           include-hidden-files: true
+      - name: Wait for Pages artifact indexing
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EXPECTED_ARTIFACT: github-pages-${{ github.run_attempt }}
+        run: |
+          set -euo pipefail
+          for attempt in {1..12}; do
+            artifact_id="$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/artifacts" --jq ".artifacts[] | select(.name == \"${EXPECTED_ARTIFACT}\" and .expired == false) | .id" | head -n 1)"
+            if [[ -n "$artifact_id" ]]; then
+              echo "Pages artifact is visible to the Actions API (ID: $artifact_id)."
+              exit 0
+            fi
+            echo "Pages artifact is not yet visible (attempt $attempt/12)."
+            sleep 5
+          done
+          echo "::error::Uploaded Pages artifact did not become visible before deployment."
+          exit 1
       - name: Deploy website
         id: deployment
         uses: actions/deploy-pages@v5
