@@ -229,11 +229,23 @@ try {
       'let cursor=host,descriptor=null;while(cursor&&!descriptor){descriptor=Object.getOwnPropertyDescriptor(cursor,plan.name);cursor=Object.getPrototypeOf(cursor);}' +
       'const access=plan.access.toLowerCase();' +
       'const ok=access.includes("read/write")?(!!descriptor?.get&&!!descriptor?.set):((!!descriptor?.get)&&!descriptor?.set);' +
-      'return {name:plan.name,tag:plan.tag||host?.localName,access:plan.access,found:!!descriptor,hasGetter:!!descriptor?.get,hasSetter:!!descriptor?.set,ok};}))';
+      'const value=host?.[plan.name];const type=String(plan.type||"").toLowerCase().replace(/\\s/g,"");' +
+      'let typeApplicable=true,typeOk=true;' +
+      'if(type.endsWith("[]")){typeOk=Array.isArray(value);}' +
+      'else if(type.includes("boolean")){typeOk=typeof value==="boolean";}' +
+      'else if(type.includes("number")||type.includes("integer")){typeOk=typeof value==="number"||value===null&&type.includes("null");}' +
+      'else if(type.includes("string")){typeOk=typeof value==="string"||value===null&&type.includes("null");}' +
+      'else if(type.includes("file")){typeOk=Array.isArray(value)&&value.every(file=>file instanceof File);}' +
+      'else{typeApplicable=false;}' +
+      'return {name:plan.name,tag:plan.tag||host?.localName,access:plan.access,documentedType:plan.type,found:!!descriptor,hasGetter:!!descriptor?.get,hasSetter:!!descriptor?.set,ok,typeApplicable,typeOk};}))';
     const propertyResults = JSON.parse(await evaluate(propertyExpression));
     for (const property of propertyResults) {
       check(item.id + ': runtime property descriptor ' + property.name + ' (' + property.access + ')',
         property.ok, JSON.stringify(property));
+      if (property.typeApplicable) {
+        check(item.id + ': runtime property initial type ' + property.name + ' (' + property.documentedType + ')',
+          property.typeOk, JSON.stringify(property));
+      }
     }
     const methodExpression = 'JSON.stringify((window.__contractMethods||[]).map(plan => {' +
       'const host=document.querySelector(plan.tag||' + JSON.stringify(item.tags[0]) + ');' +
