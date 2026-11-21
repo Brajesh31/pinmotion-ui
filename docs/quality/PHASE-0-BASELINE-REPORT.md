@@ -131,3 +131,27 @@ This is stronger state evidence, not baseline approval. Hover, alternate modes, 
 The no-WebGL screenshot generated from the published demo on commit `0178dffe6c8be451d641a4313a26c09d910f96f4` showed only the Toggle page's text and controls. The visual plate, lamp and chrome ball were completely absent. This reproduces PM-009 and invalidates the previous accepted limitation that “shader visuals are missing” without WebGL.
 
 The fix uses the original embedded `toggle-off`, `toggle-on`, and `ball` images in a Canvas 2D renderer when WebGL is not available or the WebGL paint step cannot draw. No generic replacement artwork is used. A dedicated no-WebGL browser regression is now part of the mandatory Validate workflow; pending its result, do not mark PM-009 fixed or sign off Toggle.
+
+
+## 10. WebGL-unavailable fallback remediation and latest CI
+
+The no-WebGL capture from commit `0178dffe6c8be451d641a4313a26c09d910f96f4` demonstrated PM-009: Toggle kept its title and controls but lost the pinball artwork. The problem was reproduced in the published demo and fixed in commit `55f99aff000cf4c8de52bb7a411f7b06eacda77c`.
+
+The fallback reuses the original embedded off/on photographed plates and chrome-ball image in Canvas 2D whenever WebGL cannot initialize or the WebGL paint path returns false. It preserves the visual design and functionality; only the live reflective shader is unavailable.
+
+- [Validate run 44890886645](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44890886645), success.
+- [Published-site workflow 44890886623](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44890886623), success.
+- [Visual archive 14701533586](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44890886623/artifacts/14701533586), including the new `toggle-webgl-unavailable-desktop.png`.
+
+Dedicated no-WebGL regression results: WebGL unavailable confirmed; 46,793 visible pixels on the Canvas 2D fallback; off/on plate changes with checked state; button activation and change event work; configured form value is submitted; zero JavaScript exceptions.
+
+| Latest Validate gate | Result |
+|---|---:|
+| Component contract audit | 540 passed, 0 failed |
+| Repository validation | 614 passed, 0 failed |
+| Integrity / Markdown links | 788 passed, 0 failed; 377 local links |
+| Main Chromium interaction suite | All passed |
+| Dedicated Toggle no-WebGL fallback | 0 failed |
+| Clean consumer and mixed bundle loading | 639 passed, 0 failed |
+
+PM-009 is fixed and verified. Phase 0 remains open for historical original-four identification or user confirmation, exact reproduction of PM-001/002/003, forced context-loss and asset-failure tests, audio output, and manual assistive-technology review.

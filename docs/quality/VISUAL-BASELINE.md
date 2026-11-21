@@ -116,3 +116,23 @@ Validate run [44889582076](https://github.com/Brajesh31/pinmotion-ui/actions/run
 The published no-WebGL capture from workflow run [44890209238](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44890209238), artifact [14701756868](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44890209238/artifacts/14701756868), showed a blank Toggle canvas. The original pinball plate and chrome ball were missing while the demo's text and sound control remained. This is tracked as PM-009.
 
 A Canvas 2D fallback reusing the original embedded plate and ball assets has been implemented. A dedicated WebGL-disabled browser regression is now added to Validate. Keep the no-WebGL visual gate pending until a new screenshot shows the restored original artwork and the test passes.
+
+
+## 2026-11-21 WebGL-unavailable fallback verification
+
+The initial published no-WebGL screenshot exposed PM-009: the Toggle stayed interactive but its pinball artwork disappeared. Commit `55f99aff000cf4c8de52bb7a411f7b06eacda77c` adds a Canvas 2D fallback that reuses the original embedded off/on photographs and chrome-ball image.
+
+Latest no-WebGL browser evidence:
+- [Validate run 44890886645](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44890886645), success.
+- [Published-site / screenshot run 44890886623](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44890886623), success.
+- [Visual artifact 14701533586](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44890886623/artifacts/14701533586), includes `toggle-webgl-unavailable-desktop.png`.
+
+The captured no-WebGL Toggle image was opened and reviewed. The original photographed red-rimmed teal lane, chrome ball and amber lamp are visible again. The dedicated browser regression forced WebGL off and confirmed:
+- WebGL is genuinely unavailable (`PinballKit.getGL() === null`).
+- The control selects `2d-fallback` and draws 46,793 visible pixels at 436 × 224 backing pixels.
+- The on state moves the ball to the on position and illuminates the plate; the rendered pixel checksum changes.
+- Programmatic state and real button activation still work; the regular change event fires.
+- FormData still includes the configured value.
+- No JavaScript exception is raised.
+
+PM-009 is therefore fixed and verified. A separate forced `webglcontextlost` event, asset decode failure and audio-output test remain open. The visual baseline itself remains in progress and is not approved.
