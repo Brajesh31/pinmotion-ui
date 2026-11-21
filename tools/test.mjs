@@ -250,6 +250,26 @@ check('toast: show reveals the status message', await ev("document.querySelector
 await ev("document.querySelector('pinball-toast').dismiss()");
 check('toast: dismiss hides the status message', await ev("document.querySelector('pinball-toast').shadowRoot.querySelector('.shell').hidden") === true && await fired('toast dismiss') === 1);
 
+await ev("document.querySelector('pinball-toast').show('Timed toast', 60)"); await sleep(140);
+check('toast: duration automatically dismisses the message',
+  await ev("document.querySelector('pinball-toast').shadowRoot.querySelector('.shell').hidden") === true && await fired('toast dismiss') === 2);
+await ev("document.querySelector('pinball-toast').show('Replace this timer', 100)"); await sleep(30);
+await ev("document.querySelector('pinball-toast').show('Persistent message', 0)"); await sleep(140);
+check('toast: showing again clears the previous auto-dismiss timer',
+  await ev("document.querySelector('pinball-toast').shadowRoot.querySelector('.shell').hidden") === false && await fired('toast dismiss') === 2);
+await ev("document.querySelector('pinball-toast').dismiss()");
+check('toast: persistent message remains until manually dismissed', await fired('toast dismiss') === 3);
+await ev(`(() => {
+  const toast = document.querySelector('pinball-toast');
+  window.__detachedToast = toast; window.__toastParent = toast.parentNode; window.__toastNext = toast.nextSibling;
+  toast.show('Disconnect cleanup', 80); toast.remove();
+})()`); await sleep(150);
+check('toast: disconnect clears the pending auto-dismiss timer', await fired('toast dismiss') === 3, await fired('toast dismiss'));
+await ev(`__toastParent.insertBefore(__detachedToast, __toastNext)`); await sleep(100);
+await ev("__detachedToast.show('Reconnected toast', 0)");
+check('toast: component works after reconnect', await ev("__detachedToast.shadowRoot.querySelector('.shell').hidden") === false);
+await ev("__detachedToast.dismiss()");
+
 // Navigation and search.
 check('breadcrumbs: final item is marked as the current page', await ev("document.querySelector('pinball-breadcrumbs').shadowRoot.querySelector('[aria-current=page]').textContent") === 'Breadcrumbs');
 
