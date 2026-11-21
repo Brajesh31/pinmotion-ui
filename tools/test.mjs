@@ -108,8 +108,10 @@ const keyUp = (k, code) => send('Input.dispatchKeyEvent', { type: 'keyUp', key: 
 const focus = (tag, sel) => ev(`${S(tag, sel)}.focus()`);
 const prop = (tag, p) => ev(`${E(tag)}.${p}`);
 // count the events each element fires, so a check can ask whether change really reached the page
-await ev(`window.__n = {}; for (const t of ['input', 'change', 'send', 'bonus', 'delete', 'undo', 'commit', 'reset', 'hit', 'show', 'dismiss', 'search', 'open', 'close', 'cancel', 'toggle']) document.addEventListener(t, (e) => { if (!e.target.localName.startsWith('pinball-')) return; const k = e.target.localName.slice(8) + ' ' + t; __n[k] = (__n[k] || 0) + 1; })`);
+await ev(`window.__n = {}; window.__events = []; for (const t of ['input', 'change', 'send', 'bonus', 'delete', 'undo', 'commit', 'reset', 'hit', 'show', 'dismiss', 'search', 'open', 'close', 'cancel', 'toggle']) document.addEventListener(t, (e) => { if (!e.target.localName.startsWith('pinball-')) return; const k = e.target.localName.slice(8) + ' ' + t; __n[k] = (__n[k] || 0) + 1; const detail = e.detail === undefined ? null : JSON.parse(JSON.stringify(e.detail, (key, value) => value instanceof File ? { name: value.name, type: value.type, size: value.size } : value)); __events.push({ key: k, detail, ctor: e.constructor.name, bubbles: e.bubbles, composed: e.composed, order: __events.length }); })`);
 const fired = (k) => ev(`__n[${JSON.stringify(k)}] || 0`);
+const lastEvent = async (k) => JSON.parse(await ev(`JSON.stringify((window.__events || []).filter((item) => item.key === ${JSON.stringify(k)}).at(-1) || null)`));
+const customEventMatches = (event, detail) => !!event && event.ctor === 'CustomEvent' && event.bubbles === true && event.composed === true && JSON.stringify(event.detail) === JSON.stringify(detail);
 // put the gallery's grid inside a form, once, to read what a form would send (the controls are form-associated)
 await ev(`(() => { const f = document.createElement('form'); f.id = 'f'; const g = document.getElementById('grid'); g.before(f); f.appendChild(g); for (const t of ['toggle', 'slider', 'stepper', 'targets']) document.querySelector('pinball-' + t).setAttribute('name', t); })()`); await sleep(600);
 const formValue = (n) => ev(`new FormData(document.getElementById('f')).get(${JSON.stringify(n)})`);
@@ -298,10 +300,10 @@ await ev("(() => { const e=document.querySelector('pinball-search'); const i=e.s
 check('search: submit emits the search event', await fired('search search') === 1);
 
 // Text, selection, file and native input controls.
-await ev("(() => { const e=document.querySelector('pinball-text-field'); e.setAttribute('name','extra-text'); const i=e.shadowRoot.querySelector('input'); i.value='Ada'; i.dispatchEvent(new Event('input',{bubbles:true})); })()");
+await ev("(() => { const e=document.querySelector('pinball-text-field'); e.setAttribute('name','extra-text'); const i=e.shadowRoot.querySelector('input'); i.value='Ada'; i.dispatchEvent(new Event('input',{bubbles:true})); i.dispatchEvent(new Event('change',{bubbles:true})); })()");
 check('text field: input updates the value and form data', await prop('text-field','value') === 'Ada' && await formValue('extra-text') === 'Ada', await prop('text-field','value'));
 
-await ev("(() => { const e=document.querySelector('pinball-text-area'); const i=e.shadowRoot.querySelector('textarea'); i.value='A longer note'; i.dispatchEvent(new Event('input',{bubbles:true})); })()");
+await ev("(() => { const e=document.querySelector('pinball-text-area'); const i=e.shadowRoot.querySelector('textarea'); i.value='A longer note'; i.dispatchEvent(new Event('input',{bubbles:true})); i.dispatchEvent(new Event('change',{bubbles:true})); })()");
 check('text area: multiline input updates value', await prop('text-area','value') === 'A longer note', await prop('text-area','value'));
 
 await ev("(() => { const e=document.querySelector('pinball-select'); const s=e.shadowRoot.querySelector('select'); s.value='hard'; s.dispatchEvent(new Event('change',{bubbles:true})); })()");
@@ -313,10 +315,10 @@ check('combobox: filtered option selection commits a value', await prop('combobo
 await ev("(() => { const e=document.querySelector('pinball-file-drop'); const f=new File(['x'],'tiny.txt',{type:'text/plain'}); e.setFiles([f]); })()");
 check('file drop: selected files are exposed to the host', await ev("document.querySelector('pinball-file-drop').files[0].name") === 'tiny.txt' && await fired('file-drop change') === 1);
 
-await ev("document.querySelector('pinball-date-picker').value='2026-11-20'");
+await ev("(() => { const e=document.querySelector('pinball-date-picker'); e.value='2026-11-20'; e.input.dispatchEvent(new Event('input',{bubbles:true})); e.input.dispatchEvent(new Event('change',{bubbles:true})); })()");
 check('date picker: ISO date value is reflected', await prop('date-picker','value') === '2026-11-20', await prop('date-picker','value'));
 
-await ev("document.querySelector('pinball-color-picker').value='#ff0000'");
+await ev("(() => { const e=document.querySelector('pinball-color-picker'); e.value='#ff0000'; e.input.dispatchEvent(new Event('input',{bubbles:true})); e.input.dispatchEvent(new Event('change',{bubbles:true})); })()");
 check('color picker: hex value and readout stay synchronized', await prop('color-picker','value') === '#ff0000' && await ev("document.querySelector('pinball-color-picker').shadowRoot.querySelector('.hex').textContent") === '#FF0000', await prop('color-picker','value'));
 
 
@@ -539,6 +541,63 @@ await ev(`${E('toggle')}.removeAttribute('disabled')`);
 
 await sleep(1500);
 check('no sideways scroll at 390', (await ev('document.documentElement.scrollWidth')) <= 390, await ev('document.documentElement.scrollWidth'));
+// Phase 1 event contract: assert runtime payloads, dispatch class and composed bubbling.
+{
+  const toggle = await lastEvent('toggle change');
+  check('phase 1 events: toggle emits { checked } as a composed CustomEvent', customEventMatches(toggle,{checked:true}), JSON.stringify(toggle));
+  const slider = await lastEvent('slider change');
+  check('phase 1 events: slider change emits the committed value', customEventMatches(slider,{value:100}), JSON.stringify(slider));
+  const plunger = await lastEvent('plunger send');
+  check('phase 1 events: plunger send carries a numeric power value', !!plunger&&plunger.ctor==='CustomEvent'&&plunger.bubbles&&plunger.composed&&typeof plunger.detail?.power==='number'&&plunger.detail.power>0, JSON.stringify(plunger));
+  const stepper = await lastEvent('stepper change');
+  check('phase 1 events: stepper change emits the current numeric value', customEventMatches(stepper,{value:89}), JSON.stringify(stepper));
+  const targets = await lastEvent('targets change');
+  check('phase 1 events: targets change identifies the item and selected state', !!targets&&targets.ctor==='CustomEvent'&&targets.bubbles&&targets.composed&&targets.detail?.index===0&&targets.detail?.item==='EMAIL'&&targets.detail?.checked===false&&JSON.stringify(targets.detail?.selected)===JSON.stringify(['PUSH','TEXT','CALLS'])&&targets.detail?.allChecked===false, JSON.stringify(targets));
+  const drainDelete = await lastEvent('drain delete');
+  const drainUndo = await lastEvent('drain undo');
+  const drainCommit = await lastEvent('drain commit');
+  check('phase 1 events: drain delete carries its undo window', customEventMatches(drainDelete,{undoMs:500}), JSON.stringify(drainDelete));
+  check('phase 1 events: drain undo and commit carry empty details', customEventMatches(drainUndo,{})&&customEventMatches(drainCommit,{}), JSON.stringify({drainUndo,drainCommit}));
+  const bumper = await lastEvent('bumper hit');
+  check('phase 1 events: bumper hit includes score and combo counters', !!bumper&&bumper.ctor==='CustomEvent'&&bumper.bubbles&&bumper.composed&&bumper.detail?.index===0&&typeof bumper.detail?.points==='number'&&typeof bumper.detail?.count==='number'&&typeof bumper.detail?.score==='number'&&typeof bumper.detail?.combo==='number', JSON.stringify(bumper));
+  const checkbox = await lastEvent('checkbox change');
+  check('phase 1 events: checkbox change includes checked state and submitted value', customEventMatches(checkbox,{checked:true,value:'email'}), JSON.stringify(checkbox));
+  const radio = await lastEvent('radio-group change');
+  check('phase 1 events: radio-group change emits the selected option', customEventMatches(radio,{value:'team'}), JSON.stringify(radio));
+  const segmented = await lastEvent('segmented change');
+  check('phase 1 events: segmented change emits the selected segment', customEventMatches(segmented,{value:'month'}), JSON.stringify(segmented));
+  const rating = await lastEvent('rating change');
+  check('phase 1 events: rating change emits value and maximum', customEventMatches(rating,{value:5,max:5}), JSON.stringify(rating));
+  const tabs = await lastEvent('tabs change');
+  check('phase 1 events: tabs change emits active index and label', customEventMatches(tabs,{activeIndex:1,label:'Details'}), JSON.stringify(tabs));
+  const accordion = await lastEvent('accordion change');
+  check('phase 1 events: accordion change emits index, state and open indexes', customEventMatches(accordion,{index:1,open:true,openItems:[1]}), JSON.stringify(accordion));
+  const disclosure = await lastEvent('disclosure toggle');
+  check('phase 1 events: disclosure toggle emits its open state', customEventMatches(disclosure,{open:true}), JSON.stringify(disclosure));
+  const dialogOpen = await lastEvent('dialog open'), dialogClose = await lastEvent('dialog close');
+  check('phase 1 events: dialog open and close emit empty details in order', customEventMatches(dialogOpen,{})&&customEventMatches(dialogClose,{})&&dialogOpen.order<dialogClose.order, JSON.stringify({dialogOpen,dialogClose}));
+  const toastShow = await lastEvent('toast show'), toastDismiss = await lastEvent('toast dismiss');
+  check('phase 1 events: toast reports the displayed message and dismisses', !!toastShow&&toastShow.detail?.message==='Persistent message'&&customEventMatches(toastDismiss,{})&&toastShow.order<toastDismiss.order, JSON.stringify({toastShow,toastDismiss}));
+  const pagination = await lastEvent('pagination change');
+  check('phase 1 events: pagination change emits page and page count', customEventMatches(pagination,{page:5,pages:10}), JSON.stringify(pagination));
+  const searchInput = await lastEvent('search input'), searchSubmit = await lastEvent('search search');
+  check('phase 1 events: search preserves live input and trims submitted query', customEventMatches(searchInput,{value:'pinball'})&&customEventMatches(searchSubmit,{value:'pinball'}), JSON.stringify({searchInput,searchSubmit}));
+  const textInput = await lastEvent('text-field input'), textChange = await lastEvent('text-field change');
+  check('phase 1 events: text field input and change carry the current value', customEventMatches(textInput,{value:'Ada'})&&customEventMatches(textChange,{value:'Ada'}), JSON.stringify({textInput,textChange}));
+  const areaInput = await lastEvent('text-area input'), areaChange = await lastEvent('text-area change');
+  check('phase 1 events: text area input and change carry the current text', customEventMatches(areaInput,{value:'A longer note'})&&customEventMatches(areaChange,{value:'A longer note'}), JSON.stringify({areaInput,areaChange}));
+  const select = await lastEvent('select change');
+  check('phase 1 events: select change includes option value and label', !!select&&select.ctor==='CustomEvent'&&select.bubbles&&select.composed&&select.detail?.value==='hard'&&typeof select.detail?.label==='string'&&select.detail.label.length>0, JSON.stringify(select));
+  const comboInput = await lastEvent('combobox input'), comboChange = await lastEvent('combobox change');
+  check('phase 1 events: combobox input and selection carry value and label', customEventMatches(comboInput,{value:'amber'})&&!!comboChange&&comboChange.detail?.value==='amber'&&comboChange.detail?.label==='Amber'&&comboChange.ctor==='CustomEvent'&&comboChange.bubbles&&comboChange.composed, JSON.stringify({comboInput,comboChange}));
+  const fileDrop = await lastEvent('file-drop change');
+  check('phase 1 events: file-drop change exposes File metadata', !!fileDrop&&fileDrop.ctor==='CustomEvent'&&fileDrop.bubbles&&fileDrop.composed&&fileDrop.detail?.files?.[0]?.name==='tiny.txt'&&fileDrop.detail.files[0].type==='text/plain'&&fileDrop.detail.files[0].size===1, JSON.stringify(fileDrop));
+  const dateInput = await lastEvent('date-picker input'), dateChange = await lastEvent('date-picker change');
+  check('phase 1 events: date-picker input and change carry the ISO date', customEventMatches(dateInput,{value:'2026-11-20'})&&customEventMatches(dateChange,{value:'2026-11-20'}), JSON.stringify({dateInput,dateChange}));
+  const colorInput = await lastEvent('color-picker input'), colorChange = await lastEvent('color-picker change');
+  check('phase 1 events: color-picker input and change carry normalized hex', customEventMatches(colorInput,{value:'#ff0000'})&&customEventMatches(colorChange,{value:'#ff0000'}), JSON.stringify({colorInput,colorChange}));
+}
+ 
 // Load every demo in a fresh page context to verify its standalone bundle.
 for (const component of SPEC) {
   const url = `${new URL(URL_).origin}${BASE_PATH}${component.id}/`;
