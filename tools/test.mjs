@@ -213,11 +213,12 @@ check('WebGL is drawing (the toggle canvas has pixels)', (await ev(`(() => { con
 {
   const labels = JSON.parse(await ev(`(() => {
     const wrapper = document.createElement('div'); wrapper.hidden = true;
-    const text = document.createElement('span'); text.id = 'pinmotion-toggle-label-source'; text.textContent = 'Maintenance mode';
+    const firstName = document.createElement('span'); firstName.id = 'pinmotion-toggle-label-first'; firstName.textContent = 'Maintenance';
+    const secondName = document.createElement('span'); secondName.id = 'pinmotion-toggle-label-second'; secondName.textContent = 'mode';
     const direct = document.createElement('pinball-toggle'); direct.setAttribute('aria-label', 'Emergency override');
-    const referenced = document.createElement('pinball-toggle'); referenced.setAttribute('aria-labelledby', text.id);
+    const referenced = document.createElement('pinball-toggle'); referenced.setAttribute('aria-labelledby', `${firstName.id}  ${secondName.id}`);
     const fallback = document.createElement('pinball-toggle'); fallback.setAttribute('label', 'Push alerts');
-    wrapper.append(text, direct, referenced, fallback); document.body.append(wrapper);
+    wrapper.append(firstName, secondName, direct, referenced, fallback); document.body.append(wrapper);
     const result = [direct, referenced, fallback].map((element) => {
       const button = element.shadowRoot?.querySelector('button');
       return { role: button?.getAttribute('role'), name: button?.getAttribute('aria-label') };
