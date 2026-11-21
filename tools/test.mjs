@@ -348,6 +348,47 @@ check('color picker: hex value and readout stay synchronized', await prop('color
  const validity = JSON.parse(nativeValidity);
  check('phase 2 forms: required text field exposes native valueMissing validity',
    validity.valueMissing && validity.invalid, JSON.stringify(validity));
+ const hostValidity = JSON.parse(await ev(`(() => {
+   const e = document.querySelector('pinball-text-field');
+   e.value = '';
+   return JSON.stringify({
+     hostValueMissing: e.internals.validity.valueMissing,
+     hostInvalid: !e.internals.validity.valid,
+     formInvalid: !document.getElementById('f').checkValidity()
+   });
+ })()`));
+ check('phase 2 forms: required text field validity participates in outer form validation',
+   hostValidity.hostValueMissing && hostValidity.hostInvalid && hostValidity.formInvalid, JSON.stringify(hostValidity));
+
+ await ev(`(() => {
+   const form = document.createElement('form'); form.id = '__pinmotion_validity_form';
+   const email = document.createElement('pinball-text-field');
+   email.setAttribute('name', 'email'); email.setAttribute('type', 'email'); email.setAttribute('required', '');
+   const note = document.createElement('pinball-text-area');
+   note.setAttribute('name', 'note'); note.setAttribute('required', '');
+   const date = document.createElement('pinball-date-picker');
+   date.setAttribute('name', 'date'); date.setAttribute('min', '2026-11-21'); date.setAttribute('max', '2026-12-21'); date.setAttribute('value', '2026-11-20');
+   form.append(email, note, date); document.body.append(form);
+   window.__validityControls = { form, email, note, date };
+ })()`); await sleep(120);
+ const invalidControls = JSON.parse(await ev(`JSON.stringify({
+   emailMissing: __validityControls.email.internals.validity.valueMissing,
+   noteMissing: __validityControls.note.internals.validity.valueMissing,
+   dateUnderflow: __validityControls.date.internals.validity.rangeUnderflow,
+   formInvalid: !__validityControls.form.checkValidity()
+ })`));
+ check('phase 2 forms: text field, text area and date picker expose native constraint failures',
+   invalidControls.emailMissing && invalidControls.noteMissing && invalidControls.dateUnderflow && invalidControls.formInvalid,
+   JSON.stringify(invalidControls));
+ await ev(`__validityControls.email.value = 'not-an-email'`);
+ check('phase 2 forms: email typeMismatch is reflected to ElementInternals',
+   await ev('__validityControls.email.internals.validity.typeMismatch') === true);
+ await ev(`__validityControls.email.value = 'valid@example.com'; __validityControls.note.value = 'Ready'; __validityControls.date.value = '2026-11-22'`);
+ check('phase 2 forms: corrected values clear ElementInternals validity and pass form validation',
+   await ev('__validityControls.form.checkValidity()') === true &&
+   await ev('__validityControls.email.internals.validity.valid') === true &&
+   await ev('__validityControls.note.internals.validity.valid') === true &&
+   await ev('__validityControls.date.internals.validity.valid') === true);
 
  await ev("document.getElementById('f').reset()"); await sleep(120);
  const resetState = JSON.parse(await ev(`JSON.stringify({
