@@ -85,3 +85,12 @@ These are first-pass visual observations. A screenshot does not prove that inter
 | Drain | Reviewed | Reviewed | Reviewed | Default capture only | Pending | First-pass baseline only |
 | Bumper | Reviewed | Reviewed | Reviewed | Cluster and single control default capture | Pending | Demo layout verified against source markup |
 | Remaining 22 utility bundles | Gallery only | Gallery only | Gallery only | Default previews only | Not applicable | Per-component review still pending |
+
+
+## Latest refreshed evidence and state-test addendum
+
+The latest screenshot archive was generated from the published site by [workflow run 44888652835](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44888652835) on tested source commit `e62c7d082b1f79ee7500beb1db90561572d397b4`. [Download artifact 14700861951](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44888652835/artifacts/14700861951). It contains the responsive gallery and all seven original mechanical demos at desktop, tablet and mobile widths, plus Toggle-on and Slider-at-75 state captures.
+
+The latest Chromium validation [44888652944](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44888652944) also confirms these functional states for Toggle: computed accessibility names, visible keyboard focus, disabled pointer/keyboard suppression, form reset, reduced-motion on/off state synchronization, pointer cancellation and disconnect/reconnect cleanup. The tests do not replace the pending screenshots of focus, disabled and reduced-motion states, or the manual screen-reader/WebGL/audio checks.
+
+The visual baseline is still **in progress**, not approved.

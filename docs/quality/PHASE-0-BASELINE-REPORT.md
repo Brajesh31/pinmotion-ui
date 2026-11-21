@@ -93,3 +93,20 @@ These results are for headless Chromium. They do not certify Safari, Firefox, ph
 - [ ] Capture/review additional interactive states, reduced motion, WebGL-unavailable fallback and audio behavior before visual baseline approval.
 
 **Next permitted work:** continue the Toggle component audit as a provisional first-control review, without treating Phase 0 or Phase 1A as complete. Do not move to Slider until Toggle's remaining lifecycle, accessibility and visual gates are evidenced and the Phase 0 ambiguity is resolved or explicitly carried as a user-confirmed assumption.
+
+
+## 7. Latest Toggle and Phase 0 evidence update
+
+This addendum supersedes older CI and Toggle status statements above where their evidence was less recent. It is based on tested main commit `e62c7d082b1f79ee7500beb1db90561572d397b4`; the documentation describing it was subsequently committed to main in `36e81f6d0eac2e7ac9dbaebb5d9ab4a3c54de54a`.
+
+Latest successful validation: [Validate run 44888652944](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44888652944). Results: 540 component contract checks, 611 repository validation checks, 788 integrity checks across 377 local Markdown links, and 639 clean-consumer / mixed-bundle checks, all passing.
+
+Latest successful published-site run: [Generate and publish run 44888652835](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44888652835). Refreshed visual archive: [artifact 14700861951](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44888652835/artifacts/14700861951).
+
+Two more Toggle defects are now reproduced, fixed and verified:
+- **PM-007:** Reduced-motion mode now synchronizes the ball, lamp and body spring. Both on and off transitions and spring rest pass in [Validate run 44888328829](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44888328829).
+- **PM-008:** Pointer cancellation restores the prior logical state without emitting a change event; disconnecting during a held drag clears transient state, and the element remains interactive after reinsertion. The real touch cancellation and remove/reinsert regressions pass in [Validate run 44886569149](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44886569149).
+
+The newest browser run additionally proves the computed accessibility tree for host aria-label, multiple aria-labelledby IDs, a label in an enclosing ShadowRoot and the label fallback; native form reset; visible keyboard focus; disabled pointer and keyboard suppression; and the complete pointer lifecycle suite. These are Chromium automation results, not manual assistive-technology certification.
+
+**Phase 0 remains open.** The original-four subset remains historically unproven, the broad PM-001/002/003 reports still lack component-specific reproduction steps, and WebGL-unavailable/context-loss and audible-output behavior remain to be checked. Do not advance the component sequence or mark Toggle complete until its remaining manual visual, screen-reader and runtime fallback gates are evidenced.
