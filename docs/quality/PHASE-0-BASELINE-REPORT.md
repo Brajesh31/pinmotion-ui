@@ -1,7 +1,7 @@
 # Phase 0 baseline and reproduction report
 
 > **Status: IN PROGRESS.** Responsive reference captures are complete and reviewed at a first-pass level. Phase 0 is not closed because the exact user-referenced original four and the specific PM-001/PM-002/PM-003 reproduction cases remain unresolved.
-> Current main baseline when this report was updated: 4261f5e3d4ed34926a177a08cf51307b031b904b.
+> Latest verified implementation baseline: 3dda7d7ae2084eb54e6f28075274846cf54922b6.
 
 ## 1. Repository inventory
 
@@ -154,8 +154,19 @@ Dedicated no-WebGL regression results: WebGL unavailable confirmed; 46,793 visib
 | Dedicated Toggle no-WebGL fallback | 0 failed |
 | Clean consumer and mixed bundle loading | 639 passed, 0 failed |
 
-PM-009 is fixed and verified. Phase 0 remains open for historical original-four identification or user confirmation, exact reproduction of PM-001/002/003, forced context-loss and asset-failure tests, audio output, and manual assistive-technology review.
+PM-009 is fixed and verified. Phase 0 remains open for historical original-four identification or user confirmation, exact reproduction of PM-001/002/003, asset decode failure behavior, audio output, and manual assistive-technology review.
 
 ### PM-010, idle WebGL context-loss recovery
 
-The context-loss regression initially failed because the shared WebGL context became unavailable, but idle connected controls were not woken to run their Canvas 2D fallback. The fix adds a wake hook to each connected PinballKit frame callback and calls it for all connected controls when the shared WebGL context is lost. This starts fallback asset loading and drawing without waiting for a later user interaction. The context-loss regression explicitly checks fallback readiness and visible pixels before changing checked state. CI verification is pending.
+The context-loss regression initially failed because the shared WebGL context became unavailable, but idle connected controls were not woken to run their Canvas 2D fallback. The shared PinballKit core now adds a wake hook to connected frame callbacks and explicitly wakes connected Toggle instances when the shared context is lost. This starts fallback asset loading and drawing before any later user interaction.
+
+Validate run [44892903408](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44892903408) passed the idle context-loss regression:
+- WEBGL_lose_context was triggered after the control had rendered through WebGL.
+- The WebGL context became unavailable.
+- Before changing checked state, Toggle switched to 2d-fallback, marked fallbackReady, and drew 46,793 visible pixels.
+- Subsequent on/off movement, lamp state, change event and form behavior remained functional.
+- No JavaScript exceptions occurred.
+
+The published context-loss capture toggle-webgl-context-lost-desktop.png is in [visual artifact 14703031911](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44892903514/artifacts/14703031911). The image was opened and reviewed; the original photographed lane and chrome ball remain visible after context loss.
+
+PM-010 is fixed and verified. Phase 0 remains open for exact original-four identification or user confirmation, reproduction of PM-001/PM-002/PM-003, asset decode failure behavior, audible output and manual assistive-technology review.
