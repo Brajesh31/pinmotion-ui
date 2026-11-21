@@ -102,7 +102,7 @@ export const SPEC = [
       ],
       "input": "Tap or click the switch button, or drag the ball along the lane and release. A drag resolves to the nearest end and commits the checked state.",
       "keyboard": "The internal control is a native button with `role=\"switch\"` and `aria-checked`. Space and Enter activate it.",
-      "forms": "The control is form-associated. With `name` set, it submits no value while off. While on, it submits the `value` attribute, or `on` when that attribute is absent or empty. Form-associated custom elements require browser support for `ElementInternals`.",
+      "forms": "The control is form-associated. With `name` set, it submits no value while off. While on, it submits the `value` attribute, or `on` when that attribute is absent or empty. Native `form.reset()` restores the checked state captured when the element first connects and synchronizes its checked attribute and submitted value. Form-associated custom elements require browser support for `ElementInternals`.",
       "styling": "Set `--pb-size` to change the control height (36px by default). Set `--pb-page` to a six-digit hex colour matching the page background so the chrome reflections blend into the page. `--pb-focus` changes the visible keyboard-focus outline.",
       "motion": "The shared runtime honours `prefers-reduced-motion` by moving the ball directly to the final state. The lamp still reflects the checked state.",
       "notes": [
@@ -111,7 +111,8 @@ export const SPEC = [
         "Set `checked` or call `toggle()` before appending the element to seed its initial state; the reflected `checked` attribute is applied when the element connects.",
         "The shadow switch button receives its accessible name from `aria-labelledby` (resolved from the same document or shadow root), then `aria-label`, then `label`; set the naming attributes before connection.",
         "When `prefers-reduced-motion: reduce` is active, the ball, lamp and body spring snap to the final checked state without travel animation.",
-        "A cancelled pointer or lost pointer capture rolls an unfinished drag back to the last checked state without firing change/input. Disconnecting during a drag clears transient pressed/held state before the element is reconnected."
+        "A cancelled pointer or lost pointer capture rolls an unfinished drag back to the last checked state without firing change/input. Disconnecting during a drag clears transient pressed/held state before the element is reconnected.",
+        "Native `form.reset()` restores the checked state captured at initial connection and updates the reflected attribute and form value without emitting user-interaction events."
       ],
       "happens": [
         [

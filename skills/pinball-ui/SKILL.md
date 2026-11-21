@@ -86,6 +86,8 @@ Copy the control's file into the project's static folder (or `npx shadcn add Bra
 - For controls rendered in Shadow DOM, forward the host's accessible name to the actual interactive element. Resolve `aria-labelledby` references from the same root, then fall back to `aria-label` and the component label; test all three paths in a real browser.
 - When reduced motion is active, snap all visible state to its logical destination, including lamps and secondary springs; test both turning on and off after emulating the media preference.
 - Test pointer cancellation and lost pointer capture separately from successful pointer-up. Removing a control mid-drag must clear transient input/animation state, and the control must remain interactive after reinsertion.
+- Inspect the browser's computed accessibility tree for the actual interactive control; raw `aria-*` attributes alone do not prove the computed role/name. Test document and enclosing-ShadowRoot `aria-labelledby` references.
+- For form-associated controls, test native `form.reset()` as well as FormData, disabled fieldsets and state restoration.
 - A new canvas is 300 by 150 until it is sized: check both width and height before skipping a resize.
 - Where a texture coordinate jumps (a rod with a piece left out of its middle), read both sides and pick one, or a hairline appears.
 - GLSL ES 1 reserves some words you might reach for: `cast` is one.

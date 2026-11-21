@@ -75,7 +75,7 @@ The shared event helper dispatches custom events with `bubbles: true` and `compo
 
 ## 📝 Form integration
 
-The control is form-associated. With `name` set, it submits no value while off. While on, it submits the `value` attribute, or `on` when that attribute is absent or empty. Form-associated custom elements require browser support for `ElementInternals`.
+The control is form-associated. With `name` set, it submits no value while off. While on, it submits the `value` attribute, or `on` when that attribute is absent or empty. Native `form.reset()` restores the checked state captured when the element first connects, and synchronizes its checked attribute and submitted value. Form-associated custom elements require browser support for `ElementInternals`.
 
 ## 🎨 Styling, rendering, and sound
 
@@ -87,7 +87,7 @@ The shared chrome ball and lamps use WebGL. Set the instance's `silent` attribut
 
 The shared runtime honours `prefers-reduced-motion` by moving the ball directly to the final state, updating the lamp immediately, and cancelling residual body spring movement.
 
-The interactive control lives in an open Shadow DOM and uses the semantic role and focus behavior described above. Set a useful `label`, or provide `aria-label` / `aria-labelledby` before connection. The shadow switch button receives the referenced text for `aria-labelledby`, or the explicit `aria-label`, as its accessible name. The mandatory Validate CI workflow runs the headless Chromium interaction suite, including gallery and standalone component checks. This automated browser coverage is not a substitute for a dedicated screen-reader audit.
+The interactive control lives in an open Shadow DOM and uses `role="switch"`, `aria-checked`, and a visible keyboard-focus outline. Set a useful `label`, or provide `aria-label` / `aria-labelledby` before connection. The shadow switch button receives the referenced text for `aria-labelledby`, or the explicit `aria-label`, as its accessible name. Chromium tests inspect the computed accessibility tree for document and enclosing-ShadowRoot references. The mandatory Validate CI workflow runs the headless Chromium interaction suite, including gallery and standalone component checks. This automated browser coverage is not a substitute for a dedicated screen-reader audit.
 
 ## 🎯 Mechanical behavior
 
