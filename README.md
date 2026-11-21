@@ -228,6 +228,10 @@ Set `CHROME` to the Chrome or Chromium executable when it is not available as `c
 | `npm run validate` | Run read-only repository structure and metadata checks |
 | `npm run screenshots -- <url> <output-prefix> <width> <height> <scale>` | Capture a page using headless Chrome or Chromium |
 
+## 🧭 Phased component audit and release programme
+
+The detailed sequential delivery plan is maintained in [RELEASE-READINESS-PROGRAMME.md](docs/RELEASE-READINESS-PROGRAMME.md). Components are audited in small, independently gated batches, beginning with the original four reference controls. Track every component in the [component audit matrix](docs/quality/COMPONENT-AUDIT-MATRIX.md), use the [component audit report template](docs/quality/COMPONENT-AUDIT-TEMPLATE.md), and follow the [workflow plan](docs/WORKFLOW-PLAN.md) for CI, visual regression, security, npm packaging and release automation. The reported broken components and visual defects remain open until reproduced and fixed with evidence.
+
 ## 🧪 Phase acceptance and regression evidence
 
 The current hardening work is tracked independently from implementation inventory. Phase 1 (component contract audit) and Phase 2 (functional correctness/regression coverage) remain in progress until their behavioral acceptance criteria have evidence. See the [Phase 1–2 acceptance matrix](docs/PHASE-1-2-ACCEPTANCE-MATRIX.md), [Phase 2 test plan](docs/PHASE-2-TEST-PLAN.md), and [controlling release plan](docs/RELEASE-PLAN.md).
