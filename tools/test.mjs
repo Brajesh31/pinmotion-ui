@@ -393,7 +393,7 @@ check('color picker: hex value and readout stay synchronized', await prop('color
    c.finish.value = 'chrome'; c.launch.value = '2026-12-01'; c.accent.value = '#abcdef';
    document.getElementById('f').reset();
  })()`); await sleep(150);
- const extendedReset = JSON.parse(await ev(`JSON.stringify(Object.fromEntries(Object.entries(window.__resetControls).map(([name, el]) => [name, { value: el.value, formValue: new FormData(document.getElementById('f')).get(name) } ])))`));
+ const extendedReset = JSON.parse(await ev(`JSON.stringify(Object.fromEntries(Object.entries(window.__resetControls).map(([name, el]) => [name, { value: el.value, formValue: new FormData(document.getElementById('f')).get(name), directFormValue: el.formValue?.(), nameAttr: el.getAttribute('name'), associated: el.form === document.getElementById('f'), internals: !!el.internals } ])))`));
  check('phase 2 forms: rating reset restores its default and submitted value',
    extendedReset.rating.value === 4 && extendedReset.rating.formValue === '4', JSON.stringify(extendedReset.rating));
  check('phase 2 forms: text area reset restores its default and submitted value',
