@@ -194,6 +194,11 @@
   `;
 
   class Base extends HTMLElement {
+    constructor(){
+      super();
+      this.root=this.attachShadow({mode:'open',delegatesFocus:true});
+      try{if(this.constructor.formAssociated)this.internals=this.attachInternals()}catch{this.internals=null}
+    }
     canRestoreFormProperty(name){
       for(let proto=this;proto;proto=Object.getPrototypeOf(proto)){const descriptor=Object.getOwnPropertyDescriptor(proto,name);if(descriptor)return typeof descriptor.set==='function'||descriptor.writable===true}
       return false;
@@ -214,12 +219,6 @@
     }
     formResetCallback(){if(this._formDefaults)this.restoreFormState(this._formDefaults)}
     formStateRestoreCallback(state){this.restoreFormState(state)}
-
-    constructor(){
-      super();
-      this.root=this.attachShadow({mode:'open',delegatesFocus:true});
-      try{if(this.constructor.formAssociated)this.internals=this.attachInternals()}catch{this.internals=null}
-    }
     connectedCallback(){
       if(!this.ready){
         this.ready=true;
@@ -332,6 +331,7 @@
   update(){if(!this.panel)return;this.message.textContent=this.getAttribute('message')||'Notification';this.panel.dataset.variant=this.getAttribute('variant')||'info';}
   show(message,duration){this.message.textContent=message||this.getAttribute('message')||'Notification';this.panel.dataset.variant=this.getAttribute('variant')||'info';this.panel.hidden=false;clearTimeout(this.timer);const ms=duration===undefined?Number(this.getAttribute('duration')||3500):Number(duration);if(ms>0)this.timer=setTimeout(()=>this.dismiss(),ms);this.emit('show',{message:this.message.textContent})}
   dismiss(){if(!this.panel||this.panel.hidden)return;this.panel.hidden=true;clearTimeout(this.timer);this.emit('dismiss',{})}
+  disconnectedCallback(){clearTimeout(this.timer);this.timer=0;super.disconnectedCallback()}
   attributeChangedCallback(){if(this.ready)this.update()}
  }
  if(!customElements.get('pinball-toast'))customElements.define('pinball-toast',PinballToast);
