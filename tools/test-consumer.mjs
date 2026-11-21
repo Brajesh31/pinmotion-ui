@@ -31,6 +31,26 @@ const getPort = () => new Promise((resolve, reject) => {
 });
 const toElement = (tag) => '<' + tag + ' id="' + tag + '"></' + tag + '>';
 
+const contractMemberPlans = (component) => {
+  const tick = String.fromCharCode(96);
+  const parseNames = (raw) => {
+    const value = String(raw);
+    const quoted = [...value.matchAll(new RegExp(tick + '([^' + tick + ']+)' + tick, 'g'))].map((match) => match[1]);
+    return quoted.length ? quoted : value.split(',').map((name) => name.trim()).filter(Boolean);
+  };
+  const scope = (access, description) => String(access + ' ' + description).match(/<(pinball-[^>]+)>/)?.[1] || null;
+  const properties = (component.api?.properties || []).flatMap(([names, type, access, description = '']) => {
+    const mode = String(access || '').toLowerCase();
+    if (!mode.includes('read/write') && !mode.includes('read-only getter') && mode !== 'read-only') return [];
+    return parseNames(names).map((name) => ({ name, type, access: String(access), tag: scope(access, description) }));
+  });
+  const methods = (component.api?.methods || []).map(([signature, description = '']) => {
+    const clean = String(signature).split(tick).join('');
+    return { name: clean.split('(')[0].trim(), tag: scope(signature, description) };
+  });
+  return { properties, methods };
+};
+
 const temp = mkdtempSync(join(tmpdir(), 'pinmotion-consumer-'));
 const publicRoot = join(temp, 'public', 'pinball-ui');
 mkdirSync(publicRoot, { recursive: true });
@@ -53,7 +73,7 @@ for (const component of SPEC) {
   check(component.id + ': source bundle exists', existsSync(source), source);
   if (existsSync(source) && file.target === expectedTarget) copyFileSync(source, relativeTarget);
   const tags = (component.api?.tags || ['<' + component.tag + '>']).map((tag) => tag.replace(/^<|>$/g, ''));
-  allItems.push({ id: component.id, url: '/public/pinball-ui/' + component.id + '.js', tags });
+  allItems.push({ id: component.id, url: '/public/pinball-ui/' + component.id + '.js', tags, ...contractMemberPlans(component) });
 }
 
 check('registry has exactly the 29 canonical component entries',
@@ -61,6 +81,9 @@ check('registry has exactly the 29 canonical component entries',
   registry.items.length + ' registry items / ' + allItems.length + ' copied');
 
 const htmlPage = (scripts, tags, mixed = false) => {
+  const contractScript = !mixed && ((scripts[0]?.properties?.length || 0) + (scripts[0]?.methods?.length || 0) > 0)
+    ? '<script>window.__contractProperties=' + JSON.stringify(scripts[0].properties || []) + ';window.__contractMethods=' + JSON.stringify(scripts[0].methods || []) + ';</script>'
+    : '';
   const snapshots = mixed
     ? '<script>window.__loaded=[];window.__errors=[];window.__runtimeObjects=new WeakMap();window.__nextRuntimeId=0;window.__runtimeId=value=>{if(!value||(typeof value!=="object"&&typeof value!=="function"))return null;if(!window.__runtimeObjects.has(value))window.__runtimeObjects.set(value,++window.__nextRuntimeId);return window.__runtimeObjects.get(value)};addEventListener("error",e=>window.__errors.push(e.message||"script error"));addEventListener("unhandledrejection",e=>window.__errors.push(String(e.reason)));</script>'
     : '<script>window.__errors=[];addEventListener("error",e=>window.__errors.push(e.message||"script error"));addEventListener("unhandledrejection",e=>window.__errors.push(String(e.reason)));</script>';
@@ -70,7 +93,7 @@ const htmlPage = (scripts, tags, mixed = false) => {
     '></script>'
   ).join('\n');
   return '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Pinmotion clean consumer</title></head><body>' +
-    tags.map(toElement).join('\n') + snapshots + scriptTags + '</body></html>';
+    tags.map(toElement).join('\n') + snapshots + contractScript + scriptTags + '</body></html>';
 };
 
 for (const item of allItems) {
@@ -200,6 +223,25 @@ try {
     check(item.id + ': isolated runtime family is correct',
       legacy ? state.pinball && !state.extras : state.extras && !state.pinball, JSON.stringify(state));
     check(item.id + ': isolated consumer has no uncaught script errors', state.errors.length === 0, JSON.stringify(state.errors));
+
+    const propertyExpression = 'JSON.stringify((window.__contractProperties||[]).map(plan => {' +
+      'const host=document.querySelector(plan.tag||' + JSON.stringify(item.tags[0]) + ');' +
+      'let cursor=host,descriptor=null;while(cursor&&!descriptor){descriptor=Object.getOwnPropertyDescriptor(cursor,plan.name);cursor=Object.getPrototypeOf(cursor);}' +
+      'const access=plan.access.toLowerCase();' +
+      'const ok=access.includes("read/write")?(!!descriptor?.get&&!!descriptor?.set):((!!descriptor?.get)&&!descriptor?.set);' +
+      'return {name:plan.name,tag:plan.tag||host?.localName,access:plan.access,found:!!descriptor,hasGetter:!!descriptor?.get,hasSetter:!!descriptor?.set,ok};}))';
+    const propertyResults = JSON.parse(await evaluate(propertyExpression));
+    for (const property of propertyResults) {
+      check(item.id + ': runtime property descriptor ' + property.name + ' (' + property.access + ')',
+        property.ok, JSON.stringify(property));
+    }
+    const methodExpression = 'JSON.stringify((window.__contractMethods||[]).map(plan => {' +
+      'const host=document.querySelector(plan.tag||' + JSON.stringify(item.tags[0]) + ');' +
+      'return {name:plan.name,tag:plan.tag||host?.localName,ok:!!host&&typeof host[plan.name]==="function"};}))';
+    const methodResults = JSON.parse(await evaluate(methodExpression));
+    for (const method of methodResults) {
+      check(item.id + ': runtime public method ' + method.name, method.ok, JSON.stringify(method));
+    }
   }
 
   for (const [name] of orders) {
