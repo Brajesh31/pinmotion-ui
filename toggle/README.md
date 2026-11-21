@@ -87,7 +87,7 @@ The shared chrome ball and lamps use WebGL. Set the instance's `silent` attribut
 
 The shared runtime honours `prefers-reduced-motion` by moving the ball directly to the final state. The lamp still reflects the checked state.
 
-The interactive control lives in an open Shadow DOM and uses the semantic role and focus behavior described above. Set a useful `label`, or provide `aria-label` / `aria-labelledby` before connection. The mandatory Validate CI workflow runs the headless Chromium interaction suite, including gallery and standalone component checks. This automated browser coverage is not a substitute for a dedicated screen-reader audit.
+The interactive control lives in an open Shadow DOM and uses the semantic role and focus behavior described above. Set a useful `label`, or provide `aria-label` / `aria-labelledby` before connection. The shadow switch button receives the referenced text for `aria-labelledby`, or the explicit `aria-label`, as its accessible name. The mandatory Validate CI workflow runs the headless Chromium interaction suite, including gallery and standalone component checks. This automated browser coverage is not a substitute for a dedicated screen-reader audit.
 
 ## 🎯 Mechanical behavior
 
@@ -103,7 +103,7 @@ The interactive control lives in an open Shadow DOM and uses the semantic role a
 - Programmatic `.checked` changes and `toggle()` update the form value and rendering but deliberately do not emit `change` or `input`.
 - Set `checked` or call `toggle()` before appending the element to seed its initial state; the reflected `checked` attribute is applied when the element connects.
 - The `input` event is not a `CustomEvent` and has no `detail`; use `change.detail.checked` when you need a payload.
-- The `label` attribute is read on connection rather than observed live. Set it before the element is inserted, or provide `aria-label` / `aria-labelledby`.
+- The `label`, `aria-label`, and `aria-labelledby` naming inputs are read on connection rather than observed live. Set them before the element is inserted. `aria-labelledby` is resolved against the element's current document or shadow root.
 - **It needs WebGL** for the ball and the lamps. Without it the control is still a working, focusable control, but the shader-drawn visuals are missing.
 - **One kind of picture.** It scales with `--pb-size` and stays sharp to about three times its default size, but it does not reflow: the photographed body keeps its shape.
 - **The ball mirrors the page.** Set `--pb-page` to a six-digit hex colour such as `#14161a` so its reflections match; the default is the cream the set was shot on.

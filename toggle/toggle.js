@@ -495,7 +495,10 @@ class PinballToggle extends K.Base {
     this.bump = new Spring(0, 1400, 34);                          // the body's flinch when the ball hits the wall
     this.cv = this.$('canvas'); this.btn = this.$('button');
     this.btn.setAttribute('aria-checked', String(this.on));
-    if (!this.hasAttribute('aria-label') && !this.hasAttribute('aria-labelledby')) this.btn.setAttribute('aria-label', this.getAttribute('label') || 'Toggle');
+    const labelRoot = this.getRootNode();
+    const labelledBy = (this.getAttribute('aria-labelledby') || '').trim().split(/\\s+/).map((id) => labelRoot.getElementById?.(id)?.textContent?.trim() || '').filter(Boolean).join(' ');
+    const accessibleName = labelledBy || this.getAttribute('aria-label')?.trim() || this.getAttribute('label')?.trim() || 'Toggle';
+    this.btn.setAttribute('aria-label', accessibleName);
     this.restyle();
     let down = null;
     this.btn.addEventListener('pointerdown', (e) => {

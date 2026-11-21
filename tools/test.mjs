@@ -209,6 +209,30 @@ check('WebGL is drawing (the toggle canvas has pixels)', (await ev(`(() => { con
     JSON.stringify({ afterProgrammatic: preconnect.afterProgrammatic, afterRemoval: preconnect.afterRemoval, events: preconnect.events }));
 }
 
+// Toggle's interactive shadow button must retain the host's accessible name.
+{
+  const labels = JSON.parse(await ev(`(() => {
+    const wrapper = document.createElement('div'); wrapper.hidden = true;
+    const text = document.createElement('span'); text.id = 'pinmotion-toggle-label-source'; text.textContent = 'Maintenance mode';
+    const direct = document.createElement('pinball-toggle'); direct.setAttribute('aria-label', 'Emergency override');
+    const referenced = document.createElement('pinball-toggle'); referenced.setAttribute('aria-labelledby', text.id);
+    const fallback = document.createElement('pinball-toggle'); fallback.setAttribute('label', 'Push alerts');
+    wrapper.append(text, direct, referenced, fallback); document.body.append(wrapper);
+    const result = [direct, referenced, fallback].map((element) => {
+      const button = element.shadowRoot?.querySelector('button');
+      return { role: button?.getAttribute('role'), name: button?.getAttribute('aria-label') };
+    });
+    wrapper.remove();
+    return JSON.stringify(result);
+  })()`));
+  check('toggle: aria-label is forwarded to the interactive switch',
+    labels[0].role === 'switch' && labels[0].name === 'Emergency override', JSON.stringify(labels[0]));
+  check('toggle: aria-labelledby resolves the external label for the shadow switch',
+    labels[1].role === 'switch' && labels[1].name === 'Maintenance mode', JSON.stringify(labels[1]));
+  check('toggle: label remains the accessible-name fallback',
+    labels[2].role === 'switch' && labels[2].name === 'Push alerts', JSON.stringify(labels[2]));
+}
+
 // toggle: a tap, then Space
 await tap('toggle', 'button');
 check('toggle: a tap turns it on, with change', (await prop('toggle', 'checked')) === true && (await fired('toggle change')) === 1, await prop('toggle', 'checked'));
