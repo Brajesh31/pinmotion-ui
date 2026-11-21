@@ -98,3 +98,12 @@ This is the high-level project development tracker. For the stricter, complete p
 
 ### Phase 6. Distribution and stable release
 **Status: Not started.** Clean-consumer registry installation, release governance and formal release approval remain open.
+
+
+## Expanded release-readiness programme
+
+The detailed delivery scope for restoring the original reference components, auditing every bundle and gallery card, documenting every API and skill, adding npm packaging, security and supply-chain gates, compatibility testing and final publication is now maintained in [RELEASE-READINESS-PROGRAMME.md](RELEASE-READINESS-PROGRAMME.md).
+
+The visual/behavioral defect ledger is [quality/DEFECT-REGISTER.md](quality/DEFECT-REGISTER.md), and the screenshot approval ledger is [quality/VISUAL-BASELINE.md](quality/VISUAL-BASELINE.md).
+
+The 15-phase programme is a target plan, not a statement that phases are complete. Preserve the reported original four components, identify them from history and approved references, and restore them before broad utility expansion. The public npm package remains a target until the tarball and clean-consumer gates pass.
