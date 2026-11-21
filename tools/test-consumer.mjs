@@ -275,7 +275,7 @@ try {
 
     const defaultProbe = DEFAULT_CONTRACT_PROBES[item.id];
     if (defaultProbe) {
-      const defaultResults = await evaluate('(' + defaultProbe.toString() + ')()');
+      const defaultResults = await evaluate('(() => { const result = (label, ok, detail = \"\") => ({ label, ok: !!ok, detail: String(detail) }); return (' + defaultProbe.toString() + ')(); })()');
       for (const probe of defaultResults) {
         check(item.id + ': default contract ' + probe.label, probe.ok, probe.detail);
       }
