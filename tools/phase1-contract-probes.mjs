@@ -81,6 +81,7 @@ export const DEFAULT_CONTRACT_PROBES = Object.freeze({
       result('default radio options are standard,pro,team', e.options.map(x => x.value).join(',') === 'standard,pro,team', e.options.map(x => x.value).join(',')),
       result('first radio option is selected by default', initial === 'standard', initial),
       result('radiogroup is programmatically labelled by its visible label', e.group?.getAttribute('aria-labelledby') === 'label' && e.root.querySelector('#label')?.textContent === 'Choose one', JSON.stringify({labelledby:e.group?.getAttribute('aria-labelledby'),label:e.root.querySelector('#label')?.textContent})),
+      result('radio group uses one roving keyboard tab stop', e.group.querySelectorAll('button[tabindex="0"]').length===1 && e.group.querySelector('button[data-value="'+e.value+'"]')?.getAttribute('tabindex')==='0', e.group.querySelectorAll('button[tabindex="0"]').length),
       result('radio keyboard ArrowDown, Home and End select expected options',down&&home&&end,JSON.stringify({down,home,end,value:e.value}))
     ];
   },
@@ -94,7 +95,8 @@ export const DEFAULT_CONTRACT_PROBES = Object.freeze({
     return [
       result('default segments are day,week,month', e.options.map(x => x.value).join(',') === 'day,week,month', e.options.map(x => x.value).join(',')),
       result('first segment is selected by default', initial === 'day', initial),
-      result('segmented ArrowRight and ArrowLeft change the selected segment',right&&left,JSON.stringify({right,left}))
+      result('segmented ArrowRight and ArrowLeft change the selected segment',right&&left,JSON.stringify({right,left})),
+      result('segmented uses one roving keyboard tab stop',e.group.querySelectorAll('button[tabindex="0"]').length===1&&e.group.querySelector('[data-value="day"]')?.getAttribute('tabindex')==='0',e.group.querySelectorAll('button[tabindex="0"]').length)
     ];
   },
   progress: () => {
@@ -128,6 +130,7 @@ export const DEFAULT_CONTRACT_PROBES = Object.freeze({
       result('rating value defaults to 0', initial === 0, initial),
       result('rating maximum defaults to 5', e.max === 5, e.max),
       result('rating radiogroup is labelled by its visible label', e.root.querySelector('[role=radiogroup]')?.getAttribute('aria-labelledby') === 'label' && e.root.querySelector('#label')?.textContent === 'Rating', JSON.stringify({labelledby:e.root.querySelector('[role=radiogroup]')?.getAttribute('aria-labelledby'),label:e.root.querySelector('#label')?.textContent})),
+      result('rating exposes one roving keyboard tab stop',e.root.querySelectorAll('.star[tabindex="0"]').length===1&&e.root.querySelector('.star[tabindex="0"]')?.dataset.value==='1',e.root.querySelectorAll('.star[tabindex="0"]').length),
       result('rating ArrowRight, End and Home update the value',right&&next&&end&&home,JSON.stringify({right,next,end,home,value:e.value}))
     ];
   },
@@ -184,7 +187,10 @@ export const DEFAULT_CONTRACT_PROBES = Object.freeze({
   },
   dialog: () => {
     const e = document.querySelector('pinball-dialog');
-    return [result('dialog starts closed', e.open === false, e.open)];
+    return [
+      result('dialog starts closed', e.open === false, e.open),
+      result('dialog uses its title slot as its accessible name', e.dialog?.getAttribute('aria-labelledby')==='dialog-title'&&!!e.root.querySelector('#dialog-title'), e.dialog?.getAttribute('aria-labelledby'))
+    ];
   },
   toast: () => {
     const e = document.querySelector('pinball-toast');
@@ -290,7 +296,8 @@ export const DEFAULT_CONTRACT_PROBES = Object.freeze({
     const e = document.querySelector('pinball-color-picker');
     return [
       result('color value defaults to #c9700f', e.value.toLowerCase() === '#c9700f', e.value),
-      result('hex readout defaults uppercase', e.root.querySelector('.hex')?.textContent === '#C9700F', e.root.querySelector('.hex')?.textContent)
+      result('hex readout defaults uppercase', e.root.querySelector('.hex')?.textContent === '#C9700F', e.root.querySelector('.hex')?.textContent),
+      result('color picker label is associated with its native input', e.input?.id==='color'&&e.root.querySelector('label')?.htmlFor==='color', JSON.stringify({id:e.input?.id,for:e.root.querySelector('label')?.htmlFor}))
     ];
   }
 });
