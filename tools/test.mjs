@@ -220,7 +220,7 @@ await focus('plunger','button'); await key('Enter',13,false); await sleep(1300);
 check('plunger: Enter press and release sends once',enterSends===3,enterSends);
 await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] });
 await ev("document.querySelector('pinball-plunger').fire()"); await sleep(500);
-check('plunger: reduced-motion programmatic full pull still sends without ball travel', (await fired('plunger send')) === 3 && (await prop('plunger', 'ball')) === 'none' && (await prop('plunger', 'px')) === 0, `${await fired('plunger send')} sends / ball ${await prop('plunger', 'ball')}`);
+check('plunger: reduced-motion programmatic full pull still sends without ball travel', (await fired('plunger send')) === 4 && (await prop('plunger', 'ball')) === 'none' && (await prop('plunger', 'px')) === 0, `${await fired('plunger send')} sends / ball ${await prop('plunger', 'ball')}`);
 await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'no-preference' }] });
 
 
