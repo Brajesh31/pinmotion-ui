@@ -1,7 +1,7 @@
 # Pinmotion UI phased audit, engineering and release programme
 
 > **Programme status: PLANNED. No implementation phase in this programme is marked complete by creating this document.**
-> Baseline: `main` · Programme branch: `release-readiness/roadmap` · 21 November 2026
+> Execution policy: `main` only, direct commits; no branches or pull requests · Baseline: 21 November 2026
 > Maintainer: Brajesh Kumar
 
 This is the controlling phased delivery plan for taking Pinmotion UI from its current development state to a properly audited, documented, secure, installable and releasable browser component package.
@@ -57,7 +57,7 @@ The phases below are ordered. Work may not skip ahead to package publication whi
 
 | Phase | Scope | Components / deliverables | Must be true before moving on |
 |---|---|---|---|
-| 0 | Reproduce, freeze and baseline | Identify original four from history; capture current/reference visuals; create defect ledger; inventory all 29 bundles, 30 tags, demos, guides and registry entries; capture failing browser traces | Each known report has reproducible steps, expected result, severity, source path and regression-test plan |
+| 0 | Reproduce, freeze and baseline | Identify the original four from history; capture gallery at desktop/tablet/mobile; capture all seven original mechanical demos in isolation; create defect ledger; inventory all 29 bundles, 30 tags, demos, guides and registry entries; capture failing browser traces | Each known report has reproducible steps, expected result, severity, source path and regression-test plan |
 | 1A | Original component audit 1 | Toggle | Original design and behavior restored; isolated + gallery tests, visual review, API guide, skill resources and evidence complete |
 | 1B | Original component audit 2 | Slider | Same full per-component gate; Phase 1A remains green |
 | 1C | Original component audit 3 | Plunger | Same full per-component gate; reduced-motion and send lifecycle verified |

@@ -113,7 +113,7 @@ jobs:
             curl --retry 5 --retry-all-errors --retry-delay 3 --max-time 30 --fail --silent --show-error "$BASE_URL/$component/$component.js" >/dev/null
           done
           PINMOTION_LIVE_SMOKE=1 node tools/test.mjs "$BASE_URL/gallery/"
-      - name: Capture published gallery at desktop and mobile widths
+      - name: Capture published gallery at desktop, tablet and mobile widths
         shell: bash
         env:
           CHROME: ${{ steps.setup-live-chrome.outputs.chrome-path }}
@@ -123,13 +123,36 @@ jobs:
           BASE_URL="${PAGE_URL%/}"
           READY_JS='new Promise(resolve => { let tries = 0; const poll = () => { const cards = [...document.querySelectorAll("#grid .item")]; if (cards.length === 29 && cards.every(card => card.dataset.loadState === "ready")) resolve(); else if (++tries >= 100) resolve(); else setTimeout(poll, 100); }; poll(); })'
           JS="$READY_JS" WAIT=750 node tools/shot.mjs "$BASE_URL/gallery/" "$RUNNER_TEMP/pinmotion-gallery-desktop" 1440 1000 1
+          JS="$READY_JS" WAIT=750 node tools/shot.mjs "$BASE_URL/gallery/" "$RUNNER_TEMP/pinmotion-gallery-tablet" 768 1024 1
           MOBILE=1 JS="$READY_JS" WAIT=750 node tools/shot.mjs "$BASE_URL/gallery/" "$RUNNER_TEMP/pinmotion-gallery-mobile" 390 844 2
+      - name: Capture all seven original mechanical demos at desktop, tablet and mobile widths
+        shell: bash
+        env:
+          CHROME: ${{ steps.setup-live-chrome.outputs.chrome-path }}
+          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+        run: |
+          set -euo pipefail
+          BASE_URL="${PAGE_URL%/}"
+          OUTPUT_DIR="$RUNNER_TEMP/pinmotion-original-controls"
+          mkdir -p "$OUTPUT_DIR"
+          for component in toggle slider plunger stepper targets drain bumper; do
+            curl --retry 5 --retry-all-errors --retry-delay 3 --max-time 30 --fail --silent --show-error "$BASE_URL/$component/" >/dev/null
+            READY_JS="new Promise(resolve => { let tries = 0; const poll = () => { const el = document.querySelector('pinball-$component'); if (el && el.shadowRoot) resolve(true); else if (++tries >= 100) resolve(false); else setTimeout(poll, 100); }; poll(); })"
+            JS="$READY_JS" WAIT=500 node tools/shot.mjs "$BASE_URL/$component/" "$OUTPUT_DIR/$component-desktop" 1440 1000 1
+            JS="$READY_JS" WAIT=500 node tools/shot.mjs "$BASE_URL/$component/" "$OUTPUT_DIR/$component-tablet" 768 1024 1
+            MOBILE=1 JS="$READY_JS" WAIT=500 node tools/shot.mjs "$BASE_URL/$component/" "$OUTPUT_DIR/$component-mobile" 390 844 2
+          done
+          JS='document.querySelector("pinball-toggle").checked = true' WAIT=1200 node tools/shot.mjs "$BASE_URL/toggle/" "$OUTPUT_DIR/toggle-on-desktop" 1440 1000 1
+          JS='document.querySelector("pinball-slider").value = 75' WAIT=1200 node tools/shot.mjs "$BASE_URL/slider/" "$OUTPUT_DIR/slider-75-desktop" 1440 1000 1
+          for screenshot in "$OUTPUT_DIR"/*.png; do test -s "$screenshot"; done
       - name: Upload Phase 0 visual evidence
         uses: actions/upload-artifact@v4
         with:
           name: phase-0-gallery-visual-evidence
           path: |
             ${{ runner.temp }}/pinmotion-gallery-desktop.png
+            ${{ runner.temp }}/pinmotion-gallery-tablet.png
             ${{ runner.temp }}/pinmotion-gallery-mobile.png
+            ${{ runner.temp }}/pinmotion-original-controls/
           if-no-files-found: error
-          retention-days: 30
+          retention-days: 90

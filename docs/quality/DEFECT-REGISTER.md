@@ -15,7 +15,7 @@ No P0 defect has been independently confirmed in this planning update. Record se
 | PM-002 | Remaining component catalogue | User reports some additional components do not work | Per-component reproduction, exact API action and event/state trace | Open, component inventory required |
 | PM-003 | Gallery card rendering | User reports several cards/components do not display properly | Desktop/tablet/mobile screenshots, DOM dimensions, CSS errors, asset loading and card readiness | Open, visual audit required |
 | PM-004 | Original visual fidelity | Existing visual identity must not be replaced with generic substitutes | Approved baseline captures and per-control visual comparison | Open, baseline required |
-| PM-005 | Toggle pre-connection API | `checked` and `toggle()` could access the internal button before `setup()` created it; `checked` also returned `undefined` before connection | Detached-element property/method regression test, then verify connected ARIA state, FormData and event suppression | Fix committed; CI verification pending |
+| PM-005 | Toggle pre-connection API | `checked` and `toggle()` could access the internal button before `setup()` created it; `checked` also returned `undefined` before connection | Detached-element property/method regression test, then verify connected ARIA state, FormData and event suppression | Fixed and verified in Chromium CI, commit `7ff7e014`; Validate run 44884388345 |
 
 ## Rules
 
