@@ -82,9 +82,12 @@ jobs:
           set -euo pipefail
           test -n "$PAGE_URL"
           BASE_URL="${PAGE_URL%/}"
-          curl --retry 8 --retry-all-errors --retry-delay 5 --max-time 30 --fail --silent --show-error "$BASE_URL/" | grep -qi "Pinball UI"
-          curl --retry 8 --retry-all-errors --retry-delay 5 --max-time 30 --fail --silent --show-error "$BASE_URL/gallery/" | grep -q "gallery-status"
-          curl --retry 8 --retry-all-errors --retry-delay 5 --max-time 30 --fail --silent --show-error "$BASE_URL/registry.json" | python3 -c 'import json,sys; d=json.load(sys.stdin); assert len(d["items"]) == 29'
+          curl --retry 8 --retry-all-errors --retry-delay 5 --max-time 30 --fail --silent --show-error "$BASE_URL/" -o "$RUNNER_TEMP/pinmotion-root.html"
+          grep -qi "Pinball UI" "$RUNNER_TEMP/pinmotion-root.html"
+          curl --retry 8 --retry-all-errors --retry-delay 5 --max-time 30 --fail --silent --show-error "$BASE_URL/gallery/" -o "$RUNNER_TEMP/pinmotion-gallery.html"
+          grep -q "gallery-status" "$RUNNER_TEMP/pinmotion-gallery.html"
+          curl --retry 8 --retry-all-errors --retry-delay 5 --max-time 30 --fail --silent --show-error "$BASE_URL/registry.json" -o "$RUNNER_TEMP/pinmotion-registry.json"
+          python3 -c 'import json; d=json.load(open("'"$RUNNER_TEMP"'/pinmotion-registry.json")); assert len(d["items"]) == 29'
           COMPONENTS="$(node --input-type=module -e "import('./tools/spec.mjs').then(({SPEC}) => process.stdout.write(SPEC.map((component) => component.id).join(' ')))")"
           for component in $COMPONENTS; do
             curl --retry 5 --retry-all-errors --retry-delay 3 --max-time 30 --fail --silent --show-error "$BASE_URL/$component/" >/dev/null
