@@ -68,8 +68,8 @@ Implemented in the current source:
 - [x] Keep the source generator and checked-in gallery output aligned.
 
 Still required:
-- [x] Latest Validate workflow passes, including the real-browser suite: [run 44835256653](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44835256653), commit `a47c5b40eeb5fb9f5232c51863531d3300a7c847`.
-- [x] Latest Pages generation/deployment workflow passes: [run 44835256398](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44835256398), attempt 2, commit `a47c5b40eeb5fb9f5232c51863531d3300a7c847`.
+- [x] Latest Validate workflow passes, including the real-browser suite: [run 44842827810](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44842827810), commit `be4211811526d2f2a8f8f046102201e1f5de32b5`.
+- [x] Latest Pages generation/deployment workflow passes: [run 44835256398](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44835256398), attempt 2, commit `be4211811526d2f2a8f8f046102201e1f5de32b5`.
 - [ ] Verify the published gallery in a real browser with a hard refresh and direct URL entry. Automated URL access is not a substitute for this manual check.
 - [x] The mandatory Chromium suite verifies all 29 gallery cards, ready state, all 30 tags, original mechanical interactions and standalone routes on the latest commit.
 - [ ] Complete the visual comparison against the previous approved baseline and close INC-001/INC-002 with linked evidence.
@@ -138,7 +138,7 @@ Existing test baseline in `tools/test.mjs`:
 - [x] Mobile-width horizontal overflow assertion in headless Chromium.
 
 Phase 2 coverage to add:
-- [ ] Default, changed, disabled, invalid, min/max, empty and reset states for every applicable component.
+- [ ] Default, changed, disabled, invalid, min/max and empty states for every applicable component.
 - [ ] Pointer, touch, keyboard and programmatic behavior tested independently against the documented API.
 - [ ] Exact event payload values, order, bubbling/composed flags and programmatic dispatch/suppression.
 - [x] Shared form bases implement default-state capture, native reset restoration, serialized state restoration and disabled-fieldset callbacks.
@@ -154,7 +154,7 @@ Phase 2 coverage to add:
 - [ ] Solo bundle behavior plus mixed bundle order and full-gallery regression tests.
 - [ ] Fault isolation: one component initialization exception must not prevent unrelated cards rendering and reporting ready.
 - [ ] A coverage ledger showing every documented interaction has a test or explicit manual evidence.
-- [x] Latest CI evidence attached: [Validate run 44835256653](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44835256653), commit `a47c5b40eeb5fb9f5232c51863531d3300a7c847`.
+- [x] Latest Phase 2 CI evidence attached: [Validate run 44842827810](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44842827810), commit `be4211811526d2f2a8f8f046102201e1f5de32b5`.
 - [ ] Expand the new smoke assertions into the complete per-component state/input/event/form matrix.
 
 Known implementation gaps are not passes:
@@ -199,7 +199,7 @@ Scope:
 - Verify keyboard interaction, focus order, visible focus, dialogs and live announcements.
 - Test form error messages and validation announcements.
 - [x] Add reduced-motion handling for Plunger spring/ball travel and indeterminate Progress animation.
-- [x] Add Chromium assertions for reduced-motion Progress and Plunger behavior. Evidence: [Validate run 44835256653](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44835256653), commit `a47c5b40eeb5fb9f5232c51863531d3300a7c847`.
+- [x] Add Chromium assertions for reduced-motion Progress and Plunger behavior. Evidence: [Validate run 44842827810](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44842827810), commit `be4211811526d2f2a8f8f046102201e1f5de32b5`.
 - [ ] Review reduced-motion behavior for every remaining animated component and verify dynamic preference changes.
 - Test with representative screen readers and browser combinations.
 - Record findings, remediation, retest evidence and known limitations.
