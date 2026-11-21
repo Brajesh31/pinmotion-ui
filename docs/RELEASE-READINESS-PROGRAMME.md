@@ -1,205 +1,333 @@
-# Pinmotion UI release-readiness programme
+# Pinmotion UI phased audit, engineering and release programme
 
-> **Status: planning baseline only. No stable-release approval is implied by this document.**
-> Baseline branch: `main` · Planning branch: `release-readiness/roadmap` · Date: 21 November 2026
+> **Programme status: PLANNED. No implementation phase in this programme is marked complete by creating this document.**
+> Baseline: `main` · Programme branch: `release-readiness/roadmap` · 21 November 2026
 > Maintainer: Brajesh Kumar
 
-This programme brings Pinmotion UI to the engineering, documentation, security, distribution and release standard established in VFX UI Anime, while preserving Pinmotion's own product identity and WebGL/audio architecture.
+This is the controlling phased delivery plan for taking Pinmotion UI from its current development state to a properly audited, documented, secure, installable and releasable browser component package.
 
-## Product goals
+The engineering quality target is the level of operational completeness demonstrated by [VFX UI Anime](https://github.com/Brajesh31/vfx-ui-anime): public npm distribution, package exports, clean tarball smoke tests, per-component documentation, quality evidence, contribution/support/security policies, CI workflows, CodeQL, OpenSSF Scorecard, release automation and post-publication verification.
 
-1. Restore the original four reference components to their intended visual design and fully working behavior. Preserve their appearance and interactions as the acceptance baseline; do not replace them with generic controls.
-2. Audit and repair every existing component, demo, gallery card, source file, generated bundle, guide and registry entry.
-3. Preserve the two runtime families where justified: PinballKit for the original mechanical/WebGL/audio components and PinmotionExtras for lightweight native controls. Improve their lifecycle, loading, error isolation and distribution contracts.
-4. Deliver a real public npm package with aggregate and per-component imports, package tarball verification, safe prepublish gates and versioned releases.
-5. Establish documented security, accessibility, browser, visual, performance and release processes.
-6. Make all claims evidence-based. A folder, successful build or HTTP 200 is not behavioral proof.
+**Do not copy VFX UI Anime implementation files blindly.** Pinmotion has its own pinball artwork, chrome-ball WebGL rendering, recorded sound, mechanical interactions, two runtime families and generated standalone scripts. Every adopted process must be tested against those requirements.
 
-## Non-negotiable engineering rules
+## 1. Final product outcome
 
-- Preserve the original visual identity and intended mechanics of the original four components. Capture baseline screenshots and behavior before modifying them.
-- Fix the source of truth, then regenerate bundles, demos, guides, gallery and registry. Never patch generated bundles manually unless the file is explicitly the source.
-- No new component expansion until the current catalogue passes the relevant quality gates.
-- No stable npm publication or production-ready claim while any mandatory release gate is open.
-- No secrets or credentials in source, workflows, examples, issue comments or artifacts.
-- Use npm only for package commands and lockfiles. Do not introduce Bun or Yarn.
-- All component documentation must distinguish tested facts, browser-dependent behavior, known limits and unverified claims.
-- All phase completion must be backed by CI artifacts, reproducible test output or dated manual QA evidence.
-- Security fixes must be prioritized by severity and verified after remediation. Never promise that all vulnerabilities can be eliminated; record residual risk.
+The finished project must provide:
 
-## Current baseline
+- All 29 existing component bundles and 30 custom-element tags working correctly.
+- The original four reference controls restored to their actual original design and intended behavior. The working identification hypothesis is Toggle, Slider, Plunger and Stepper, but Phase 0 must verify this from repository history and original references before making that list authoritative.
+- Every other component audited in small batches. Each batch is finished and evidenced before work moves to the next batch.
+- Every component demo, gallery card, standalone bundle, registry entry, public API and README/API guide checked against the same source of truth.
+- The PinballKit and PinmotionExtras shared runtimes documented, tested and hardened without flattening the original design.
+- A clear design system, asset and sound provenance, WebGL/audio fallback behavior, responsive rules and motion standards.
+- A complete documentation and skill system for humans and coding agents.
+- A working public npm package with `npm install pinmotion-ui`, an aggregate browser entry point and individual component subpath imports.
+- Tested package contents using `npm pack`, clean consumer installation and real-browser import smoke tests.
+- CI/CD, security scanning, accessibility, browser compatibility, performance and release workflows.
+- A versioned release process with changelog, GitHub Release, tarball/checksum, provenance where supported and post-release installation/live-site checks.
 
-- 29 standalone bundles, 30 custom-element tags, 29 demos, 29 generated component guides.
-- Seven original mechanical bundles and 22 lightweight utility bundles.
-- Phase 0 and Phase 1 are recorded as complete.
-- Phase 2 is incomplete. Phase 3 and Phase 5 are not started. Phase 4 remains in progress.
-- Package manifest is private (`0.0.0-private`), with no supported public npm installation command yet.
-- Existing validation, contract-audit, integrity, Chromium interaction and clean-registry-consumer tooling is a foundation, not release certification.
-- The original four components reported as not working and multiple visual rendering issues are priority defects to reproduce and resolve. Their exact failures must be captured in the Phase 0/1 baseline rather than guessed.
+## 2. Non-negotiable rules
 
-## Phase programme
+1. **One small component batch at a time.** Do not audit or rewrite all 29 components in one large change. Complete its source fixes, visual QA, tests, documentation, generated output and evidence before the next batch.
+2. **Original design preservation.** The original four are the reference baseline. Do not replace their artwork, proportions, materials, mechanisms, colors, animation or sound with generic controls to make tests easier.
+3. **Source of truth first.** Edit canonical source/specification/runtime files and regenerate generated bundles, guides, demos, gallery and registry. Do not hand-edit generated output.
+4. **No component-count race.** Do not add new components while existing component defects or release gates remain open.
+5. **No false completion.** A folder, API guide, build, screenshot, HTTP 200 or workflow success alone does not prove a component works.
+6. **Evidence per component.** Every component has its own audit row, issue references, test results, visual evidence, documentation review and status.
+7. **npm only.** Use npm and npm lockfiles. Do not introduce Bun or Yarn.
+8. **Secure by default.** Do not commit tokens, credentials, private keys, user files or untrusted generated payloads. Use least-privilege workflow permissions and OIDC publishing where supported.
+9. **Honest security status.** Do not promise that every vulnerability can be eliminated. The release gate is no untriaged critical/high findings, all actionable findings fixed or formally accepted, and documented residual risks.
+10. **Release is last.** No stable npm publication or production-ready claim until all mandatory gates pass on the exact release candidate SHA.
 
-| Phase | Name | Scope | Exit gate |
+## 3. Current repository baseline
+
+- 29 standalone bundles, 30 custom-element tags, 29 dedicated demos, 29 component API guides.
+- Seven components described in the repository as the original mechanical family, plus 22 utility components.
+- Existing canonical metadata, build and docs generators, validators, integrity checks, Chromium interaction tests and clean registry consumer tests are valuable foundations.
+- The prior roadmap records Phase 0 gallery stabilization and Phase 1 source/API contract audit as complete; Phase 2 functional regression is in progress; visual, accessibility, browser and release work remains open.
+- Current root package manifest is private at `0.0.0-private`. The repository does not yet provide the VFX-style public npm package.
+- The current release checklist is still unchecked. It must remain NO-GO until the complete programme passes.
+- Reported defects: original four not working, additional components not behaving correctly and multiple gallery/component cards not rendering correctly. Exact root causes have not been independently reproduced in this planning change.
+
+Historical Phase 0/Phase 1 completion does not automatically satisfy the new per-component acceptance gates below. The new programme adds stricter, separately evidenced component batches.
+
+## 4. Sequential implementation phases
+
+The phases below are ordered. Work may not skip ahead to package publication while component batches are failing. Each component batch closes its own gate before the next starts.
+
+| Phase | Scope | Components / deliverables | Must be true before moving on |
 |---|---|---|---|
-| 0 | Reproduction, freeze and visual baseline | Identify original four, reproduce all reported defects, capture screenshots, record browser/console/network errors, create component inventory and risk register | Every known defect has a reproducible test case, expected reference behavior and owner/priority |
-| 1 | Original four restoration | Repair original four from canonical source, preserve visual assets, proportions, mechanics, animation, audio and responsive behavior | Four components pass individual demo and gallery tests, desktop/mobile visual review, keyboard/pointer/touch and regression snapshots |
-| 2 | Remaining original mechanical controls | Audit Toggle, Slider, Plunger, Stepper, Targets, Drain and Bumper (including both bumper tags), PinballKit and shared assets | All original family controls work independently and together, all states/events/forms/lifecycle covered |
-| 3 | Utility components, batch A | Checkbox, Radio Group, Segmented, Progress, Meter, Rating, Tabs, Accordion | Every component passes visual/API/interaction/form/accessibility contract |
-| 4 | Utility components, batch B | Disclosure, Tooltip, Dialog, Toast, Breadcrumbs, Pagination, Search | Every component passes visual/API/interaction/focus/timer/lifecycle contract |
-| 5 | Utility components, batch C | Text Field, Text Area, Select, Combobox, File Drop, Date Picker, Color Picker | Every component passes validation, form, keyboard, file safety, visual and lifecycle contract |
-| 6 | Runtime and asset engineering | PinballKit, PinmotionExtras, WebGL fallback, shader/context loss, audio permission/mute, scheduling, cleanup, optional shared-runtime design, asset optimization | Runtime contracts stable; no leaked listeners/timers/observers/frames; measurable size/performance budgets pass |
-| 7 | Design-system and gallery audit | All 29 cards, category filters, search, responsive grid, detail views, individual demo pages, original pinball visual identity, error/empty/loading states | 29/29 cards correct, every demo visually approved at defined viewports, gallery failure isolation proven |
-| 8 | Complete component documentation and skill system | 29 component README/API guides; root README; architecture; runtime; design system; asset pipeline; API contracts; examples; troubleshooting; llms.txt; skills/SKILL.md and skill resources | Docs generated from source where appropriate, every public contract matches tested source, examples executed in clean consumers |
-| 9 | TypeScript and framework integration | Type declarations, plain HTML examples, React integration guidance/wrapper decision, Vue and other framework examples, SSR/client-only guidance | Type checks and clean example apps pass; supported integration scope is explicit |
-| 10 | npm package and distribution | package manifest, root index, per-component exports, subpath exports, files allowlist, versioning, npm pack inspection, offline/clean consumer install, CDN paths | npm tarball includes all required component scripts/docs and excludes dev tooling; root and every subpath import pass in browser |
-| 11 | Security and supply-chain hardening | threat model, CodeQL, dependency audit, secret scanning, token permissions, workflow pinning, artifact integrity, license audit, provenance, OpenSSF Scorecard, vulnerability response | No untriaged critical/high findings; all actionable findings fixed or formally risk-accepted; least-privilege workflows pass |
-| 12 | Accessibility and compatibility | WCAG 2.2 AA review, keyboard, focus, names/roles/values, screen readers, reduced motion, zoom/contrast, Firefox, Safari, Edge, Android and iOS | Automated and manual evidence per supported environment; no unsupported conformance claims |
-| 13 | Performance, reliability and regression | Bundle budgets, startup/card timing, WebGL/audio budgets, asset transfer, memory/lifecycle stress, visual snapshots, fault isolation | Defined budgets pass under reproducible test environment; no known P0/P1 defects |
-| 14 | Release operations and publication | Changelog, migration/version policy, contributor/security/support docs, CI release gates, npm Trusted Publishing, provenance, GitHub release/tarball/checksum, rollback and post-release smoke | Exact release SHA passes all gates, package installs publicly, release artifacts and live demos verified |
+| 0 | Reproduce, freeze and baseline | Identify original four from history; capture current/reference visuals; create defect ledger; inventory all 29 bundles, 30 tags, demos, guides and registry entries; capture failing browser traces | Each known report has reproducible steps, expected result, severity, source path and regression-test plan |
+| 1A | Original component audit 1 | Toggle | Original design and behavior restored; isolated + gallery tests, visual review, API guide, skill resources and evidence complete |
+| 1B | Original component audit 2 | Slider | Same full per-component gate; Phase 1A remains green |
+| 1C | Original component audit 3 | Plunger | Same full per-component gate; reduced-motion and send lifecycle verified |
+| 1D | Original component audit 4 | Stepper | Same full per-component gate; original mechanical behavior preserved |
+| 2A | Remaining mechanical batch | Targets and Drain | Both components pass independently and together; forms, selection, undo/commit timing and lifecycle covered |
+| 2B | Remaining mechanical batch | Bumper bundle: pinball-bumper and pinball-bumpers | Both tags, hit feedback, score/combo behavior, keyboard, events and standalone use pass |
+| 3 | Selection utility batch | Checkbox, Radio Group, Segmented | Native selection semantics, keyboard navigation, form values, focus, disabled and boundary states pass |
+| 4 | Indicator utility batch | Progress, Meter, Rating | Value semantics, ARIA, read-only/input distinctions and animation behavior pass |
+| 5 | Navigation utility batch | Tabs, Accordion, Disclosure | Focus models, selected/open states, slots/content, events and keyboard behavior pass |
+| 6 | Feedback utility batch | Tooltip, Dialog, Toast | Focus/dismissal, modal behavior, Escape, live announcements, timers and disconnect/reconnect pass |
+| 7 | Navigation/data batch | Breadcrumbs, Pagination, Search | Navigation semantics, current state, search input/submission and boundary behavior pass |
+| 8 | Form controls batch | Text Field, Text Area, Select | Labeling, form association, value synchronization, constraints, reset, validity and keyboard behavior pass |
+| 9 | Advanced input batch | Combobox, File Drop, Date Picker, Color Picker | Editable selection, file safety, native date/color behavior, forms, keyboard and invalid states pass |
+| 10 | Shared runtime audit | `core.js`, PinballKit, `tools/extra-core.js`, PinmotionExtras, source generators, sounds and art | Scheduling, cleanup, singletons, WebGL context loss/fallback, audio permissions, reduced motion, errors and bundle duplication are tested and documented |
+| 11 | Gallery and demo audit | All 29 gallery cards, filters, search, 29 demo routes, responsive layouts, loading/error states | Every card renders the correct component and state; isolated demo/gallery parity and broken-component fault isolation pass |
+| 12 | Documentation and skills completion | Root README, 29 component guides, docs hub, architecture, design system, API conventions, runtime/asset docs, llms.txt and skills | Every public claim matches source and passing tests; examples run; every component has complete documentation |
+| 13 | TypeScript and framework integration | Type declarations, browser-only entry docs, React/Vue examples or wrappers only if implemented, SSR guidance | Type checks and consumer examples pass; unsupported frameworks are clearly labelled |
+| 14 | npm package implementation | `package.json`, lockfile, root entry, per-component entry points/exports, package allowlist, CDN/subpath contract | `npm pack` and clean offline/online consumer tests pass; root and every subpath registers expected tags |
+| 15 | Security and supply-chain hardening | Security policy, threat model, CodeQL, dependency review/audit, secret scanning, Gitleaks, Scorecard, license/asset audit, workflow hardening | No untriaged critical/high issue; actionable issues fixed or accepted; least-privilege and supply-chain checks pass |
+| 16 | Accessibility completion | WCAG 2.2 AA review, names/roles/values, keyboard, focus, contrast, zoom, reduced motion and screen reader tests | Automated and manual evidence is recorded; limitations are explicit; no unsupported compliance claim |
+| 17 | Cross-browser/device compatibility | Chromium, Edge, Firefox, Safari, Android Chrome, iOS Safari, WebGL/audio variations | Supported browser/device matrix has reproducible pass evidence and known limits |
+| 18 | Performance and reliability | Bundle budgets, WebGL/audio assets, initial render, gallery readiness, memory, lifecycle stress, long-running tests, regression screenshots | Budgets defined and met; no known release-blocking defects; regression artifacts archived |
+| 19 | Release candidate and publication | Changelog, semver, release notes, exact SHA validation, npm OIDC/trusted publishing, provenance, GitHub Release, tarball/checksum, rollback and post-publish smoke | Exact candidate passes all gates; public install works; release and live gallery verified |
 
-## Phase 0: defect reproduction and reference baseline
+### Phase discipline
 
-Create `docs/quality/DEFECT-REGISTER.md` and `docs/quality/VISUAL-BASELINE.md`.
+- Phase 0 is the only discovery/baseline phase.
+- Phases 1A–9 are the component repair programme. They run in the listed order, not as one mega-audit.
+- A component batch that fails is reopened and fixed before the next batch starts.
+- Runtime and gallery phases may reveal regressions. Those regressions return to the affected component phase and must be retested there.
+- Documentation and the component skill are updated during every component batch, not postponed until the end. Phase 12 consolidates and verifies the complete system.
+- Security and CI basics should be introduced early enough to protect ongoing work. Phase 15 completes and audits the full supply-chain/security programme.
+- Phase 19 is the only phase allowed to publish a stable package.
 
-For each issue capture:
-- Component ID and custom-element tag.
-- Exact page/URL and clean load conditions.
-- Browser, version, OS, viewport, device scale and reduced-motion setting.
-- Reproduction steps and actual result.
-- Expected behavior/design reference.
-- Console errors, failed network requests, registration status and relevant event trace.
-- Screenshot/video before fix and after fix.
-- Severity: P0 (data/security/crash), P1 (core interaction/render broken), P2 (significant visual/API/accessibility defect), P3 (minor polish).
-- Source-of-truth file and test that will prevent recurrence.
+## 5. Mandatory per-component audit checklist
 
-Priority order: the user-reported original four; other broken original controls; component cards that render incorrectly; utility components; gallery-wide defects.
+Every component in Phases 1A–9 must have a completed, dated row for every applicable item below.
 
-## Per-component quality contract
+### A. Visual identity and rendering
+- Compare against approved original artwork/reference, not a generic replacement.
+- Verify default, hover, focus, pressed/active, selected/on, disabled, invalid, boundary, loading and settled/animated states as applicable.
+- Inspect desktop 1440 CSS px, tablet 768 CSS px and phone 390 CSS px.
+- Check dimensions, alignment, type, contrast, shadows, material, lamps, chrome ball, labels, icons, spacing and responsive behavior.
+- Check no clipping, overlap, blank canvas, missing image, broken audio asset, layout shift or horizontal overflow.
+- For WebGL controls, test renderer-on, renderer-unavailable and context-lost behavior.
 
-Every component must have a complete record covering:
+### B. Functional/API contract
+- List exact tag names and prevent duplicate custom-element registration.
+- Record observed attributes, defaults, types, coercion, reflection and attribute-removal behavior.
+- Verify each public property getter/setter, method, argument and return value.
+- Verify exact event names, detail payloads, event count/order, bubbling/composed flags and event suppression rules.
+- Test valid, invalid, empty, min/max, out-of-range, rapid and repeated interactions.
+- Test pointer, touch, keyboard and programmatic interaction independently.
+- Test disabled/read-only, focus entry/exit, reconnect and duplicate bundle loading.
 
-1. Identity: public element tags, bundle/source file, demo route, guide, registry ID and category.
-2. Visual design: approved states and screenshots at phone/tablet/desktop widths; no clipping, overflow, overlap, missing assets or generic fallback replacing intended artwork.
-3. API: observed attributes, defaults, types, coercion, property getters/setters, methods, events and exact event detail shapes.
-4. Interaction: pointer, touch, keyboard, programmatic API, disabled, focus, boundary, invalid and empty states.
-5. Forms: name/value, FormData, required/min/max/type/step validity, disabled fieldsets, reset and restore where applicable.
-6. Lifecycle: connect, disconnect during active animation/timer, reconnect, duplicate script inclusion, listener/timer/observer/frame cleanup.
-7. Accessibility: accessible name, role, value/state, focus order, visible focus, keyboard, live announcements and reduced motion.
-8. Runtime: WebGL available/unavailable/context lost, audio permitted/blocked/muted and fallback rendering where applicable.
-9. Documentation: standalone installation, npm import, usage examples, attributes, properties, methods, events, CSS custom properties, accessibility, limitations and troubleshooting.
-10. Evidence: component-specific automated tests, CI job/run, screenshot evidence and outstanding manual QA.
+### C. Forms and browser semantics
+- Test name/value in FormData and required/disabled semantics.
+- Verify native validity, checkValidity/reportValidity, custom validity and invalid events where applicable.
+- Verify disabled fieldsets, form reset, state restoration and submission values.
+- Do not promise native form association where a browser does not support the required ElementInternals capability; document and test the fallback.
 
-No component may be marked complete solely because its source exists, its demo returns HTTP 200 or its card appears.
+### D. Lifecycle and reliability
+- Disconnect during an active animation, timer, observer, drag, audio playback or pending callback.
+- Reconnect and verify behavior is restored exactly once.
+- Ensure no stale timeout, animation frame, observer, event listener or audio node continues unnecessarily.
+- Ensure one failing component does not prevent independent gallery cards/components from initializing.
+- Test isolated script inclusion and mixed runtime load order.
 
-## Documentation deliverables
+### E. Accessibility
+- Accessible name, role, value, description, checked/selected/expanded/disabled state.
+- Visible focus, logical focus order, target sizing and keyboard-only operation.
+- Focus management/restoration for overlays.
+- Status/live-region announcements for dynamic outcomes.
+- Reduced-motion before load and after preference changes.
+- Manual screen reader testing where applicable.
 
-### Root-level
-- README.md with actual install, import, feature list, compatibility and honest release status.
-- CHANGELOG.md, CONTRIBUTING.md, CODE_OF_CONDUCT.md, SECURITY.md, SUPPORT.md.
-- LICENSE (MIT, Copyright (c) Brajesh Kumar), package metadata and citation metadata where appropriate.
-- llms.txt and an up-to-date documentation index.
+### F. Documentation and skills
+- Update the component README from the real API, not assumptions.
+- Include installation by standalone script and (when available) npm subpath.
+- Include exact attributes/defaults, properties, methods, events/payloads, CSS properties, slots, forms, keyboard behavior, accessibility, browser limitations and troubleshooting.
+- Provide at least one working minimal example and one realistic use case.
+- Update component inventory, llms.txt, skill resources and relevant examples.
+- Run documentation parity checks after generation.
+
+### G. Evidence
+- Link defect IDs, source files, test file, CI run and commit SHA.
+- Attach before/after screenshots for visual changes.
+- Record browser/device/version and viewport.
+- Show pass/fail counts. Never turn a pending or skipped test into a pass.
+
+## 6. Documentation and skill deliverables
+
+### Root files
+- `README.md`: what the package is, component catalogue, install/use examples, browser requirements, design/runtime overview, test commands, accessibility limits, current release status.
+- `CHANGELOG.md`: dated semver changes.
+- `CONTRIBUTING.md`: local setup, component workflow, tests, screenshots and PR evidence.
+- `CODE_OF_CONDUCT.md`.
+- `SECURITY.md`: private reporting, supported versions and response expectations.
+- `SUPPORT.md`: usage help and reproducible bug reports.
+- `LICENSE`: MIT, Copyright (c) Brajesh Kumar.
+- `CITATION.cff`: citation metadata if appropriate.
+- `llms.txt`: current machine-readable package and component index.
 
 ### docs/
-- PROJECT-REFERENCE.md and architecture diagrams.
-- COMPONENTS.md and generated full component inventory.
-- PACKAGE.md, API-CONVENTIONS.md, TESTING.md, ACCESSIBILITY.md, SECURITY.md.
-- VISUAL-DESIGN-SYSTEM.md, ANIMATION-DESIGN-SYSTEM.md, RUNTIME.md, ASSET-PIPELINE.md.
-- BROWSER-COMPATIBILITY.md, PERFORMANCE.md, TROUBLESHOOTING.md.
-- QUALITY-AND-RELEASE.md, PHASE-ACCEPTANCE-MATRIX.md, RELEASE-CHECKLIST.md.
-- VISUAL-BASELINE.md, DEFECT-REGISTER.md and reproducible evidence index.
+- `README.md` documentation hub.
+- `PROJECT-REFERENCE.md` architecture and canonical source map.
+- `COMPONENTS.md` generated index of all 29 elements.
+- `API-CONVENTIONS.md` public API and event rules.
+- `ARCHITECTURE.md`, runtime diagrams, generator and build flow.
+- `RUNTIME.md`, `ASSET-PIPELINE.md`, sound/art provenance.
+- `VISUAL-DESIGN-SYSTEM.md`, `ANIMATION-DESIGN-SYSTEM.md`.
+- `TESTING.md`, `ACCESSIBILITY.md`, `BROWSER-COMPATIBILITY.md`.
+- `PACKAGE.md`, `PERFORMANCE.md`, `SECURITY.md`, `TROUBLESHOOTING.md`.
+- `QUALITY-AND-RELEASE.md`, `PHASE-ACCEPTANCE-MATRIX.md`, `RELEASE-CHECKLIST.md`.
+- `quality/DEFECT-REGISTER.md`, `quality/VISUAL-BASELINE.md`, `quality/COMPONENT-AUDIT-MATRIX.md` and CI evidence index.
 
-### Per-component
-Every component folder must have an accurate README and working demo. Document all API members individually. Keep the generated/source distinction explicit.
+### Per-component folders
+Every one of the 29 folders must include:
+- A README with the complete actual API and examples.
+- A standalone demo page that loads the correct local bundle.
+- Working cross-links to source and main gallery.
+- The documented browser limitations and accessibility contract.
+- Where code is generated, a visible source-of-truth/generation note.
 
 ### Skills
-- `skills/pinmotion-ui/SKILL.md`: installation, component selection, API discovery, source editing, build, tests, design rules and release policy.
-- A component-authoring skill with a checklist and template.
-- A debugging skill for gallery, WebGL, audio, custom elements, forms and lifecycle.
-- A release/security skill for package validation and release evidence.
-- Resource files: canonical API conventions, visual tokens, component inventory, tested examples and test instructions.
-- The skill must never tell an agent to edit generated bundles directly.
+- `skills/pinmotion-ui/SKILL.md`: project orientation, installation, component selection, API rules, design system, build/test workflow and release status.
+- `skills/component-authoring/SKILL.md`: authoring checklist and component template.
+- `skills/component-audit/SKILL.md`: reproducible visual/API/form/accessibility/lifecycle audit.
+- `skills/pinmotion-debugging/SKILL.md`: WebGL, audio, custom elements, gallery, forms, runtime and lifecycle diagnosis.
+- `skills/release-security/SKILL.md`: package verification, vulnerability workflow and release evidence.
+- Shared skill resources: API conventions, visual tokens, runtime design, component audit matrix, test commands and examples.
 
-## npm package contract (target)
+All component skills and their documentation are reviewed as part of the relevant component phase. The skill must instruct agents to edit canonical source files and regenerate generated output.
 
-Target usage after release:
+## 7. GitHub Actions and repository workflow programme
+
+Pinmotion must have a workflow suite comparable in purpose to VFX UI Anime. Existing workflows must be reviewed and upgraded; duplicate workflows should be consolidated where they perform the same job.
+
+| Workflow / file | Trigger | Responsibility and mandatory gates |
+|---|---|---|
+| `.github/workflows/validate.yml` | Pull requests, main pushes, manual | npm ci; Node/npm version; source syntax; build/docs parity; validator/integrity; focused component tests; full Chromium tests; clean consumer; fail on console/runtime/network errors |
+| `.github/workflows/component-regression.yml` | Component source/spec/demo/docs changes | Detect changed component IDs; run relevant isolated tests and shared-runtime regression tests; report exact component matrix |
+| `.github/workflows/visual-regression.yml` | Pull requests and manual | Capture 1440/768/390 screenshots; upload artifacts; compare only against approved baselines; never auto-approve changed baselines |
+| `.github/workflows/deploy-pages.yml` | Main push or controlled manual release | Separate build/artifact and deploy jobs; verify artifact identity; deploy; check homepage/gallery/all demos/all bundles/registry; live Chromium hard reload; retain screenshots |
+| `.github/workflows/codeql.yml` | Push, PR, schedule | JavaScript/TypeScript CodeQL static analysis; least-privilege security-events permissions |
+| `.github/workflows/codeql-alert-inventory.yml` | After successful CodeQL, scheduled/manual | Export and archive open code scanning alert inventory; do not call zero findings unless the artifact proves it |
+| `.github/workflows/dependency-review.yml` | Pull requests | Review introduced dependency licenses and known vulnerabilities; currently no third-party runtime dependencies is not a reason to skip future checks |
+| `.github/workflows/security-audit.yml` | PR, main, schedule | npm audit, lockfile checks, secret scanning/Gitleaks supplemental scan, license and asset-provenance checks |
+| `.github/workflows/scorecard.yml` | Default-branch push, schedule | OpenSSF Scorecard report and SARIF/artifact; track branch protection, permissions, pinned dependencies and token scope |
+| `.github/workflows/package-smoke.yml` | PR, main, release candidate | npm pack dry run; inspect allowlisted tarball; install tarball into clean consumer; test root import and each of the 29 component subpaths in Chromium |
+| `.github/workflows/release.yml` | Release-candidate branch/tag and manual approval | Verify exact candidate SHA, complete gates, build source-only GitHub pre-release or RC; never publish npm from an unapproved candidate |
+| `.github/workflows/publish.yml` | Protected stable version tag | Verify semver/tag/main ancestry; npm trusted publishing/OIDC and provenance where supported; npm staged approval if configured |
+| `.github/workflows/publish-github-package.yml` | Stable version tag, optional | Only add if a separate GitHub Packages distribution is deliberately required. It must not silently repoint the npmjs package or create a second confusing source of truth |
+| `.github/workflows/post-release.yml` | Successful publication | npm view/install from public registry; verify version, dist-tag, provenance and tarball; run live gallery and component URL smoke tests; attach evidence |
+| `.github/workflows/scorecard.yml` | Default branch, schedule | Preserve report artifact and actionable findings |
+| `.github/workflows/generate-components.yml` | Explicit/manual or controlled source changes | Generate source bundles, docs, demos, gallery and registry; run parity; create a clear generated-change PR or a safe commit strategy. Avoid races with deploy and validate jobs |
+
+### Workflow engineering requirements
+
+- Pin third-party GitHub Actions to full commit SHAs for hardened release/security workflows, with update automation and readable version comments.
+- Use explicit minimal permissions at workflow and job level.
+- Use `persist-credentials: false` when checkout does not require authenticated git pushes.
+- Separate build, artifact upload, deployment and live verification.
+- Do not let a successful static file upload imply live functionality.
+- Avoid workflow loops where generation commits re-trigger themselves endlessly.
+- Make all release-critical jobs required branch-protection checks once the maintainers configure branch protection.
+- Retain test/screenshot/security artifacts with sensible retention.
+- Never echo secrets or expose environment values in logs.
+- Use environment approval for publication and protected release environments.
+- Test failure paths, not just green paths.
+- Use OIDC for npm trusted publishing where the npm account supports it; do not hardcode npm tokens into workflow YAML.
+- Keep GitHub Packages optional unless there is a concrete distribution requirement.
+
+### Repository governance assets
+- `.github/pull_request_template.md`.
+- `.github/ISSUE_TEMPLATE/bug_report.yml`.
+- `.github/ISSUE_TEMPLATE/feature_request.yml`.
+- `.github/ISSUE_TEMPLATE/config.yml`.
+- `.github/CODEOWNERS` if code ownership is useful for this single-maintainer project.
+- Branch protection/ruleset configuration requiring Validate, security and package checks before merge.
+- Private vulnerability reporting enabled in repository settings where GitHub supports it.
+
+## 8. npm package and public usage contract
+
+Target install:
 
 ```bash
 npm install pinmotion-ui
 ```
 
-Register all elements in a browser-only entry point:
+Register all browser custom elements:
 
 ```js
 import 'pinmotion-ui';
 ```
 
-Register a selected component only:
+Register one component:
 
 ```js
 import 'pinmotion-ui/toggle';
 ```
 
-Do not promise framework wrappers unless they are implemented and tested. The package must document SSR restrictions, side effects, browser requirements and WebGL/audio fallbacks. Root import and every component subpath must be tested from the packed tarball in a clean consumer, not just from the repository.
+Implementation requirements:
+- Root aggregate browser entry exports frozen version, component names and tag metadata if useful.
+- Each component has a stable subpath and registers only its own tag(s).
+- `package.json` has correct `exports`, `files`, `sideEffects`, `type`, browser/ESM fields, repository/homepage/bugs/license/engines and `publishConfig`.
+- No unsupported CommonJS, SSR, React or Vue support claims.
+- Document browser-only registration, custom-element side effects, duplicate registration strategy and loading timing.
+- Include component README/API docs in the package tarball.
+- Exclude tools, tests, CI, unpublished source data and large demo media unless required at runtime.
+- `npm pack --dry-run --json` output must be inspected by an automated test.
+- Install the packed .tgz in an empty consumer and test all exports and actual component registration in Chromium.
+- Include CDN version-pinned module usage where supported.
+- Release semver and changelog must match the Git tag and npm version.
 
-The final package must include package.json, root entry, component entry points, per-component READMEs, root README, license and package guide. It must exclude tooling, CI internals, gallery media not required by runtime, scratch files and secrets unless explicitly part of the distribution.
+## 9. Security and supply-chain requirements
 
-## Security programme
+- Create a realistic threat model for browser-executed custom elements and their build/release pipeline.
+- Keep user-provided text as text. Sanitize HTML only where rich HTML is an explicit feature.
+- File Drop may expose File objects to consumer code but must not upload, execute or automatically open files.
+- Validate URLs, attribute content, SVG/media sources, dynamic selectors, CSS injection paths and DOM construction.
+- Review shader and WebGL error handling; do not leak unbounded GPU resources.
+- Audit recorded sounds, photographs, generated images and fonts for provenance and licensing.
+- Use CodeQL, dependency review, npm audit, secret scanning, supplemental Gitleaks, license audit and OpenSSF Scorecard.
+- Review GitHub Actions pinning, workflow permissions, branch protections, tag protections, release environment approvals and artifact integrity.
+- Scan source and release tarball; scan git history if credentials/assets were ever committed.
+- Establish responsible disclosure instructions and supported-version policy.
+- Generate provenance/attestation where supported; verify it after publication.
+- No untriaged critical/high vulnerability may remain at release. Medium/low issues require a documented disposition.
 
-- Add SECURITY.md with supported versions, private reporting route and response expectations.
-- Enable CodeQL JavaScript analysis and inspect all code-scanning findings.
-- Add npm audit and dependency review (current project has no runtime third-party dependencies; do not add dependencies without review).
-- Add secret scanning / push protection guidance and scan repository history when an incident warrants it.
-- Run OpenSSF Scorecard and track actionable findings.
-- Pin third-party GitHub Actions to full commit SHAs for hardened release workflows; enable minimal workflow permissions.
-- Use OIDC Trusted Publishing for npm when account configuration supports it. Do not store long-lived publish tokens in repository secrets.
-- Generate npm provenance where supported and verify provenance/attestations.
-- Audit license and asset provenance, including embedded images and sound files.
-- Validate user-controlled strings and HTML. File Drop reports File objects only; it must not upload or execute them.
-- Add security test cases for unsafe HTML, URL handling, file types/limits, event injection, prototype/DOM clobbering and CSP compatibility where relevant.
-- Do not claim "zero vulnerabilities" without a dated scan and evidence. Record accepted residual risks.
+## 10. Release checklist
 
-## CI quality gates
+A stable release is NO-GO until all items pass on one frozen release-candidate SHA:
 
-Pull requests and main pushes should run:
-1. npm ci and source syntax checks.
-2. Build and generated-output parity checks.
-3. Documentation and registry parity.
-4. Static repository/integrity checks.
-5. Component contract audit.
-6. Chromium interaction suite at desktop and mobile viewports.
-7. Clean bundle consumer and npm tarball smoke tests.
-8. Accessibility automation.
-9. Dependency, secret, CodeQL and license checks.
-10. Visual screenshot artifact generation and regression review.
-11. Performance/bundle budget checks.
-12. Firefox/WebKit tests in the compatibility phase.
+- [ ] All 29 components have per-component audit evidence.
+- [ ] Original four are restored and visually approved against their baseline.
+- [ ] All 30 custom-element tags register without collisions.
+- [ ] All 29 component demos and gallery cards are correct.
+- [ ] All per-component README/API docs and skill references match the implementation.
+- [ ] All generated bundles, docs, demos, registry and llms.txt are in parity.
+- [ ] Root and all subpath imports work from the actual npm tarball in a clean consumer.
+- [ ] Automated Chromium tests pass; supported Firefox/WebKit/browser/device matrix evidence is recorded.
+- [ ] Manual accessibility and real assistive-technology evidence is recorded.
+- [ ] Performance and bundle budgets pass.
+- [ ] Security checks pass and residual risks are documented.
+- [ ] License and asset provenance checks pass.
+- [ ] Branch protection and required workflows are configured.
+- [ ] Changelog, semver, migration notes, support policy and known limitations are ready.
+- [ ] npm publishing uses protected OIDC/trusted publishing where supported.
+- [ ] GitHub Release includes source SHA, package archive and checksums.
+- [ ] Post-release npm install, metadata/provenance and live gallery smoke checks pass.
+- [ ] Rollback, deprecation and security response procedures are documented.
 
-A failing mandatory gate must block release. A manual QA task cannot be marked passed by an automated job.
+## 11. Progress reporting after every phase
 
-## Release gates
+Every progress update must use this structure:
 
-- Package version, npm version and Git tag must match.
-- Release commit must be reachable from main.
-- Release validation must run against the exact tagged SHA.
-- Build and generated files must be clean.
-- All component acceptance rows must be closed or explicitly accepted as non-blocking.
-- No open P0/P1 issue; no untriaged critical/high security finding.
-- Package tarball and checksums must be archived.
-- npm publication must use protected OIDC/trusted publishing when configured.
-- GitHub Release must link changelog, installation commands, supported browsers and known limitations.
-- Post-publication npm view/install and live-gallery smoke tests must pass.
-- Rollback/yank/deprecation procedures must be documented.
+| Field | Required report |
+|---|---|
+| Phase | Exact phase and batch ID |
+| Scope | Components and subcomponents in this batch only |
+| Defects | Issue IDs, reproduction, root cause and fix |
+| Source changes | Exact canonical source/runtime/spec files |
+| Generated changes | Bundles, demos, gallery, registry and docs regenerated |
+| Tests | Commands, browser versions, pass/fail counts and skipped tests |
+| Visual evidence | Screenshot links and viewport details |
+| Documentation | Component README/API, root docs and skills changed |
+| Security | Findings and remediation/accepted residual risks |
+| Git | Branch, commit SHA and PR URL |
+| Exit decision | Pass / Fail / Blocked, with exact unmet criteria |
+| Next phase | The next batch only |
 
-## Progress reporting format
-
-After each implementation batch, report:
-- Phase and sub-phase.
-- Exact components/files changed.
-- Defects fixed and root causes.
-- Tests run with pass/fail counts and exact commit/run references.
-- Visual evidence.
-- Documentation/skill files updated.
-- Remaining defects and next batch.
-- Phase status: Not started / In progress / Blocked / Complete.
-
-Never report phase completion without the exit gate evidence above.
+Do not say "complete" without evidence. Do not skip ahead because a phase is taking longer than expected. A failing batch is fixed first.
