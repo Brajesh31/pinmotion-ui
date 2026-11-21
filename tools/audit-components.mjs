@@ -194,7 +194,7 @@ for (const component of SPEC) {
     const name = clean.split('(')[0].trim();
     const args = clean.includes('(') ? clean.slice(clean.indexOf('(') + 1, clean.lastIndexOf(')')).trim() : '';
     const expectedCount = args ? args.split(',').length : 0;
-    const definition = new RegExp('(?:^|[;{}])\\s*(?:async\\s+)?' + name + '\\s*\\(([^)]*)\\)\\s*\\{').exec(source);
+    const definition = new RegExp('\\b' + name + '\\s*\\(([^)]*)\\)\\s*\\{').exec(source);
     const actualArgs = definition ? definition[1].trim() : null;
     const actualCount = actualArgs === null ? -1 : (actualArgs ? actualArgs.split(',').length : 0);
     check(id + ': ' + name + ' source method parameter count matches its signature',
@@ -239,7 +239,7 @@ const utilityBase = read('tools/extra-core.js');
 check('PinballKit custom events bubble and cross the Shadow DOM boundary',
   coreBase.includes('bubbles: true') && coreBase.includes('composed: true'));
 check('PinmotionExtras custom events bubble and cross the Shadow DOM boundary',
-  utilityBase.includes('bubbles: true') && utilityBase.includes('composed: true'));
+  /(?:bubbles:\\s*true)/.test(utilityBase) && /(?:composed:\\s*true)/.test(utilityBase));
 
 console.log('');
 console.log('Component contract audit: ' + passed + ' passed, ' + failures + ' failed.');
