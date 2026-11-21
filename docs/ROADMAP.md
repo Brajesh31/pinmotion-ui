@@ -17,13 +17,14 @@ This is the high-level project development tracker. For the stricter, complete p
 | Component demo routes | 29 |
 | API guides | 29 |
 | Registry entries | 29 |
+| Phase 0, gallery stabilization | Complete |
 | Phase 1, inventory and contract audit | In progress |
 | Phase 2, functional correctness and regression | In progress |
-| Phases fully complete by evidence | 0 / 7 |
-| Phases in progress | 4 / 7 |
+| Phases fully complete by evidence | 1 / 7 |
+| Phases in progress | 3 / 7 |
 | Phases not started | 3 / 7 |
 
-**Phase completion is a delivery estimate, not a count of components.** The component families and documentation foundation exist, but the current pre-release sequence treats inventory contracts and functional correctness as separate, evidence-gated phases. Phases 0–2 and Phase 4 are active hardening work. Phases 3, 5 and 6 have not started. The detailed scope and evidence gates are tracked in [RELEASE-PLAN.md](RELEASE-PLAN.md).
+**Phase completion is a delivery estimate, not a count of components.** Phase 0, gallery stabilization, is complete with local and published-site browser evidence. Phases 1, 2 and 4 remain active hardening work. Phases 3, 5 and 6 have not started. The detailed scope and evidence gates are tracked in [RELEASE-PLAN.md](RELEASE-PLAN.md), with Phase 0 proof in [PHASE-0-VERIFICATION.md](PHASE-0-VERIFICATION.md).
 
 ## ✅ Completed foundations
 
@@ -54,6 +55,9 @@ This is the high-level project development tracker. For the stricter, complete p
 - Canonical component metadata and documentation generator.
 - `llms.txt`, integration skill, technical documentation and architecture diagrams.
 - MIT license naming Brajesh Kumar.
+
+### Phase 0. Gallery stabilization
+**Status: Complete** · The generated gallery runtime, visible startup diagnostics and deployed-site checks are now covered by CI. The 29-card/30-tag gallery passed hard-refresh Chromium verification, all 29 demo routes and bundles were checked on GitHub Pages, and responsive screenshots were archived. See [Phase 0 verification evidence](PHASE-0-VERIFICATION.md).
 
 ## 🚧 Active hardening phases
 

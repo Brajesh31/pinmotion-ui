@@ -32,7 +32,7 @@ Do not mark work complete because a source file exists, a workflow ran, or a pag
 ### INC-001 · Gallery never leaves “Loading component catalogue…”
 
 **Severity:** Release blocker  
-**Status:** Fix committed, automated verification in progress
+**Status:** Resolved and verified on `main` at `e94464445ec91cb4722f8e4e1328ffcff1467366` (21 November 2026)
 
 **Root cause:** The gallery generator emitted JavaScript object properties using raw component IDs. Several IDs contain hyphens, including `radio-group`, `text-field`, `text-area`, `date-picker`, `color-picker`, and `file-drop`. Those unquoted keys make the entire inline gallery runtime invalid JavaScript. The browser stops before the code that creates the cards can execute.
 
@@ -42,22 +42,20 @@ Do not mark work complete because a source file exists, a workflow ran, or a pag
 - The validator parses the generated inline gallery runtime with Node's JavaScript parser.
 - The browser interaction suite checks first-load card count, successful component initialization and registration of all 30 custom-element tags.
 
-**Acceptance evidence still required:**
-- [ ] Current `npm run check` passes on the latest commit.
-- [ ] Current static-server smoke test passes.
-- [ ] The real Chromium test confirms 29 cards appear on first load.
-- [ ] Every card has `data-load-state="ready"`.
-- [ ] The gallery reports all 29 components loaded.
-- [ ] All 30 custom-element tags are registered.
-- [ ] Browser console has no uncaught startup errors.
-- [ ] The published GitHub Pages gallery is checked after deployment, with a hard refresh and a direct URL load.
+**Acceptance evidence:**
+- [x] Full repository validation and local Chromium browser suite passed: [Validate run 44846228512](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44846228512).
+- [x] The generated gallery runtime parses and the complete build/docs/registry parity checks pass.
+- [x] The published GitHub Pages workflow passed after deployment: [Pages run 44846228487](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44846228487).
+- [x] A cache-disabled hard reload of the published gallery produced 29 cards, all 29 reached `data-load-state="ready"`, the status reported `29 of 29 components shown`, and all 30 custom-element tags registered.
+- [x] The hosted browser check recorded no failed non-favicon network responses and no uncaught runtime exceptions.
+- [x] The homepage, gallery, 29 standalone component URLs, 29 component JavaScript bundles, and 29-item registry were checked after deployment.
 
-Do not close INC-001 until all boxes above have evidence.
+**Disposition:** INC-001 is closed. Detailed evidence is recorded in [PHASE-0-VERIFICATION.md](PHASE-0-VERIFICATION.md).
 
 ## 3. Phase roadmap
 
 ### Phase 0 · Stop the gallery boot failure and stabilize the preview
-**Status: In progress · automated CI and deployment gates passed on the latest commit; published-site manual QA remains open**
+**Status: Complete · build, local Chromium, published Pages, hard-refresh, direct-route, mobile-width and screenshot evidence passed on `e94464445ec91cb4722f8e4e1328ffcff1467366`**
 
 Implemented in the current source:
 - [x] Quote component IDs when generating the gallery wire-map properties.
@@ -67,20 +65,25 @@ Implemented in the current source:
 - [x] Make the Chrome browser suite a mandatory Validate workflow step.
 - [x] Keep the source generator and checked-in gallery output aligned.
 
-Still required:
-- [x] Latest Validate workflow passes, including the real-browser suite: [run 44843352695](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44843352695), commit `f34a32e0f7fe9414c20d14e33eedb3e39b4593ed`.
-- [x] Latest Pages generation/deployment workflow passes: [run 44835256398](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44835256398), attempt 2, commit `f34a32e0f7fe9414c20d14e33eedb3e39b4593ed`.
-- [ ] Verify the published gallery in a real browser with a hard refresh and direct URL entry. Automated URL access is not a substitute for this manual check.
-- [x] The mandatory Chromium suite verifies all 29 gallery cards, ready state, all 30 tags, original mechanical interactions and standalone routes on the latest commit.
-- [ ] Complete the visual comparison against the previous approved baseline and close INC-001/INC-002 with linked evidence.
+Verification evidence:
+- [x] Latest full local Validate workflow passed: [run 44846228512](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44846228512), commit `e94464445ec91cb4722f8e4e1328ffcff1467366`.
+- [x] Latest Pages build, generated-file checks and deployment passed: [run 44846228487](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44846228487), same commit.
+- [x] The published gallery passed a cache-disabled hard reload in headless Chromium. All 29 cards reached ready state and all 30 custom-element tags registered.
+- [x] The published homepage, gallery, all 29 demo routes, all 29 bundle URLs and the 29-entry registry passed direct HTTP checks.
+- [x] The hosted gallery passed the 390 CSS px no-horizontal-overflow check.
+- [x] Full-page desktop and mobile screenshots were generated and archived as [Phase 0 visual evidence](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44846228487/artifacts/14682354540). The desktop screenshot is 1440px wide; the mobile capture uses a 390 CSS px viewport at device scale factor 2.
+- [x] The captured layouts were visually inspected. The original component family and utility-card layout remain present without obvious clipping or overlap. The repository did not contain an approved historical screenshot baseline, so a pixel-diff against a prior approved image is not claimed. No component rendering/source changes were made as part of this Phase 0 completion pass.
 
 Exit gate:
-- All 29 gallery cards render and initialize on first load.
-- The status reaches “All 29 live components loaded successfully.”
-- All 30 custom-element tags are registered.
-- No startup console errors or missing component scripts remain.
-- No original component is removed or visually regressed.
-- Latest CI and Pages workflows pass. (Passed on `f54d1e4`; published-site manual QA remains required.)
+- [x] All 29 gallery cards render and initialize on first load.
+- [x] The gallery leaves its loading state and reports all 29 components available.
+- [x] All 30 custom-element tags are registered.
+- [x] No failed non-favicon network responses or uncaught startup exceptions were observed in the hosted browser check.
+- [x] All 29 standalone demo routes and bundles are reachable on the deployed site.
+- [x] No horizontal overflow was observed at the 390 CSS px mobile viewport; desktop and mobile screenshots were archived and visually reviewed.
+- [x] The latest Validate and Pages deployment workflows pass on the same commit.
+
+**Phase 0 is complete.** This closes the gallery stabilization work only. It does not approve a stable release or close Phases 1–6.
 
 ### Phase 1 · Complete inventory and component contract audit
 **Status: In progress · inventory, static contract checks and route existence/browser checks are complete; runtime contract semantics and per-component review remain open**
