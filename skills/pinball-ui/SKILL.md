@@ -75,12 +75,14 @@ Copy the control's file into the project's static folder (or `npx shadcn add Bra
 
 - Size it with `--pb-size` (the height). Set `--pb-page` to the page background as a hex colour so the ball's reflections match.
 - Attributes set where it starts; use the properties and methods after that. Listen for the events in its README.
+- A custom element may be configured while detached. Public setters and methods must not dereference shadow controls before `connectedCallback`; reflect or retain early state, then synchronize ARIA and form values during connection.
 - Sound starts with the first press on the page. `silent` mutes one control; `PinballKit.sound = false` mutes all.
 
 ## Check it
 
 - `node look.mjs URL --act "..." --times 0,60,140,260,420,700` and look at every frame: where the ball is, when the lamp lights, whether the ball still reads as chrome at the size it is shown.
 - Use it with a keyboard and at phone width; check nothing scrolls sideways (the canvases reach outside the element for shadows and glow).
+- Create each control while detached, set its public properties and attributes, then append it; verify that state, ARIA and FormData are correct and no setter throws.
 - A new canvas is 300 by 150 until it is sized: check both width and height before skipping a resize.
 - Where a texture coordinate jumps (a rod with a piece left out of its middle), read both sides and pick one, or a hairline appears.
 - GLSL ES 1 reserves some words you might reach for: `cast` is one.

@@ -528,7 +528,7 @@ class PinballToggle extends K.Base {
     if (name === 'checked') this.set(value !== null, false, true);
     this.dirty = true; K.start();
   }
-  get checked() { return this.on; }
+  get checked() { return !!this.on; }
   set checked(v) { this.set(!!v, false, true); }
   toggle() { this.set(!this.on, false, true); }
   restyle() { this.page = rgb(getComputedStyle(this).getPropertyValue('--pb-page')) || [0.953, 0.937, 0.898]; this.dirty = true; K.start(); }
@@ -536,9 +536,10 @@ class PinballToggle extends K.Base {
 
   set(on, user, kick) {
     if (on === this.on) { this.wake(); return; }
-    this.on = on; this.toggleAttribute('checked', on); this.btn.setAttribute('aria-checked', String(on)); this.syncForm();
+    this.on = on; this.toggleAttribute('checked', on); this.btn?.setAttribute('aria-checked', String(on));
+    if (this.ready) this.syncForm();
     if (K.calm) { this.s = on ? 1 : 0; this.v = 0; }
-    else if (kick) { this.v += (on ? 1 : -1) * K.feel.kick; this.fx.kick(); }
+    else if (kick && this.ready) { this.v += (on ? 1 : -1) * K.feel.kick; this.fx.kick(); }
     this.tocks = 9;   // no knocking until it has hit the far wall
     if (user) { this.emit('change', { checked: on }); this.dispatchEvent(new Event('input', { bubbles: true, composed: true })); }
     this.wake();

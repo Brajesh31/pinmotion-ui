@@ -101,6 +101,7 @@ The interactive control lives in an open Shadow DOM and uses the semantic role a
 
 - The visual `mode` attribute switches rendering style only. Do not use it as application state.
 - Programmatic `.checked` changes and `toggle()` update the form value and rendering but deliberately do not emit `change` or `input`.
+- Set `checked` or call `toggle()` before appending the element to seed its initial state; the reflected `checked` attribute is applied when the element connects.
 - The `input` event is not a `CustomEvent` and has no `detail`; use `change.detail.checked` when you need a payload.
 - The `label` attribute is read on connection rather than observed live. Set it before the element is inserted, or provide `aria-label` / `aria-labelledby`.
 - **It needs WebGL** for the ball and the lamps. Without it the control is still a working, focusable control, but the shader-drawn visuals are missing.

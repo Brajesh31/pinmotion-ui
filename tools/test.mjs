@@ -147,6 +147,68 @@ if (process.env.PINMOTION_LIVE_SMOKE === '1') {
 check('all seven files built their elements', (await ev(`['toggle', 'slider', 'plunger', 'stepper', 'targets', 'drain', 'bumpers', 'bumper'].every((t) => { const e = document.querySelector('pinball-' + t); return e && e.shadowRoot && e.shadowRoot.querySelector('canvas'); })`)) === true);
 check('WebGL is drawing (the toggle canvas has pixels)', (await ev(`(() => { const c = ${S('toggle', 'canvas')}; const d = c.getContext('2d').getImageData(0, 0, c.width, c.height).data; let n = 0; for (let i = 3; i < d.length; i += 4) n += d[i] > 0; return n; })()`)) > 1000);
 
+// Toggle must accept property/method state before the host is inserted into the document.
+{
+  const preconnect = JSON.parse(await ev(`(() => {
+    const form = document.createElement('form');
+    form.hidden = true;
+    document.body.append(form);
+    const element = document.createElement('pinball-toggle');
+    element.setAttribute('name', 'phase2-preconnect-toggle');
+    element.setAttribute('value', 'seeded');
+    let changes = 0, inputs = 0;
+    element.addEventListener('change', () => changes++);
+    element.addEventListener('input', () => inputs++);
+    const initial = { checked: element.checked, type: typeof element.checked };
+    let error = null;
+    try {
+      element.checked = true;
+      element.toggle();
+      element.toggle();
+    } catch (err) {
+      error = err.name + ': ' + err.message;
+    }
+    const beforeConnect = { checked: element.checked, attribute: element.hasAttribute('checked') };
+    form.append(element);
+    const button = element.shadowRoot?.querySelector('button');
+    const connected = {
+      checked: element.checked,
+      ariaChecked: button?.getAttribute('aria-checked'),
+      formValue: new FormData(form).get('phase2-preconnect-toggle')
+    };
+    element.checked = false;
+    element.toggle();
+    const afterProgrammatic = {
+      checked: element.checked,
+      ariaChecked: button?.getAttribute('aria-checked'),
+      formValue: new FormData(form).get('phase2-preconnect-toggle')
+    };
+    element.removeAttribute('checked');
+    const afterRemoval = {
+      checked: element.checked,
+      ariaChecked: button?.getAttribute('aria-checked'),
+      formValue: new FormData(form).get('phase2-preconnect-toggle')
+    };
+    const events = { changes, inputs };
+    form.remove();
+    return JSON.stringify({ initial, error, beforeConnect, connected, afterProgrammatic, afterRemoval, events });
+  })()`));
+  check('toggle: checked is a boolean before connection',
+    preconnect.initial.type === 'boolean' && preconnect.initial.checked === false,
+    JSON.stringify(preconnect.initial));
+  check('toggle: checked setter and toggle() work before connection',
+    preconnect.error === null && preconnect.beforeConnect.checked === true && preconnect.beforeConnect.attribute === true,
+    JSON.stringify({ error: preconnect.error, beforeConnect: preconnect.beforeConnect }));
+  check('toggle: preconnection state initializes connected ARIA and FormData',
+    preconnect.connected.checked === true && preconnect.connected.ariaChecked === 'true' && preconnect.connected.formValue === 'seeded',
+    JSON.stringify(preconnect.connected));
+  check('toggle: programmatic changes and attribute removal synchronize without user events',
+    preconnect.afterProgrammatic.checked === true && preconnect.afterProgrammatic.ariaChecked === 'true' && preconnect.afterProgrammatic.formValue === 'seeded' &&
+    preconnect.afterRemoval.checked === false && preconnect.afterRemoval.ariaChecked === 'false' && preconnect.afterRemoval.formValue === null &&
+    preconnect.events.changes === 0 && preconnect.events.inputs === 0,
+    JSON.stringify({ afterProgrammatic: preconnect.afterProgrammatic, afterRemoval: preconnect.afterRemoval, events: preconnect.events }));
+}
+
 // toggle: a tap, then Space
 await tap('toggle', 'button');
 check('toggle: a tap turns it on, with change', (await prop('toggle', 'checked')) === true && (await fired('toggle change')) === 1, await prop('toggle', 'checked'));

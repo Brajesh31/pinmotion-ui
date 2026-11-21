@@ -107,7 +107,8 @@ export const SPEC = [
       "motion": "The shared runtime honours `prefers-reduced-motion` by moving the ball directly to the final state. The lamp still reflects the checked state.",
       "notes": [
         "The visual `mode` attribute switches rendering style only. Do not use it as application state.",
-        "Programmatic `.checked` changes and `toggle()` update the form value and rendering but deliberately do not emit `change` or `input`."
+        "Programmatic `.checked` changes and `toggle()` update the form value and rendering but deliberately do not emit `change` or `input`.",
+        "Set `checked` or call `toggle()` before appending the element to seed its initial state; the reflected `checked` attribute is applied when the element connects."
       ],
       "happens": [
         [
