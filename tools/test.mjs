@@ -234,6 +234,38 @@ check('WebGL is drawing (the toggle canvas has pixels)', (await ev(`(() => { con
     labels[2].role === 'switch' && labels[2].name === 'Push alerts', JSON.stringify(labels[2]));
 }
 
+// Verify the computed browser accessibility tree, not only copied ARIA attributes.
+{
+  await send('Accessibility.enable');
+  await ev("(() => { const root=document.createElement('div'); root.style.cssText='position:fixed;left:-10000px;top:0'; const first=document.createElement('span'); first.id='pinmotion-ax-label-first'; first.textContent='Maintenance'; const second=document.createElement('span'); second.id='pinmotion-ax-label-second'; second.textContent='mode'; const explicit=document.createElement('pinball-toggle'); explicit.setAttribute('aria-label','Emergency override'); const referenced=document.createElement('pinball-toggle'); referenced.setAttribute('aria-labelledby',first.id+' '+second.id); const fallback=document.createElement('pinball-toggle'); fallback.setAttribute('label','Push alerts'); root.append(first,second,explicit,referenced,fallback); document.body.append(root); window.__pinmotionAX={root,explicit,referenced,fallback}; return 'ready'; })()");
+  const axName = async (elementExpression) => {
+    const remote = await send('Runtime.evaluate', { expression: elementExpression, returnByValue: false });
+    const objectId = remote.result?.objectId;
+    if (!objectId) return null;
+    const tree = await send('Accessibility.getPartialAXTree', { objectId, fetchRelatives: false });
+    const node = tree.nodes?.find((entry) => entry.role?.value === 'switch');
+    return node ? { role: node.role.value, name: node.name?.value || '', ignored: node.ignored } : null;
+  };
+  const explicitAX = await axName("__pinmotionAX.explicit.shadowRoot.querySelector('button')");
+  const referencedAX = await axName("__pinmotionAX.referenced.shadowRoot.querySelector('button')");
+  const fallbackAX = await axName("__pinmotionAX.fallback.shadowRoot.querySelector('button')");
+  check('toggle: computed AX name includes host aria-label', explicitAX?.role === 'switch' && explicitAX.name === 'Emergency override' && explicitAX.ignored !== true, JSON.stringify(explicitAX));
+  check('toggle: computed AX name resolves all aria-labelledby ID references', referencedAX?.role === 'switch' && referencedAX.name === 'Maintenance mode' && referencedAX.ignored !== true, JSON.stringify(referencedAX));
+  check('toggle: computed AX name uses label fallback', fallbackAX?.role === 'switch' && fallbackAX.name === 'Push alerts' && fallbackAX.ignored !== true, JSON.stringify(fallbackAX));
+  await ev('__pinmotionAX.root.remove()');
+}
+
+// Form reset must restore the initially connected checked state and submitted value.
+{
+  const reset = JSON.parse(await ev("(() => { const form=document.createElement('form'); form.style.cssText='position:fixed;left:-10000px;top:0'; const element=document.createElement('pinball-toggle'); element.setAttribute('name','reset-toggle'); element.setAttribute('value','reset-value'); element.setAttribute('checked',''); let changes=0,inputs=0; element.addEventListener('change',()=>changes++); element.addEventListener('input',()=>inputs++); form.append(element); document.body.append(form); element.checked=false; const before={checked:element.checked,value:new FormData(form).get('reset-toggle')}; form.reset(); const after={checked:element.checked,attribute:element.hasAttribute('checked'),ariaChecked:element.shadowRoot.querySelector('button').getAttribute('aria-checked'),value:new FormData(form).get('reset-toggle'),changes,inputs}; form.remove(); return JSON.stringify({before,after}); })()"));
+  check('toggle: form.reset restores initial checked state and submitted value without user events',
+    reset.before.checked === false && reset.before.value === null &&
+    reset.after.checked === true && reset.after.attribute === true &&
+    reset.after.ariaChecked === 'true' && reset.after.value === 'reset-value' &&
+    reset.after.changes === 0 && reset.after.inputs === 0,
+    JSON.stringify(reset));
+}
+
 // toggle: a tap, then Space
 await tap('toggle', 'button');
 check('toggle: a tap turns it on, with change', (await prop('toggle', 'checked')) === true && (await fired('toggle change')) === 1, await prop('toggle', 'checked'));
