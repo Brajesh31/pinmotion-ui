@@ -239,7 +239,7 @@ const utilityBase = read('tools/extra-core.js');
 check('PinballKit custom events bubble and cross the Shadow DOM boundary',
   coreBase.includes('bubbles: true') && coreBase.includes('composed: true'));
 check('PinmotionExtras custom events bubble and cross the Shadow DOM boundary',
-  /(?:bubbles:\\s*true)/.test(utilityBase) && /(?:composed:\\s*true)/.test(utilityBase));
+  (utilityBase.includes('bubbles:true') || utilityBase.includes('bubbles: true')) && (utilityBase.includes('composed:true') || utilityBase.includes('composed: true')));
 
 console.log('');
 console.log('Component contract audit: ' + passed + ' passed, ' + failures + ' failed.');
