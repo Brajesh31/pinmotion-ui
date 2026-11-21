@@ -70,17 +70,31 @@ export const DEFAULT_CONTRACT_PROBES = Object.freeze({
   },
   'radio-group': () => {
     const e = document.querySelector('pinball-radio-group');
+    const initial=e.value;
+    e.group.querySelector('button[data-value="standard"]')?.dispatchEvent(new KeyboardEvent('keydown',{key:'ArrowDown',bubbles:true,cancelable:true}));
+    const down=e.value==='pro';
+    e.group.querySelector('button[data-value="pro"]')?.dispatchEvent(new KeyboardEvent('keydown',{key:'Home',bubbles:true,cancelable:true}));
+    const home=e.value==='standard';
+    e.group.querySelector('button[data-value="standard"]')?.dispatchEvent(new KeyboardEvent('keydown',{key:'End',bubbles:true,cancelable:true}));
+    const end=e.value==='team';
     return [
       result('default radio options are standard,pro,team', e.options.map(x => x.value).join(',') === 'standard,pro,team', e.options.map(x => x.value).join(',')),
-      result('first radio option is selected by default', e.value === 'standard', e.value),
-      result('radiogroup is programmatically labelled by its visible label', e.group?.getAttribute('aria-labelledby') === 'label' && e.root.querySelector('#label')?.textContent === 'Choose one', JSON.stringify({labelledby:e.group?.getAttribute('aria-labelledby'),label:e.root.querySelector('#label')?.textContent}))
+      result('first radio option is selected by default', initial === 'standard', initial),
+      result('radiogroup is programmatically labelled by its visible label', e.group?.getAttribute('aria-labelledby') === 'label' && e.root.querySelector('#label')?.textContent === 'Choose one', JSON.stringify({labelledby:e.group?.getAttribute('aria-labelledby'),label:e.root.querySelector('#label')?.textContent})),
+      result('radio keyboard ArrowDown, Home and End select expected options',down&&home&&end,JSON.stringify({down,home,end,value:e.value}))
     ];
   },
   segmented: () => {
     const e = document.querySelector('pinball-segmented');
+    const initial=e.value;
+    e.group.querySelector('[data-value="day"]')?.dispatchEvent(new KeyboardEvent('keydown',{key:'ArrowRight',bubbles:true,cancelable:true}));
+    const right=e.value==='week';
+    e.group.querySelector('[data-value="week"]')?.dispatchEvent(new KeyboardEvent('keydown',{key:'ArrowLeft',bubbles:true,cancelable:true}));
+    const left=e.value==='day';
     return [
       result('default segments are day,week,month', e.options.map(x => x.value).join(',') === 'day,week,month', e.options.map(x => x.value).join(',')),
-      result('first segment is selected by default', e.value === 'day', e.value)
+      result('first segment is selected by default', initial === 'day', initial),
+      result('segmented ArrowRight and ArrowLeft change the selected segment',right&&left,JSON.stringify({right,left}))
     ];
   },
   progress: () => {
@@ -101,26 +115,52 @@ export const DEFAULT_CONTRACT_PROBES = Object.freeze({
   },
   rating: () => {
     const e = document.querySelector('pinball-rating');
+    const initial=e.value;
+    e.root.querySelector('[data-value="1"]')?.dispatchEvent(new KeyboardEvent('keydown',{key:'ArrowRight',bubbles:true,cancelable:true}));
+    const right=e.value===1;
+    e.root.querySelector('[data-value="1"]')?.dispatchEvent(new KeyboardEvent('keydown',{key:'ArrowRight',bubbles:true,cancelable:true}));
+    const next=e.value===2;
+    e.root.querySelector('[data-value="2"]')?.dispatchEvent(new KeyboardEvent('keydown',{key:'End',bubbles:true,cancelable:true}));
+    const end=e.value===5;
+    e.root.querySelector('[data-value="5"]')?.dispatchEvent(new KeyboardEvent('keydown',{key:'Home',bubbles:true,cancelable:true}));
+    const home=e.value===1;
     return [
-      result('rating value defaults to 0', e.value === 0, e.value),
+      result('rating value defaults to 0', initial === 0, initial),
       result('rating maximum defaults to 5', e.max === 5, e.max),
-      result('rating radiogroup is labelled by its visible label', e.root.querySelector('[role=radiogroup]')?.getAttribute('aria-labelledby') === 'label' && e.root.querySelector('#label')?.textContent === 'Rating', JSON.stringify({labelledby:e.root.querySelector('[role=radiogroup]')?.getAttribute('aria-labelledby'),label:e.root.querySelector('#label')?.textContent}))
+      result('rating radiogroup is labelled by its visible label', e.root.querySelector('[role=radiogroup]')?.getAttribute('aria-labelledby') === 'label' && e.root.querySelector('#label')?.textContent === 'Rating', JSON.stringify({labelledby:e.root.querySelector('[role=radiogroup]')?.getAttribute('aria-labelledby'),label:e.root.querySelector('#label')?.textContent})),
+      result('rating ArrowRight, End and Home update the value',right&&next&&end&&home,JSON.stringify({right,next,end,home,value:e.value}))
     ];
   },
   tabs: () => {
     const e = document.querySelector('pinball-tabs');
+    const initial=e.activeIndex;
+    e.root.querySelector('[data-index="0"]')?.dispatchEvent(new KeyboardEvent('keydown',{key:'ArrowRight',bubbles:true,cancelable:true}));
+    const right=e.activeIndex===1;
+    e.root.querySelector('[data-index="1"]')?.dispatchEvent(new KeyboardEvent('keydown',{key:'End',bubbles:true,cancelable:true}));
+    const end=e.activeIndex===2;
+    e.root.querySelector('[data-index="2"]')?.dispatchEvent(new KeyboardEvent('keydown',{key:'Home',bubbles:true,cancelable:true}));
+    const home=e.activeIndex===0;
     return [
       result('default labels are Overview,Details,History', e.labels.join(',') === 'Overview,Details,History', e.labels.join(',')),
-      result('active tab defaults to index 0', e.activeIndex === 0, e.activeIndex),
-      result('tablist has the default accessible name', e.root.querySelector('[role=tablist]')?.getAttribute('aria-label') === 'Tabs', e.root.querySelector('[role=tablist]')?.getAttribute('aria-label'))
+      result('active tab defaults to index 0', initial === 0, initial),
+      result('tablist has the default accessible name', e.root.querySelector('[role=tablist]')?.getAttribute('aria-label') === 'Tabs', e.root.querySelector('[role=tablist]')?.getAttribute('aria-label')),
+      result('tabs ArrowRight, End and Home navigate documented tabs',right&&end&&home,JSON.stringify({right,end,home}))
     ];
   },
   accordion: () => {
     const e = document.querySelector('pinball-accordion');
+    const headings=e.$$('.heading');
+    headings[0]?.dispatchEvent(new KeyboardEvent('keydown',{key:'ArrowDown',bubbles:true,cancelable:true}));
+    const down=e.root.activeElement===headings[1];
+    headings[1]?.dispatchEvent(new KeyboardEvent('keydown',{key:'End',bubbles:true,cancelable:true}));
+    const end=e.root.activeElement===headings[2];
+    headings[2]?.dispatchEvent(new KeyboardEvent('keydown',{key:'Home',bubbles:true,cancelable:true}));
+    const home=e.root.activeElement===headings[0];
     return [
       result('default labels are Playfield,Scoring,Sound', e.labels.join(',') === 'Playfield,Scoring,Sound', e.labels.join(',')),
       result('first section is expanded by default', e.expanded.length === 1 && e.expanded[0] === 0, JSON.stringify(e.expanded)),
       result('multiple-open mode defaults off', !e.hasAttribute('multiple'), e.hasAttribute('multiple')),
+      result('accordion ArrowDown, End and Home move heading focus',down&&end&&home,JSON.stringify({down,end,home})),
       (() => { e.toggle(1,false); const reflected=e.getAttribute('open')==='1' && e.expanded.join(',')==='1'; e.expanded=[0,2]; const constrained=e.expanded.join(',')==='0' && e.getAttribute('open')==='0'; e.setAttribute('multiple',''); e.expanded=[0,2]; const multiple=e.expanded.join(',')==='0,2' && e.getAttribute('open')==='0,2'; e.removeAttribute('multiple'); const normalized=e.expanded.join(',')==='0' && e.getAttribute('open')==='0'; e.toggle(0,false); const canClose=e.expanded.length===0 && e.getAttribute('open')===''; return result('expanded state normalizes, reflects open, and permits all sections to close',reflected&&constrained&&multiple&&normalized&&canClose,JSON.stringify({reflected,constrained,multiple,normalized,canClose,expanded:e.expanded,open:e.getAttribute('open')})); })()
     ];
   },
@@ -130,9 +170,15 @@ export const DEFAULT_CONTRACT_PROBES = Object.freeze({
   },
   tooltip: () => {
     const e = document.querySelector('pinball-tooltip');
+    const initial=getComputedStyle(e.bubble).visibility==='hidden';
+    e.tip.focus();
+    const focusShows=e.bubble?.getAttribute('data-open')==='true';
+    e.tip.dispatchEvent(new KeyboardEvent('keydown',{key:'Escape',bubbles:true,cancelable:true}));
+    const escapeHides=!e.bubble?.hasAttribute('data-open');
     return [
       result('tooltip has a bubble element', !!e.bubble, !!e.bubble),
-      result('tooltip starts hidden without an open marker', !e.bubble?.hasAttribute('data-open'), e.bubble?.getAttribute('data-open')),
+      result('tooltip starts hidden with its default content', initial && !!e.bubble.textContent, JSON.stringify({initial,content:e.bubble.textContent})),
+      result('tooltip focus and Escape show and hide the bubble', focusShows && escapeHides, JSON.stringify({focusShows,escapeHides})),
       result('tooltip hidden state is represented by CSS visibility and opacity', getComputedStyle(e.bubble).visibility === 'hidden' && getComputedStyle(e.bubble).opacity === '0', JSON.stringify({visibility:getComputedStyle(e.bubble).visibility,opacity:getComputedStyle(e.bubble).opacity}))
     ];
   },
@@ -199,20 +245,37 @@ export const DEFAULT_CONTRACT_PROBES = Object.freeze({
   },
   combobox: () => {
     const e = document.querySelector('pinball-combobox');
+    const initial=e.value;
+    e.open();
+    e.input.dispatchEvent(new KeyboardEvent('keydown',{key:'ArrowDown',bubbles:true,cancelable:true}));
+    const down=e.active===1 && e.list.querySelectorAll('[role=option]')[1]?.getAttribute('aria-selected')==='true';
+    e.input.dispatchEvent(new KeyboardEvent('keydown',{key:'Enter',bubbles:true,cancelable:true}));
+    const enter=e.value==='chrome' && !e.opened;
+    e.open();
+    e.input.dispatchEvent(new KeyboardEvent('keydown',{key:'Escape',bubbles:true,cancelable:true}));
+    const escape=!e.opened;
     return [
       result('default combobox has four options', e.options.length === 4, e.options.length),
-      result('combobox value defaults to empty', e.value === '', e.value),
+      result('combobox value defaults to empty', initial === '', initial),
       result('placeholder defaults to Start typing…', e.input?.placeholder === 'Start typing…', e.input?.placeholder),
-      result('listbox starts closed', e.opened === false, e.opened)
+      result('listbox starts closed', !initial && down && escape, JSON.stringify({initial,down,escape,opened:e.opened})),
+      result('combobox ArrowDown, Enter and Escape use documented options and popup state',down&&enter&&escape,JSON.stringify({down,enter,escape,value:e.value}))
     ];
   },
   'file-drop': () => {
     const e = document.querySelector('pinball-file-drop');
+    let clicks=0;
+    e.input.click=()=>{clicks++};
+    e.zone.dispatchEvent(new KeyboardEvent('keydown',{key:'Enter',bubbles:true,cancelable:true}));
+    const enter=clicks===1;
+    e.zone.dispatchEvent(new KeyboardEvent('keydown',{key:' ',bubbles:true,cancelable:true}));
+    const space=clicks===2;
     return [
       result('files defaults to an empty array', Array.isArray(e.files) && e.files.length === 0, JSON.stringify(e.files)),
       result('multiple selection defaults off', e.input?.multiple === false, e.input?.multiple),
       result('accept filter defaults empty', e.input?.accept === '', e.input?.accept),
-      result('file drop button uses its visible label as the accessible name', e.zone?.getAttribute('aria-labelledby') === 'label' && e.root.querySelector('#label')?.textContent === 'Drop files here or browse', JSON.stringify({labelledby:e.zone?.getAttribute('aria-labelledby'),label:e.root.querySelector('#label')?.textContent}))
+      result('file drop button uses its visible label as the accessible name', e.zone?.getAttribute('aria-labelledby') === 'label' && e.root.querySelector('#label')?.textContent === 'Drop files here or browse', JSON.stringify({labelledby:e.zone?.getAttribute('aria-labelledby'),label:e.root.querySelector('#label')?.textContent})),
+      result('file-drop Enter and Space activate the file input',enter&&space,JSON.stringify({enter,space}))
     ];
   },
   'date-picker': () => {
