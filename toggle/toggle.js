@@ -496,7 +496,7 @@ class PinballToggle extends K.Base {
     this.cv = this.$('canvas'); this.btn = this.$('button');
     this.btn.setAttribute('aria-checked', String(this.on));
     const labelRoot = this.getRootNode();
-    const labelledBy = (this.getAttribute('aria-labelledby') || '').trim().split(/\\s+/).map((id) => labelRoot.getElementById?.(id)?.textContent?.trim() || '').filter(Boolean).join(' ');
+    const labelledBy = (this.getAttribute('aria-labelledby') || '').trim().split(/\s+/).map((id) => labelRoot.getElementById?.(id)?.textContent?.trim() || '').filter(Boolean).join(' ');
     const accessibleName = labelledBy || this.getAttribute('aria-label')?.trim() || this.getAttribute('label')?.trim() || 'Toggle';
     this.btn.setAttribute('aria-label', accessibleName);
     this.restyle();
