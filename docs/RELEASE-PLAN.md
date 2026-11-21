@@ -103,15 +103,17 @@ Completed and evidenced:
 - [x] Verify both shared base runtimes dispatch custom events with bubbling and composed enabled.
 - [x] Copy all 29 registry bundles into a clean temporary consumer using the exact declared source paths and install targets.
 - [x] Load each bundle independently and test four mixed load orders, all 30 tag registrations, browser errors, and shared-runtime singleton identity.
+- [x] Verify actual runtime getter/setter descriptor shapes for documented Read/write and Read-only properties in Chromium.
+- [x] Verify each documented public method exists on the corresponding isolated custom-element instance.
 - [x] Compare form-association claims with `static formAssociated = true` and `formValue()` declarations.
 - [x] Check source, generated bundle, demo, guide, and registry entry presence/linkage.
 - [x] Run the source-to-contract audit as part of repository validation.
 - [x] Verify all 29 standalone demo routes in headless Chromium for correct URL, expected tag registration and demo element.
 
-Latest verification on `4dc11f0f0f886860b5b9f2331bef4d922044ee9d`:
-- Validate [run 44848315411](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44848315411): **611 repository checks**, **540 contract-audit checks**, full Chromium suite and all 29 standalone demos passed.
-- Pages generation/deployment [run 44848315301](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44848315301): passed.
-- The clean consumer audit reports **216 passed, 0 failed**, including all 29 isolated bundles and four mixed load orders.
+Latest verification on `16ee3ba9997d9d9e4c78b941d7c170f9bdd9d245`:
+- Validate [run 44848925692](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44848925692): **611 repository checks**, **540 contract-audit checks**, **730 integrity checks**, full Chromium suite and all 29 standalone demos passed.
+- Pages generation/deployment [run 44848925653](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44848925653): passed.
+- The clean consumer audit reports **283 passed, 0 failed**, including all 29 isolated bundles, 4 mixed load orders, all documented runtime property descriptors, and public method presence.
 
 Historical evidence (these runs are not a substitute for rerunning after changes):
 - Static component contract audit: **424 checks passed, 0 failed** on `dea5484f5beae9d34a34515b614acd0255938278`.
@@ -126,7 +128,7 @@ Still required:
 - [ ] Verify every documented keyboard path and pointer/touch interaction, not only one happy path.
 - [ ] Verify form values, native constraint validation, disabled fieldset, reset and state-restore behavior for every applicable component in supported browsers.
 - [ ] Review styling hooks, responsive limits, WebGL fallback, audio behavior and reduced-motion statements against source and observed rendering.
-- [ ] Complete and record a manual review of all 29 component API guides.
+- [ ] Complete and record a manual review of all 29 component API guides. Track each guide in [PHASE-1-API-GUIDE-REVIEW.md](PHASE-1-API-GUIDE-REVIEW.md).
 
 Exit gate:
 - The inventory covers all bundles, tags, demos, guides and registry entries.

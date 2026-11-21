@@ -1,17 +1,19 @@
 # 🧪 Phase 1–2 acceptance matrix
 
 > **Purpose:** Evidence ledger for the contract audit (Phase 1) and functional regression coverage (Phase 2).
-> **Baseline reviewed:** `main` at `4dc11f0f0f886860b5b9f2331bef4d922044ee9d` (21 November 2026).
+> **Baseline reviewed:** `main` at `16ee3ba9997d9d9e4c78b941d7c170f9bdd9d245` (21 November 2026).
 > **Rule:** A check is complete only when an executable test or dated manual evidence exists. Source presence and a successful build are not behavioral proof.
 
 ## Latest CI evidence
 
-- **Validate:** [run 44848315411](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44848315411) passed on `4dc11f0f0f886860b5b9f2331bef4d922044ee9d`.
-- **GitHub Pages generation/deployment:** [run 44848315301](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44848315301) passed on the same commit.
+- **Validate:** [run 44848925692](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44848925692) passed on `16ee3ba9997d9d9e4c78b941d7c170f9bdd9d245`.
+- **GitHub Pages generation/deployment:** [run 44848925653](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44848925653) passed on the same commit.
 - Repository validation: **611 checks passed, 0 failed**.
 - Expanded source-to-contract audit: **540 checks passed, 0 failed**.
+- Integrity audit: **730 checks passed, 0 failed**, including 319 local Markdown links.
 - Full Chromium interaction and standalone-route suite: **all passed**, including 29/29 standalone demos.
-- Clean registry consumer test: **216 checks passed, 0 failed**. All 29 registry bundles passed in isolation and all four mixed load orders passed, with all 30 custom-element tags registered, no browser script errors, and stable singleton identities for `PinballKit` and `PinmotionExtras`.
+- Clean registry consumer test: **283 checks passed, 0 failed**. All 29 registry bundles passed in isolation and all four mixed load orders passed, with all 30 custom-element tags registered, no browser script errors, and stable singleton identities for `PinballKit` and `PinmotionExtras`.
+- Runtime consumer checks also verified every documented read/write or read-only property descriptor shape and every documented public method on its corresponding custom element.
 - The successful consumer test uses the actual `registry.json` paths/targets in a clean temporary project. It does not claim npm package publication or cross-browser support.
 - This evidence closes the clean-consumer and mixed-load-order rows only. It does not close the broader runtime semantics, complete keyboard/pointer, manual API guide review, or real-device criteria.
 
@@ -29,11 +31,11 @@
 | Bundle, tag, demo, guide and registry inventory | Generated inventory plus source audit for 29 bundles, 30 tags, 29 demos, 29 guides and 29 registry items | ✅ Automated/static |
 | Tag registration uniqueness and metadata parity | `tools/audit-components.mjs` | ✅ Automated/static |
 | `observedAttributes` declaration parity | Source-to-spec audit | ✅ Automated/static |
-| Public property/method names | Source audit verifies documented names, read/write and read-only accessors, and method parameter counts; default-value semantics and return values remain open | 🟡 Partial |
+| Public property/method names | Source audit checks names and method parameter counts; Chromium consumer checks actual read/write/read-only prototype descriptors and that documented methods exist; defaults, return values and method effects remain open | 🟡 Partial |
 | Custom-event detail keys | Static audit compares every literal source payload shape with the documented event variants; runtime values, order and trigger conditions remain sampled, not exhaustive | 🟡 Partial |
 | Attribute defaults and normalization | No exhaustive value-by-value audit | ⏳ Pending |
 | Attribute reflection and update timing | Not exhaustively tested | ⏳ Pending |
-| Property descriptors, getters/setters, return values | Read/write and read-only accessor presence is checked against source; runtime values, side effects and return-value semantics are not exhaustive | 🟡 Partial |
+| Property descriptors, getters/setters, return values | Actual runtime getter/setter descriptor shape is checked for all documented Read/write and Read-only properties; values, side effects and return-value semantics are not exhaustive | 🟡 Partial |
 | Event order, payload values, propagation and dispatch conditions | Browser suite has selected bubbling/event checks; no exhaustive matrix | 🟡 Partial |
 | Form association declarations | Static `formAssociated` and `formValue()` checks | ✅ Automated/static |
 | Form lifecycle, reset, restore, validation | Both bases implement reset/restore/disabled callbacks; Chromium verifies native reset and submitted values for all 14 form-associated controls, plus representative state restore and disabled-fieldset behavior; Text Field/Text Area/Date Picker constraint validity passes; exhaustive remaining controls and cross-browser restore remain open | 🟡 Partial |
@@ -41,7 +43,7 @@
 | Pointer/touch behavior | Selected interactions tested in Chromium | 🟡 Partial |
 | Styling hooks, responsive limits, WebGL/audio/reduced motion claims | Documented; not comprehensively exercised for every component | 🟡 Partial |
 | Mixed-bundle order and runtime collisions | Clean consumer test loads all 29 bundles in four orders and checks all 30 tags, browser errors, and stable singleton identities for both shared runtimes | ✅ Automated |
-| Clean consumer registry installation | All 29 registry files are copied to their declared targets in a clean temporary project and loaded independently | ✅ Automated |
+| Clean consumer registry installation | All 29 registry files are copied to their declared targets in a clean temporary project, loaded independently, and checked for documented property descriptors and public methods | ✅ Automated |
 | Manual guide review | No per-guide sign-off ledger | ⏳ Pending |
 
 ### Phase 1 exit criteria

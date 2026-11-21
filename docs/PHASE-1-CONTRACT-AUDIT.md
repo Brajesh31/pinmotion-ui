@@ -1,7 +1,7 @@
 # 🔎 Phase 1 contract audit evidence
 
 > **Status:** Phase 1 remains in progress  
-> **Verified code/test commit:** `4dc11f0f0f886860b5b9f2331bef4d922044ee9d`  
+> **Verified code/test commit:** `16ee3ba9997d9d9e4c78b941d7c170f9bdd9d245`  
 > **Date:** 21 November 2026  
 > **Branch:** `main`
 
@@ -11,11 +11,12 @@ The latest completed Validate run on the verified commit passed:
 
 - **540 source-to-contract audit checks, 0 failures.**
 - **611 repository validation checks, 0 failures.**
+- **730 integrity checks, 0 failures**, including 319 local Markdown links.
 - The full Chromium interaction suite ended with `all passed`.
 - All 29 standalone demo routes passed in fresh browser navigations.
-- The clean registry consumer test reported **216 passed, 0 failed**.
+- The clean registry consumer test reported **283 passed, 0 failed**.
 
-Evidence: [Validate run 44848315411](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44848315411). The Pages generation/deployment workflow also succeeded: [run 44848315301](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44848315301).
+Evidence: [Validate run 44848925692](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44848925692). The Pages generation/deployment workflow also succeeded: [run 44848925653](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44848925653).
 
 ## 2. What the source-to-contract audit now checks
 
@@ -42,6 +43,8 @@ Each bundle is loaded independently and checked for:
 - successful script execution;
 - expected custom-element registration and Shadow DOM initialization;
 - the appropriate runtime family (`PinballKit` or `PinmotionExtras`);
+- actual JavaScript prototype descriptors for every documented read/write and read-only property;
+- actual method presence on the corresponding custom-element instance for every documented public method;
 - uncaught script or runtime errors.
 
 The full set is then loaded in four orders:
@@ -51,7 +54,7 @@ The full set is then loaded in four orders:
 3. Interleaved original and utility bundles.
 4. Reverse order of all 29 bundles.
 
-Every order registered all 30 custom-element tags without browser errors and retained one stable object instance for each shared runtime. The four order checks and per-bundle checks are included in the **216 passed, 0 failed** result.
+Every order registered all 30 custom-element tags without browser errors and retained one stable object instance for each shared runtime. The four order checks, per-bundle checks, runtime property-descriptor checks, and public method existence checks are included in the **283 passed, 0 failed** result.
 
 ## 4. API corrections made during source review
 
@@ -73,9 +76,9 @@ Phase 1 is **not complete**. The following gaps remain open:
 - Every documented keyboard path, pointer/touch path and disabled interaction for all applicable components.
 - Complete per-control validity and form-state restoration, plus cross-browser lifecycle checks.
 - Full review of styling hooks, responsive limits, renderer/audio fallbacks and reduced-motion behavior against observed rendering.
-- Manual source-to-guide review and sign-off for all 29 API guides.
+- Manual source-to-guide review and sign-off for all 29 API guides, tracked in [PHASE-1-API-GUIDE-REVIEW.md](PHASE-1-API-GUIDE-REVIEW.md).
 
-The automated contract audit and clean consumer test close the static API and distribution-install rows, not these remaining behavioral and manual review requirements.
+The automated source audit and runtime consumer checks close the static contract, runtime descriptor/method availability, and clean distribution-install rows, not the remaining value semantics, defaults, comprehensive event/input behavior, and manual review requirements.
 
 ## 6. Change boundary
 

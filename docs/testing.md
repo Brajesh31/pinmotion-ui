@@ -26,7 +26,7 @@ npm run check
 1. `npm run build:check` ensures the seven PinballKit bundles match embedded core/art and the 22 utility bundles match `tools/extra-core.js` plus `extras-src/`.
 2. `npm run docs:check` ensures the generated component docs, demos, gallery, registry, and `llms.txt` match `tools/spec.mjs` and current bundle sizes.
 3. `npm run validate` checks required files, 29 component IDs, unique IDs/tags, generated page and registry relationships, package/lockfile metadata, JavaScript syntax, and GitHub Pages action settings. It also runs `tools/audit-components.mjs` to compare source registrations and observed-attribute declarations, actual form-associated declarations and value methods, documented property/method names, custom-event detail keys (including plain Event exceptions), component demos/guides, and registry coverage.
-4. `npm run test:consumer` is a separate mandatory Validate CI step. It copies all 29 registry files into an isolated temporary consumer using their declared install targets, tests each bundle independently, then tests four mixed script orders for custom-element registration, runtime singleton reuse and browser errors.
+4. `npm run test:consumer` is a separate mandatory Validate CI step. It copies all 29 registry files into an isolated temporary consumer using their declared install targets, tests each bundle independently, then tests four mixed script orders for custom-element registration, runtime singleton reuse and browser errors. It also checks each documented read/write/read-only property descriptor and verifies documented public methods exist on the matching element.
 5. `npm run integrity` checks bundled source and generated artifact integrity.
 
 The check scripts are intended to detect stale output; use the non-check commands only when you intend to regenerate files.
@@ -86,9 +86,9 @@ Run:
 npm run test:consumer
 ```
 
-This command creates a temporary consumer project without adding dependencies. It copies the 29 bundles using the `files[].path` and `files[].target` declarations in `registry.json`. It then loads each bundle alone and checks its documented custom-element tags, Shadow DOM initialization, runtime family and uncaught script errors. Finally, it loads all 29 bundles in four orders: original mechanical first, utility first, interleaved, and reverse order. Each order must register all 30 tags while retaining exactly one `PinballKit` and one `PinmotionExtras` runtime instance. The temporary consumer and browser profile are removed when the test finishes.
+This command creates a temporary consumer project without adding dependencies. It copies the 29 bundles using the `files[].path` and `files[].target` declarations in `registry.json`. It then loads each bundle alone and checks its documented custom-element tags, Shadow DOM initialization, runtime family and uncaught script errors. For every documented read/write or read-only property, it inspects the actual prototype descriptor to verify the expected getter/setter shape. It also checks that each documented public method exists on the scoped custom-element instance. Finally, it loads all 29 bundles in four orders: original mechanical first, utility first, interleaved, and reverse order. Each order must register all 30 tags while retaining exactly one `PinballKit` and one `PinmotionExtras` runtime instance. The temporary consumer and browser profile are removed when the test finishes.
 
-The consumer test validates file install paths and script/runtime behavior. It does not claim that every API interaction or keyboard path has been tested in every browser.
+The consumer test validates registry file install paths, script/runtime behavior, documented accessor descriptor shapes, and public method availability. It does not validate each property's returned value, setter side effects, method return values, every API interaction, or every keyboard path in all browsers.
 
 ## 5. Screenshot and film tooling
 
