@@ -70,6 +70,7 @@ The Validate GitHub Actions workflow installs Chrome and runs this suite as a ma
 - Drain delete, undo, and commit lifecycle;
 - Bumper and bumper-cluster hit scoring;
 - the Plunger short-pull and full-pull behavior;
+- Toast manual/timed dismissal, timer replacement, disconnect cleanup and reconnect behavior;
 - disabled-state behavior;
 - horizontal overflow at the mobile-width viewport.
 
@@ -110,6 +111,6 @@ Do not describe the project as cross-browser certified based on the current chec
 - The browser suite is a mandatory Validate workflow step. A passing Chrome run is not evidence of Safari, Firefox, real-device, or screen-reader support.
 - Native `form.reset()` and submitted values are covered for all 14 form-associated controls in Chromium. Serialized state restoration is covered with representative checked and scalar-value controls.
 - Disabled-fieldset exclusion and re-enablement are covered for both component bases. Text Field, Text Area and Date Picker expose required, type-mismatch and date-range validity through `ElementInternals`; Chromium verifies invalid-state propagation and recovery. Invalid events are asserted on the custom hosts, and utility checked/scalar state restoration is tested. Exhaustive per-control constraint validation and cross-browser form lifecycle behavior remain open. See [Phase 2 test plan](PHASE-2-TEST-PLAN.md) and [acceptance matrix](PHASE-1-2-ACCEPTANCE-MATRIX.md).
-- Latest passing form lifecycle evidence: [Validate run 44842827810](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44842827810), commit `be4211811526d2f2a8f8f046102201e1f5de32b5`.
+- Latest passing form lifecycle evidence: [Validate run 44843352695](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44843352695), commit `f34a32e0f7fe9414c20d14e33eedb3e39b4593ed`.
 
 These gaps are tracked as explicit validation work, not assumed passes.
