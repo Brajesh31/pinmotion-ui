@@ -10,6 +10,7 @@ import { dirname, extname, join, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { SPEC } from './spec.mjs';
 import { LEGACY_NAMES, EXTRA_NAMES } from './build.mjs';
+import { DEFAULT_CONTRACT_PROBES } from './phase1-contract-probes.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const CHROME = process.env.CHROME || 'chromium';
@@ -270,6 +271,14 @@ try {
     const methodResults = JSON.parse(await evaluate(methodExpression));
     for (const method of methodResults) {
       check(item.id + ': runtime public method ' + method.name, method.ok, JSON.stringify(method));
+    }
+
+    const defaultProbe = DEFAULT_CONTRACT_PROBES[item.id];
+    if (defaultProbe) {
+      const defaultResults = await evaluate('(' + defaultProbe.toString() + ')()');
+      for (const probe of defaultResults) {
+        check(item.id + ': default contract ' + probe.label, probe.ok, probe.detail);
+      }
     }
 
     const observedResults = JSON.parse(await evaluate('JSON.stringify((window.__contractObservedAttributes||[]).map(plan => {const definition=customElements.get(plan.tag);const actual=definition?.observedAttributes||[];return {tag:plan.tag,name:plan.name,type:plan.type,registered:!!definition,observed:actual.includes(plan.name),actual};}))'));
