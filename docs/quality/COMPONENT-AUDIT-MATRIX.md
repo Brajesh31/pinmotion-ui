@@ -48,3 +48,8 @@
 - **Final evidence:** CI run, commit SHA, issue references, screenshots and manual QA results linked.
 
 A row moves to **Complete** only when every applicable column is evidenced and all P0/P1 defects are closed. If a column is still pending or the test was skipped, the component is not complete.
+
+
+## Per-component report files
+
+When a component batch starts, create one report at `docs/component-audits/<component-id>.md` using [the component audit template](COMPONENT-AUDIT-TEMPLATE.md). Do not create a bulk set of empty reports. Each report is completed as the component passes its own phase and links all code, screenshot, test, documentation and CI evidence.
