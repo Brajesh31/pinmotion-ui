@@ -20,6 +20,7 @@
     "test": "npm run validate",
     "test:browser": "node tools/test.mjs http://127.0.0.1:8000/gallery/",
     "test:toggle-fallback": "node tools/test-toggle-fallback.mjs http://127.0.0.1:8000/toggle/",
+    "test:toggle-context-loss": "node tools/test-toggle-context-loss.mjs http://127.0.0.1:8000/toggle/",
     "check": "npm run build:check && npm run docs:check && npm run validate && npm run integrity",
     "screenshots": "node tools/shot.mjs",
     "integrity": "node tools/integrity.mjs",

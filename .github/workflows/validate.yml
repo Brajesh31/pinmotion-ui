@@ -65,6 +65,7 @@ jobs:
 
           npm run test:browser
           npm run test:toggle-fallback
+          npm run test:toggle-context-loss
 
       - name: Verify clean registry consumer installs and mixed bundle load orders
         env:
