@@ -103,11 +103,11 @@
 | Disabled | Attempt pointer, keyboard and programmatic interactions; confirm values/events/form data remain correct | 🟡 Partial |
 | Invalid | Native constraint validity and invalid events for required/type/min/max/step/maxlength controls | ⏳ Pending |
 | Boundaries | Min/max, first/last choice, empty option list, zero, maximum and out-of-range normalization | ⏳ Pending |
-| Reset | Assert form reset behavior; add callbacks only after behavior contract is agreed | ⚠️ Known gap |
+| Reset | Native reset restores defaults and submitted values for all 14 form-associated controls | ✅ Chromium covered |
 | Programmatic APIs | Property setters, methods, attribute changes, event suppression/dispatch and form-value synchronization | 🟡 Partial |
 | Input modalities | Pointer/touch and keyboard paths for every documented component | 🟡 Partial |
 | Event contract | Exact payload, count, order, bubbles, composed and default prevention where relevant | 🟡 Partial |
-| Forms | Successful controls, disabled controls, required validity, fieldset disabled, reset, state restore | 🟡 Partial |
+| Forms | All 14 controls reset correctly; representative state restore and both-base fieldset behavior pass; per-control validity and cross-browser restore remain | 🟡 Partial |
 | Async/timers | Drain undo/commit and Toast auto-dismiss including disconnect/cleanup | 🟡 Partial |
 | Full gallery isolation | A component exception must produce diagnostics without preventing unaffected cards from becoming ready | ⏳ Pending |
 | Standalone vs gallery parity | Core interactions in each solo bundle and full-gallery load | 🟡 Partial |
@@ -120,11 +120,14 @@
 - [ ] Each documented keyboard interaction is independently tested.
 - [ ] Each public property and method has programmatic behavior tests.
 - [ ] Exact event names, payload values, event counts/order and bubbling/composed flags are asserted.
-- [ ] Form submission, validation, disabled-fieldset, reset and applicable state-restore behavior are tested.
+- [x] Native reset and submitted values are verified for all 14 form-associated controls in Chromium.
+- [x] Disabled-fieldset exclusion and re-enablement are verified for both component bases.
+- [x] Representative serialized state restoration is verified for checked and scalar-value controls.
+- [ ] Complete per-control constraint validation and cross-browser state-restore coverage.
 - [ ] Async transitions, timers, undo/commit and disconnect cleanup are tested.
 - [ ] All 29 bundles pass core behavior tests alone and together.
 - [ ] Fault isolation proves a broken component cannot stop unrelated gallery cards.
-- [ ] CI runs the suite and the latest successful run is linked here.
+- [x] CI runs the suite and the latest successful run is linked here: [Validate run 44841618203](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44841618203).
 - [ ] No known functional regression remains, or every accepted limitation is documented and approved.
 
 **Phase 2 status: IN PROGRESS.** Existing tests are retained; this phase is not considered complete until the gaps above are closed and CI evidence is attached.
