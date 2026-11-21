@@ -32,7 +32,7 @@
 | Property descriptors, getters/setters, return values | Not exhaustively tested | ⏳ Pending |
 | Event order, payload values, propagation and dispatch conditions | Browser suite has selected bubbling/event checks; no exhaustive matrix | 🟡 Partial |
 | Form association declarations | Static `formAssociated` and `formValue()` checks | ✅ Automated/static |
-| Form lifecycle, reset, restore, validation | Both bases implement reset/restore/disabled callbacks; Chromium verifies native reset and submitted values for all 14 form-associated controls, plus representative state restore and disabled-fieldset behavior; per-control validity and cross-browser restore remain open | 🟡 Partial |
+| Form lifecycle, reset, restore, validation | Both bases implement reset/restore/disabled callbacks; Chromium verifies native reset and submitted values for all 14 form-associated controls, plus representative state restore and disabled-fieldset behavior; Text Field/Text Area/Date Picker constraint validity passes; exhaustive remaining controls and cross-browser restore remain open | 🟡 Partial |
 | Keyboard behavior | Selected controls tested; not every documented key path for every control | 🟡 Partial |
 | Pointer/touch behavior | Selected interactions tested in Chromium | 🟡 Partial |
 | Styling hooks, responsive limits, WebGL/audio/reduced motion claims | Documented; not comprehensively exercised for every component | 🟡 Partial |
@@ -50,7 +50,7 @@
 - [ ] Event payload values, order, bubbling/composed behavior and trigger conditions are verified.
 - [ ] Every documented keyboard and pointer/touch interaction is covered.
 - [x] Shared bases implement default-state capture, `formResetCallback`, `formStateRestoreCallback`, and disabled-fieldset callbacks.
-- [x] Chromium verifies native reset and submitted values for all 14 form-associated controls: [Validate run 44841618203](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44841618203).
+- [x] Chromium verifies native reset and submitted values for all 14 form-associated controls: [Validate run 44842279022](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44842279022).
 - [x] Disabled-fieldset exclusion and re-enablement are verified for both original and utility component bases.
 - [x] Representative serialized state restoration is verified for checked and scalar-value controls.
 - [ ] Complete per-control validity/constraint validation and browser-driven state-restore matrix.
@@ -101,7 +101,7 @@
 | Defaults and initial values | Assert documented initial state and initial ARIA/form state for every component | ⏳ Pending |
 | Changed states | Assert each public interaction changes state once and emits the documented payload | 🟡 Partial |
 | Disabled | Attempt pointer, keyboard and programmatic interactions; confirm values/events/form data remain correct | 🟡 Partial |
-| Invalid | Native constraint validity and invalid events for required/type/min/max/step/maxlength controls | ⏳ Pending |
+| Invalid | Chromium verifies required, email type mismatch and date range-underflow propagation into `ElementInternals` for Text Field, Text Area and Date Picker; exhaustive remaining controls and invalid-event coverage remain | 🟡 Partial |
 | Boundaries | Min/max, first/last choice, empty option list, zero, maximum and out-of-range normalization | ⏳ Pending |
 | Reset | Native reset restores defaults and submitted values for all 14 form-associated controls | ✅ Chromium covered |
 | Programmatic APIs | Property setters, methods, attribute changes, event suppression/dispatch and form-value synchronization | 🟡 Partial |
