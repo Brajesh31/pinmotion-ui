@@ -57,7 +57,7 @@ For applicable controls assert:
 - `form.reset()` restores the documented initial value.
 - Browser state restoration has a documented contract and tested behavior if supported.
 
-**Implemented baseline:** Both shared bases now capture writable `checked`/`value` state after setup, serialize it as the ElementInternals restoration state, implement `formResetCallback` and `formStateRestoreCallback`, and propagate disabled-fieldset state. The browser suite now includes passing representative reset, state-restore and fieldset assertions. Evidence: [Validate run 44839251769](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44839251769). Extend this baseline across every form-associated control and browser before closing Phase 2.
+**Implemented baseline:** Both shared bases capture writable `checked`/`value` state after setup, serialize it as the ElementInternals restoration state, implement `formResetCallback` and `formStateRestoreCallback`, and propagate disabled-fieldset state. Chromium now verifies native reset and submitted form values for all 14 form-associated controls across both component families. It also verifies representative serialized state restoration and disabled-fieldset exclusion/restoration for both families. Evidence: [Validate run 44841618203](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44841618203), commit `1d6eaf3ac358d7c19d5e4a3eacae29e683af1cbe`. Cross-browser reset/state restoration and exhaustive per-control validity remain open.
 
 ### E. Asynchronous behavior and cleanup
 
