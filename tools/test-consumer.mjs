@@ -87,7 +87,7 @@ check('registry has exactly the 29 canonical component entries',
 
 const htmlPage = (scripts, tags, mixed = false) => {
   const contractScript = !mixed && ((scripts[0]?.properties?.length || 0) + (scripts[0]?.methods?.length || 0) + (scripts[0]?.observedAttributes?.length || 0) > 0)
-    ? '<script>window.__contractProperties=' + JSON.stringify(scripts[0].properties || []) + ';window.__contractMethods=' + JSON.stringify(scripts[0].methods || []) + ';window.__contractObservedAttributes=' + JSON.stringify((scripts[0].observedAttributes || []).map(name => ({tag:scripts[0].tags[0],name}))) + ';</script>'
+    ? '<script>window.__contractProperties=' + JSON.stringify(scripts[0].properties || []) + ';window.__contractMethods=' + JSON.stringify(scripts[0].methods || []) + ';window.__contractObservedAttributes=' + JSON.stringify((scripts[0].observedAttributes || []).map(attribute => ({tag:scripts[0].tags[0],...attribute}))) + ';</script>'
     : '';
   const snapshots = mixed
     ? '<script>window.__loaded=[];window.__errors=[];window.__runtimeObjects=new WeakMap();window.__nextRuntimeId=0;window.__runtimeId=value=>{if(!value||(typeof value!=="object"&&typeof value!=="function"))return null;if(!window.__runtimeObjects.has(value))window.__runtimeObjects.set(value,++window.__nextRuntimeId);return window.__runtimeObjects.get(value)};addEventListener("error",e=>window.__errors.push(e.message||"script error"));addEventListener("unhandledrejection",e=>window.__errors.push(String(e.reason)));</script>'
