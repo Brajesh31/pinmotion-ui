@@ -6,8 +6,8 @@ import { createServer as createNetServer } from 'node:net';
 import { copyFileSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { spawn } from 'node:child_process';
 import { tmpdir } from 'node:os';
-import { extname, join, resolve, sep } from 'node:path';
-import { dirname, fileURLToPath } from 'node:url';
+import { dirname, extname, join, resolve, sep } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { SPEC } from './spec.mjs';
 import { LEGACY_NAMES, EXTRA_NAMES } from './build.mjs';
 
