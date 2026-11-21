@@ -132,11 +132,11 @@
 
 **Phase 2 status: IN PROGRESS.** Existing tests are retained; this phase is not considered complete until the gaps above are closed and CI evidence is attached.
 
-## Known implementation defects to track
+## Known implementation constraints and verified motion behavior
 
 1. **Form reset and state restore:** Both bases now snapshot writable form state after setup, restore defaults on native form reset, and accept serialized state through `formStateRestoreCallback`. New Chromium tests cover representative controls from both component families. The full component-by-component matrix and cross-browser behavior remain open.
-3. **Plunger reduced motion:** Pull and shot animations continue under `prefers-reduced-motion: reduce`.
-4. **Progress reduced motion:** Indeterminate progress animation has no dedicated reduced-motion override.
+3. **Plunger reduced motion (verified):** The shared runtime skips spring/drop/bounce/ball-travel animation under `prefers-reduced-motion: reduce`, while preserving the full-pull `send` action. The Chromium suite verifies a programmatic full pull sends without ball travel.
+4. **Progress reduced motion (verified):** `extras-src/progress.js` disables the indeterminate fill animation and transform in its `prefers-reduced-motion` media query. The Chromium suite verifies this behavior.
 5. **Drop Targets reduced motion:** The `bonus` event is tied to the normal-motion impact callback. Consumers needing reliable completion should use `change.detail.allChecked`.
 
 These are recorded as facts from the inspected source/documentation, not silently treated as passing tests. Application component source is not modified by this audit ledger.

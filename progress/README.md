@@ -72,7 +72,7 @@ This standalone file embeds the compact Pinmotion Extras base and this component
 
 ## ♿ Motion and accessibility
 
-The indeterminate fill moves with a CSS animation. Consider disabling the indeterminate attribute for reduced-motion contexts; the current version does not add a separate reduced-motion animation override.
+The indeterminate fill moves with a CSS animation. A `prefers-reduced-motion` media query disables the animation and transform while retaining the indeterminate progress state.
 
 The interactive control lives in an open Shadow DOM and uses the semantic role and focus behavior described above. Set a useful `label`, or provide `aria-label` / `aria-labelledby` before connection. The repository's optional automated interaction script uses headless Chromium; it is not a substitute for a screen-reader audit.
 

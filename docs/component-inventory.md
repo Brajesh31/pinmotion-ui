@@ -119,13 +119,13 @@ These are the original Pinball UI controls. Their distinctive photographed mecha
 - **Keyboard:** The internal control is a native button. Hold Space or Enter to pull it back; release the key to shoot. A synthetic button activation, such as an assistive-technology click, invokes a full `fire()` sequence.
 - **Forms:** The plunger is an action control and does not expose a form value.
 - **Styling:** Set `--pb-size` to change the knob height (44px by default). Leave roughly one knob-height of space on the pull side and room on the tip side for the ball to travel. Set `--pb-focus` to change the visible focus outline.
-- **Reduced motion:** The Plunger is the current reduced-motion exception. Its pull and shot animation still play when `prefers-reduced-motion: reduce` is active.
+- **Reduced motion:** The shared runtime honours `prefers-reduced-motion`; spring, drop, bounce and ball-travel animations are skipped while the full-pull action and `send` event remain available.
 - **References:** [API guide](../plunger/README.md) · [Live demo](../plunger/)
 
 **Implementation notes and limits:**
 - The ball travels across the page above surrounding content before it is removed. Allow sufficient open space around the control.
 - The public convenience method documented for application use is `fire()`; `send` is the completion event.
-- Reduced motion is not honoured for this component yet.
+- Reduced-motion mode skips the plunger pull, drop, bounce and ball-travel visuals while preserving the action event.
 - The travelling ball is drawn above page content and crosses the page before it disappears.
 
 ### 4. Stepper (`stepper`)
@@ -391,7 +391,7 @@ These controls use the separate PinmotionExtras base and native/CSS implementati
 - **Keyboard:** Not focusable because this is a status indicator, not an interactive control.
 - **Forms:** Does not contribute a form value.
 - **Styling:** The component sits in the shared Pinball UI metal deck with brushed-steel edges, four recessed fasteners, a component-specific backglass emblem, three pilot lamps, a chrome ball marker and a dark inset playfield. If PinballKit is already present, the marker uses the original shared chrome-ball shader; otherwise it falls back to CSS. Width is responsive up to 320px. The fill uses a repeating amber lane stripe and a native progressbar role with min, max and current values.
-- **Reduced motion:** The indeterminate fill moves with a CSS animation. Consider disabling the indeterminate attribute for reduced-motion contexts; the current version does not add a separate reduced-motion animation override.
+- **Reduced motion:** A `prefers-reduced-motion` media query disables the indeterminate fill animation and transform.
 - **References:** [API guide](../progress/README.md) · [Live demo](../progress/)
 
 **Implementation notes and limits:**

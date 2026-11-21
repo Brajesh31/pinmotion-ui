@@ -115,7 +115,7 @@ export const EXTRA_SPEC = [
     keyboard:'Not focusable because this is a status indicator, not an interactive control.',
     forms:'Does not contribute a form value.',
     styling:'Width is responsive up to 320px. The fill uses a repeating amber lane stripe and a native progressbar role with min, max and current values.',
-    motion:'The indeterminate fill moves with a CSS animation. Consider disabling the indeterminate attribute for reduced-motion contexts; the current version does not add a separate reduced-motion animation override.',
+    motion:'The indeterminate fill moves with a CSS animation. A prefers-reduced-motion media query disables the animation and transform while retaining the indeterminate progress state.',
     notes:['The visual percentage is clamped to the configured range.'],
     happens:[['Update value','The visible fill and aria-valuenow update.'],['Set indeterminate','The indicator shows ongoing activity without announcing a percentage.']],
     limits:['The progress element is informational and has no user input or completion event.']

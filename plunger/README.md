@@ -81,7 +81,7 @@ The shared chrome ball and lamps use WebGL. Set the instance's `silent` attribut
 
 ## ♿ Motion and accessibility
 
-The Plunger is the current reduced-motion exception. Its pull and shot animation still play when `prefers-reduced-motion: reduce` is active.
+The Plunger honours `prefers-reduced-motion` through the shared runtime. Reduced-motion mode skips the spring, drop, bounce and ball-travel animations while preserving the full-pull action and `send` event.
 
 The interactive control lives in an open Shadow DOM and uses the semantic role and focus behavior described above. Set a useful `label`, or provide `aria-label` / `aria-labelledby` before connection. The repository's optional automated interaction script uses headless Chromium; it is not a substitute for a screen-reader audit.
 
@@ -98,7 +98,7 @@ The interactive control lives in an open Shadow DOM and uses the semantic role a
 
 - The ball travels across the page above surrounding content before it is removed. Allow sufficient open space around the control.
 - The public convenience method documented for application use is `fire()`; `send` is the completion event.
-- Reduced motion is not honoured for this component yet.
+- In reduced-motion mode the pull, drop, bounce and ball-travel visuals are skipped; the action and `send` event remain available.
 - The travelling ball is drawn above page content and crosses the page before it disappears.
 - **It needs WebGL** for the ball and the lamps. Without it the control is still a working, focusable control, but the shader-drawn visuals are missing.
 - **One kind of picture.** It scales with `--pb-size` and stays sharp to about three times its default size, but it does not reflow: the photographed body keeps its shape.

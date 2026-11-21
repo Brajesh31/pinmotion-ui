@@ -346,7 +346,7 @@ export const SPEC = [
       "keyboard": "The internal control is a native button. Hold Space or Enter to pull it back; release the key to shoot. A synthetic button activation, such as an assistive-technology click, invokes a full `fire()` sequence.",
       "forms": "The plunger is an action control and does not expose a form value.",
       "styling": "Set `--pb-size` to change the knob height (44px by default). Leave roughly one knob-height of space on the pull side and room on the tip side for the ball to travel. Set `--pb-focus` to change the visible focus outline.",
-      "motion": "The Plunger is the current reduced-motion exception. Its pull and shot animation still play when `prefers-reduced-motion: reduce` is active.",
+      "motion": "The Plunger honours `prefers-reduced-motion` through the shared runtime. Reduced-motion mode skips the spring, drop, bounce and ball-travel animations while preserving the full-pull action and `send` event.",
       "notes": [
         "The ball travels across the page above surrounding content before it is removed. Allow sufficient open space around the control.",
         "The public convenience method documented for application use is `fire()`; `send` is the completion event."
@@ -370,7 +370,6 @@ export const SPEC = [
         ]
       ],
       "limits": [
-        "Reduced motion is not honoured for this component yet.",
         "The travelling ball is drawn above page content and crosses the page before it disappears."
       ]
     },
@@ -382,7 +381,7 @@ export const SPEC = [
     attrs: [['`label`', 'its name for screen readers', 'Send'], ['`flip`', 'puts the knob on the left: you pull left and the ball leaves to the right', 'off'], ['`disabled`', 'greys it out and ignores presses', 'off']],
     notes: ['**It is a `<button>`** in the shadow root. Hold Space or Enter to pull it back and let go to shoot; a screen reader can also press it, which does the whole pull.', '**Leave room on both sides.** About one knob-height on the knob\'s side for the pull, and on the tip\'s side for the ball. The ball leaves across the page: while it rolls away it is drawn above everything else, then removed.', '**Let go while the ball is still falling** and the plunger waits for it to land.', '**Size** is `--pb-size`, the height of the knob: 44 pixels by default.'],
     happens: [['drag the knob back', 'the spring squashes and the rod ratchets every fifth of the way'], ['pull all the way', 'a relay clicks, a ball drops in front of the tip, lands and bounces twice'], ['let go', 'the plunger slams forward, hits the ball and knocks it off the edge of the screen; `send` fires with `{ power }` at the hit'], ['let go early', 'it springs back home; nothing is sent']],
-    limits: ['**Reduced motion is not honoured yet.** The pull and the shot still play.', '**The ball crosses the whole page,** above everything else, for about a second.'],
+    limits: ['**The ball crosses the whole page,** above everything else, for about a second when reduced motion is not enabled.'],
   },
   {
     id: 'stepper', name: 'Stepper', tag: 'pinball-stepper', kind: 'stepper', categories: ['stepper', 'number', 'counter', 'pinball', 'webgl', 'animation'],
