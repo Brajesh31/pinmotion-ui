@@ -362,6 +362,8 @@ check('color picker: hex value and readout stay synchronized', await prop('color
 
  await ev(`(() => {
    const form = document.createElement('form'); form.id = '__pinmotion_validity_form';
+   window.__invalidTargets = [];
+   form.addEventListener('invalid', event => window.__invalidTargets.push(event.target.localName), true);
    const email = document.createElement('pinball-text-field');
    email.setAttribute('name', 'email'); email.setAttribute('type', 'email'); email.setAttribute('required', '');
    const note = document.createElement('pinball-text-area');
@@ -380,6 +382,10 @@ check('color picker: hex value and readout stay synchronized', await prop('color
  check('phase 2 forms: text field, text area and date picker expose native constraint failures',
    invalidControls.emailMissing && invalidControls.noteMissing && invalidControls.dateUnderflow && invalidControls.formInvalid,
    JSON.stringify(invalidControls));
+ const invalidTargets = JSON.parse(await ev('JSON.stringify(__invalidTargets)'));
+ check('phase 2 forms: invalid events identify all three invalid custom controls',
+   ['pinball-text-field','pinball-text-area','pinball-date-picker'].every(tag => invalidTargets.includes(tag)),
+   JSON.stringify(invalidTargets));
  await ev(`__validityControls.email.value = 'not-an-email'`);
  check('phase 2 forms: email typeMismatch is reflected to ElementInternals',
    await ev('__validityControls.email.internals.validity.typeMismatch') === true);
@@ -454,6 +460,12 @@ check('color picker: hex value and readout stay synchronized', await prop('color
  await ev(`document.querySelector('pinball-slider').formStateRestoreCallback(JSON.stringify({value:37}), 'restore')`);
  check('phase 2 forms: state restoration restores scalar values',
    await prop('slider','value') === 37 && await formValue('slider') === '37', await prop('slider','value'));
+ await ev(`document.querySelector('pinball-checkbox').formStateRestoreCallback(JSON.stringify({checked:true}), 'restore')`);
+ check('phase 2 forms: utility state restoration restores checked state',
+   await prop('checkbox','checked') === true, await prop('checkbox','checked'));
+ await ev(`document.querySelector('pinball-text-field').formStateRestoreCallback(JSON.stringify({value:'restored text'}), 'restore')`)
+ check('phase 2 forms: utility state restoration restores scalar value',
+   await prop('text-field','value') === 'restored text', await prop('text-field','value'));
 
  await ev(`(() => {
    const fieldset=document.createElement('fieldset'); fieldset.disabled=true;
