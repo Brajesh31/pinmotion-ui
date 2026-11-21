@@ -88,18 +88,23 @@ export const DEFAULT_CONTRACT_PROBES = Object.freeze({
     return [
       result('progress value defaults to 0', e.value === 0, e.value),
       result('progress maximum defaults to 100', e.max === 100, e.max),
-      result('progress starts determinate', !e.hasAttribute('indeterminate'), e.hasAttribute('indeterminate'))
+      result('progress starts determinate', !e.hasAttribute('indeterminate'), e.hasAttribute('indeterminate')),
+      result('progressbar is labelled by the visible label', e.track?.getAttribute('aria-labelledby') === 'label' && e.root.querySelector('#label')?.textContent === 'Progress', JSON.stringify({labelledby:e.track?.getAttribute('aria-labelledby'),label:e.root.querySelector('#label')?.textContent}))
     ];
   },
   meter: () => {
     const e = document.querySelector('pinball-meter');
-    return [result('meter value defaults to 0', e.value === 0, e.value)];
+    return [
+      result('meter value defaults to 0', e.value === 0, e.value),
+      result('meter role is labelled by the visible label', e.root.querySelector('[role=meter]')?.getAttribute('aria-labelledby') === 'label' && e.root.querySelector('#label')?.textContent === 'Level', JSON.stringify({labelledby:e.root.querySelector('[role=meter]')?.getAttribute('aria-labelledby'),label:e.root.querySelector('#label')?.textContent}))
+    ];
   },
   rating: () => {
     const e = document.querySelector('pinball-rating');
     return [
       result('rating value defaults to 0', e.value === 0, e.value),
-      result('rating maximum defaults to 5', e.max === 5, e.max)
+      result('rating maximum defaults to 5', e.max === 5, e.max),
+      result('rating radiogroup is labelled by its visible label', e.root.querySelector('[role=radiogroup]')?.getAttribute('aria-labelledby') === 'label' && e.root.querySelector('#label')?.textContent === 'Rating', JSON.stringify({labelledby:e.root.querySelector('[role=radiogroup]')?.getAttribute('aria-labelledby'),label:e.root.querySelector('#label')?.textContent}))
     ];
   },
   tabs: () => {
@@ -206,7 +211,8 @@ export const DEFAULT_CONTRACT_PROBES = Object.freeze({
     return [
       result('files defaults to an empty array', Array.isArray(e.files) && e.files.length === 0, JSON.stringify(e.files)),
       result('multiple selection defaults off', e.input?.multiple === false, e.input?.multiple),
-      result('accept filter defaults empty', e.input?.accept === '', e.input?.accept)
+      result('accept filter defaults empty', e.input?.accept === '', e.input?.accept),
+      result('file drop button uses its visible label as the accessible name', e.zone?.getAttribute('aria-labelledby') === 'label' && e.root.querySelector('#label')?.textContent === 'Drop files here or browse', JSON.stringify({labelledby:e.zone?.getAttribute('aria-labelledby'),label:e.root.querySelector('#label')?.textContent}))
     ];
   },
   'date-picker': () => {
