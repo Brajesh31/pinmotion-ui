@@ -56,6 +56,7 @@ const requiredFiles = [
   'tools/docs.mjs',
   'tools/spec.mjs',
   'tools/test.mjs',
+  'tools/test-consumer.mjs',
   'tools/shot.mjs',
   'tools/serve.mjs',
   'tools/validate.mjs',
@@ -149,6 +150,7 @@ check('package is private until distribution phase', packageJson.private === tru
 check('package has no third-party dependencies', !packageJson.dependencies && !packageJson.devDependencies);
 check('package and lockfile names match', packageJson.name === packageLock.name);
 check('package and lockfile versions match', packageJson.version === packageLock.version);
+check('clean registry consumer test is exposed through npm', packageJson.scripts?.['test:consumer'] === 'node tools/test-consumer.mjs');
 check('package uses the npm lockfile v3 format', packageLock.lockfileVersion === 3);
 check('package repository metadata matches', packageJson.repository?.url === `https://github.com/${REPO}.git`);
 check('package license is MIT', packageJson.license === 'MIT' && packageLock.packages?.['']?.license === 'MIT');
@@ -164,6 +166,7 @@ const syntaxFiles = [
   'tools/docs.mjs',
   'tools/spec.mjs',
   'tools/test.mjs',
+  'tools/test-consumer.mjs',
   'tools/shot.mjs',
   'tools/serve.mjs',
   'tools/validate.mjs',

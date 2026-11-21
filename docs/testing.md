@@ -26,7 +26,8 @@ npm run check
 1. `npm run build:check` ensures the seven PinballKit bundles match embedded core/art and the 22 utility bundles match `tools/extra-core.js` plus `extras-src/`.
 2. `npm run docs:check` ensures the generated component docs, demos, gallery, registry, and `llms.txt` match `tools/spec.mjs` and current bundle sizes.
 3. `npm run validate` checks required files, 29 component IDs, unique IDs/tags, generated page and registry relationships, package/lockfile metadata, JavaScript syntax, and GitHub Pages action settings. It also runs `tools/audit-components.mjs` to compare source registrations and observed-attribute declarations, actual form-associated declarations and value methods, documented property/method names, custom-event detail keys (including plain Event exceptions), component demos/guides, and registry coverage.
-4. `npm run integrity` checks bundled source and generated artifact integrity.
+4. `npm run test:consumer` is a separate mandatory Validate CI step. It copies all 29 registry files into an isolated temporary consumer using their declared install targets, tests each bundle independently, then tests four mixed script orders for custom-element registration, runtime singleton reuse and browser errors.
+5. `npm run integrity` checks bundled source and generated artifact integrity.
 
 The check scripts are intended to detect stale output; use the non-check commands only when you intend to regenerate files.
 
@@ -41,7 +42,8 @@ The Validate workflow:
 - checks the root page, gallery, toggle demo, component script response, and gallery artwork response;
 - verifies that a request for `.git/config` is not served.\n- parses the generated inline gallery runtime before browser execution;
 - verifies that the generated gallery error monitor and quoted component wire keys exist;
-- runs the mandatory headless Chrome suite against the locally served gallery.
+- runs the mandatory headless Chrome suite against the locally served gallery;
+- runs `npm run test:consumer` with the same Chrome executable to test isolated registry installs and mixed-bundle load order.
 
 The static-server smoke tests exercise HTTP behavior and basic file availability. They do not simulate component user input.
 
@@ -74,7 +76,19 @@ The Validate GitHub Actions workflow installs Chrome and runs this suite as a ma
 - disabled-state behavior;
 - horizontal overflow at the mobile-width viewport.
 
-The default browser executable is `chromium`. Set `CHROME` to the executable path when needed. The browser suite is run by the Validate CI workflow after the static-server checks. The `npm test` alias still runs the read-only Node validator only; use `npm run test:browser` for the complete browser suite while the local server is running.
+The default browser executable is `chromium`. Set `CHROME` to the executable path when needed. The browser suite is run by the Validate CI workflow after the static-server checks. The `npm test` alias still runs the read-only Node validator only; use `npm run test:browser` for the complete interaction suite while the local server is running.
+
+### Clean registry consumer and mixed-bundle tests
+
+Run:
+
+```sh
+npm run test:consumer
+```
+
+This command creates a temporary consumer project without adding dependencies. It copies the 29 bundles using the `files[].path` and `files[].target` declarations in `registry.json`. It then loads each bundle alone and checks its documented custom-element tags, Shadow DOM initialization, runtime family and uncaught script errors. Finally, it loads all 29 bundles in four orders: original mechanical first, utility first, interleaved, and reverse order. Each order must register all 30 tags while retaining exactly one `PinballKit` and one `PinmotionExtras` runtime instance. The temporary consumer and browser profile are removed when the test finishes.
+
+The consumer test validates file install paths and script/runtime behavior. It does not claim that every API interaction or keyboard path has been tested in every browser.
 
 ## 5. Screenshot and film tooling
 
