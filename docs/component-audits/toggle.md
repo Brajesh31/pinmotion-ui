@@ -122,6 +122,10 @@ Latest successful Validate run: [44888652944](https://github.com/Brajesh31/pinmo
 **Disposition:** Toggle has five confirmed defects (PM-005–PM-009) fixed with passing browser regressions. The original pinball artwork now survives WebGL being disabled through the Canvas 2D fallback. It is still not fully audited or release-ready because forced context-loss/asset-failure recovery, audible output, manual screen-reader, remaining visual states, broader lifecycle and Phase 0 identification/reproduction gates remain open. Its original pinball artwork is present at the three reference widths. Computed accessible names, keyboard focus, disabled suppression, form reset, reduced motion and pointer cancellation/reconnection are now tested. It is still not fully audited or release-ready because manual screen-reader, WebGL/audio failure, expanded visual-state, broader lifecycle and Phase 0 identification/reproduction gates remain open.
 
 
+### PM-010: idle WebGL context-loss wakeup
+
+The context-loss regression exposed a recovery gap: when the shared WebGL context was lost while the control was idle, the animation loop had stopped and the fallback renderer was not invoked until a later interaction marked the element dirty. The shared PinballKit frame callback will expose a wake hook; the WebGL context-loss handler will call it for all connected controls. This restarts rendering and allows Toggle to load and draw its original-art Canvas 2D fallback without waiting for user input. The regression checks fallback mode and visible pixels before changing checked state. CI verification is pending.
+
 ### PM-009: WebGL-unavailable visual loss
 
 The first captured no-WebGL run proved that Toggle remained interactive but its whole pinball visual disappeared. This is a real rendering defect: the old documentation described it as an accepted loss, but it violates the original-design requirement.

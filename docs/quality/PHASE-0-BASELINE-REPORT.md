@@ -155,3 +155,7 @@ Dedicated no-WebGL regression results: WebGL unavailable confirmed; 46,793 visib
 | Clean consumer and mixed bundle loading | 639 passed, 0 failed |
 
 PM-009 is fixed and verified. Phase 0 remains open for historical original-four identification or user confirmation, exact reproduction of PM-001/002/003, forced context-loss and asset-failure tests, audio output, and manual assistive-technology review.
+
+### PM-010, idle WebGL context-loss recovery
+
+The context-loss regression initially failed because the shared WebGL context became unavailable, but idle connected controls were not woken to run their Canvas 2D fallback. The fix adds a wake hook to each connected PinballKit frame callback and calls it for all connected controls when the shared WebGL context is lost. This starts fallback asset loading and drawing without waiting for a later user interaction. The context-loss regression explicitly checks fallback readiness and visible pixels before changing checked state. CI verification is pending.

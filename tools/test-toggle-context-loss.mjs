@@ -104,6 +104,7 @@ try {
     await sleep(100);
   }
   const afterLoss = JSON.parse(await evaluate("(() => { const e=document.querySelector('pinball-toggle'); const c=e.shadowRoot.querySelector('canvas'); const d=c.getContext('2d').getImageData(0,0,c.width,c.height).data; let visible=0,checksum=0; for(let i=0;i<d.length;i+=4){if(d[i+3]>20)visible++;checksum=(checksum+d[i]*3+d[i+1]*5+d[i+2]*7+d[i+3])%1000000007;} return JSON.stringify({webgl:PinballKit.getGL()!==null,mode:c.dataset.renderMode,ready:c.dataset.fallbackReady,visible,checksum,checked:e.checked}); })()"));
+  check('lost WebGL context immediately schedules an idle control repaint', recovered && afterLoss.mode === '2d-fallback', JSON.stringify({recovered,mode:afterLoss.mode,ready:afterLoss.ready}));
   check('lost WebGL context falls back to original Canvas 2D artwork', recovered && afterLoss.webgl === false && afterLoss.mode === '2d-fallback' && afterLoss.ready === 'true' && afterLoss.visible > 1000, JSON.stringify(afterLoss));
 
   await evaluate("document.querySelector('pinball-toggle').checked=true");
