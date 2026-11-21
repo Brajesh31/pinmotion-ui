@@ -32,7 +32,7 @@
 | Property descriptors, getters/setters, return values | Not exhaustively tested | ⏳ Pending |
 | Event order, payload values, propagation and dispatch conditions | Browser suite has selected bubbling/event checks; no exhaustive matrix | 🟡 Partial |
 | Form association declarations | Static `formAssociated` and `formValue()` checks | ✅ Automated/static |
-| Form lifecycle, reset, restore, validation | Shared callbacks implemented in both bases; Chromium verifies representative reset/state-restore/fieldset behavior; full per-control matrix not yet complete | 🟡 Partial |
+| Form lifecycle, reset, restore, validation | Both bases implement reset/restore/disabled callbacks; Chromium verifies native reset and submitted values for all 14 form-associated controls, plus representative state restore and disabled-fieldset behavior; per-control validity and cross-browser restore remain open | 🟡 Partial |
 | Keyboard behavior | Selected controls tested; not every documented key path for every control | 🟡 Partial |
 | Pointer/touch behavior | Selected interactions tested in Chromium | 🟡 Partial |
 | Styling hooks, responsive limits, WebGL/audio/reduced motion claims | Documented; not comprehensively exercised for every component | 🟡 Partial |
@@ -50,8 +50,10 @@
 - [ ] Event payload values, order, bubbling/composed behavior and trigger conditions are verified.
 - [ ] Every documented keyboard and pointer/touch interaction is covered.
 - [x] Shared bases implement default-state capture, `formResetCallback`, `formStateRestoreCallback`, and disabled-fieldset callbacks.
-- [x] Chromium form lifecycle assertions pass: [Validate run 44839251769](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44839251769).
-- [ ] Complete per-control validity, submission, reset, disabled-fieldset and browser-driven state-restore matrix.
+- [x] Chromium verifies native reset and submitted values for all 14 form-associated controls: [Validate run 44841618203](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44841618203).
+- [x] Disabled-fieldset exclusion and re-enablement are verified for both original and utility component bases.
+- [x] Representative serialized state restoration is verified for checked and scalar-value controls.
+- [ ] Complete per-control validity/constraint validation and browser-driven state-restore matrix.
 - [ ] Styling hooks and implementation limitations are checked against actual source and observed rendering.
 - [ ] Mixed bundle load order/collision behavior and clean-consumer registry installs are tested.
 - [ ] All 29 API guides receive a recorded review.
