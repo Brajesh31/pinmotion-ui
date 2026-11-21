@@ -1,15 +1,19 @@
 # 🧪 Phase 1–2 acceptance matrix
 
 > **Purpose:** Evidence ledger for the contract audit (Phase 1) and functional regression coverage (Phase 2).
-> **Baseline reviewed:** `main` at `f54d1e4f9ce1e989691ddf707179c8764c67c3f9` (21 November 2026).
+> **Baseline reviewed:** `main` at `4dc11f0f0f886860b5b9f2331bef4d922044ee9d` (21 November 2026).
 > **Rule:** A check is complete only when an executable test or dated manual evidence exists. Source presence and a successful build are not behavioral proof.
 
 ## Latest CI evidence
 
-- **Validate:** [run 44833625705](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44833625705) passed on `f54d1e4f9ce1e989691ddf707179c8764c67c3f9`, including the browser suite.
-- **GitHub Pages generation/deployment:** [run 44833625348](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44833625348) passed on the same commit.
-- Added browser assertions cover programmatic checkbox event suppression, checkbox event bubbling/composed payload, selected utility boundary normalization, and native required-field validity.
-- This evidence confirms the current suite passes. It does not close the broader Phase 1/2 exit criteria or manual real-device checks.
+- **Validate:** [run 44848315411](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44848315411) passed on `4dc11f0f0f886860b5b9f2331bef4d922044ee9d`.
+- **GitHub Pages generation/deployment:** [run 44848315301](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44848315301) passed on the same commit.
+- Repository validation: **611 checks passed, 0 failed**.
+- Expanded source-to-contract audit: **540 checks passed, 0 failed**.
+- Full Chromium interaction and standalone-route suite: **all passed**, including 29/29 standalone demos.
+- Clean registry consumer test: **216 checks passed, 0 failed**. All 29 registry bundles passed in isolation and all four mixed load orders passed, with all 30 custom-element tags registered, no browser script errors, and stable singleton identities for `PinballKit` and `PinmotionExtras`.
+- The successful consumer test uses the actual `registry.json` paths/targets in a clean temporary project. It does not claim npm package publication or cross-browser support.
+- This evidence closes the clean-consumer and mixed-load-order rows only. It does not close the broader runtime semantics, complete keyboard/pointer, manual API guide review, or real-device criteria.
 
 ## Evidence labels
 
@@ -25,29 +29,30 @@
 | Bundle, tag, demo, guide and registry inventory | Generated inventory plus source audit for 29 bundles, 30 tags, 29 demos, 29 guides and 29 registry items | ✅ Automated/static |
 | Tag registration uniqueness and metadata parity | `tools/audit-components.mjs` | ✅ Automated/static |
 | `observedAttributes` declaration parity | Source-to-spec audit | ✅ Automated/static |
-| Public property/method names | Name-presence checks only; not descriptor/accessor semantics | 🟡 Partial |
-| Custom-event detail keys | Source object-key matching; does not prove emitted runtime payloads | 🟡 Static only |
+| Public property/method names | Source audit verifies documented names, read/write and read-only accessors, and method parameter counts; default-value semantics and return values remain open | 🟡 Partial |
+| Custom-event detail keys | Static audit compares every literal source payload shape with the documented event variants; runtime values, order and trigger conditions remain sampled, not exhaustive | 🟡 Partial |
 | Attribute defaults and normalization | No exhaustive value-by-value audit | ⏳ Pending |
 | Attribute reflection and update timing | Not exhaustively tested | ⏳ Pending |
-| Property descriptors, getters/setters, return values | Not exhaustively tested | ⏳ Pending |
+| Property descriptors, getters/setters, return values | Read/write and read-only accessor presence is checked against source; runtime values, side effects and return-value semantics are not exhaustive | 🟡 Partial |
 | Event order, payload values, propagation and dispatch conditions | Browser suite has selected bubbling/event checks; no exhaustive matrix | 🟡 Partial |
 | Form association declarations | Static `formAssociated` and `formValue()` checks | ✅ Automated/static |
 | Form lifecycle, reset, restore, validation | Both bases implement reset/restore/disabled callbacks; Chromium verifies native reset and submitted values for all 14 form-associated controls, plus representative state restore and disabled-fieldset behavior; Text Field/Text Area/Date Picker constraint validity passes; exhaustive remaining controls and cross-browser restore remain open | 🟡 Partial |
 | Keyboard behavior | Selected controls tested; not every documented key path for every control | 🟡 Partial |
 | Pointer/touch behavior | Selected interactions tested in Chromium | 🟡 Partial |
 | Styling hooks, responsive limits, WebGL/audio/reduced motion claims | Documented; not comprehensively exercised for every component | 🟡 Partial |
-| Mixed-bundle order and runtime collisions | Full gallery exercises all bundles together; isolated demos verify loading, not all collision sequences | 🟡 Partial |
-| Clean consumer registry installation | Not tested against all 29 entries | ⏳ Pending |
+| Mixed-bundle order and runtime collisions | Clean consumer test loads all 29 bundles in four orders and checks all 30 tags, browser errors, and stable singleton identities for both shared runtimes | ✅ Automated |
+| Clean consumer registry installation | All 29 registry files are copied to their declared targets in a clean temporary project and loaded independently | ✅ Automated |
 | Manual guide review | No per-guide sign-off ledger | ⏳ Pending |
 
 ### Phase 1 exit criteria
 
 - [x] One source-controlled inventory covers all distributed bundles, tags, demos, guides and registry entries.
-- [x] CI statically checks source registrations, observed attributes, form declarations, documented member names and event detail keys.
+- [x] CI statically checks source registrations, observed attributes, form declarations, documented member names, read/write/read-only accessor modes, method parameter counts, and every literal event-payload shape.
+- [x] The two shared base runtimes are checked for bubbling and composed custom-event dispatch.
 - [x] All 29 standalone demo routes are checked in headless Chromium for their URL, expected registration and demo element.
 - [ ] Defaults, normalization, reflection and update timing are verified per component.
-- [ ] Property semantics and public method parameters/returns are verified per component.
-- [ ] Event payload values, order, bubbling/composed behavior and trigger conditions are verified.
+- [ ] Property runtime semantics, method default values/returns and programmatic side effects are verified per component.
+- [ ] Event payload values, order, dispatch conditions and event counts are verified exhaustively.
 - [ ] Every documented keyboard and pointer/touch interaction is covered.
 - [x] Shared bases implement default-state capture, `formResetCallback`, `formStateRestoreCallback`, and disabled-fieldset callbacks.
 - [x] Chromium verifies native reset and submitted values for all 14 form-associated controls: [Validate run 44843352695](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44843352695).
@@ -55,10 +60,11 @@
 - [x] Representative serialized state restoration is verified for checked and scalar-value controls.
 - [ ] Complete per-control validity/constraint validation and browser-driven state-restore matrix.
 - [ ] Styling hooks and implementation limitations are checked against actual source and observed rendering.
-- [ ] Mixed bundle load order/collision behavior and clean-consumer registry installs are tested.
-- [ ] All 29 API guides receive a recorded review.
+- [x] All 29 registry bundles install at their declared paths and initialize in a clean consumer project: [Validate run 44848315411](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44848315411).
+- [x] Four mixed bundle load orders preserve all 30 tags and singleton shared runtimes: [Validate run 44848315411](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44848315411).
+- [ ] All 29 API guides receive a recorded manual review.
 
-**Phase 1 status: IN PROGRESS.** The earlier 424-check static audit and 29/29 standalone demo result are retained as evidence, but do not satisfy the outstanding behavioral contract review.
+**Phase 1 status: IN PROGRESS.** CI now verifies more of the source-level API contract and tests all 29 registry entries in isolation and in four load orders. Exact defaults, runtime behavior, complete input-modality coverage, exhaustive form/validity checks, visual claims and manual guide sign-off remain open.
 
 ## Phase 2 · Functional correctness and regression coverage
 

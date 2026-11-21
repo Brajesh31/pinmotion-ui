@@ -97,10 +97,21 @@ Completed and evidenced:
 - [x] Compare declared `observedAttributes` with attributes documented as observed.
 - [x] Check documented property and public method names against component source.
 - [x] Compare documented event detail keys with source event payload object keys.
+- [x] Verify documented read/write and read-only property accessor modes against source getter/setter declarations.
+- [x] Compare documented public method parameter counts with source method definitions.
+- [x] Verify every literal source event-payload shape is represented in the documented event variants.
+- [x] Verify both shared base runtimes dispatch custom events with bubbling and composed enabled.
+- [x] Copy all 29 registry bundles into a clean temporary consumer using the exact declared source paths and install targets.
+- [x] Load each bundle independently and test four mixed load orders, all 30 tag registrations, browser errors, and shared-runtime singleton identity.
 - [x] Compare form-association claims with `static formAssociated = true` and `formValue()` declarations.
 - [x] Check source, generated bundle, demo, guide, and registry entry presence/linkage.
 - [x] Run the source-to-contract audit as part of repository validation.
 - [x] Verify all 29 standalone demo routes in headless Chromium for correct URL, expected tag registration and demo element.
+
+Latest verification on `4dc11f0f0f886860b5b9f2331bef4d922044ee9d`:
+- Validate [run 44848315411](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44848315411): **611 repository checks**, **540 contract-audit checks**, full Chromium suite and all 29 standalone demos passed.
+- Pages generation/deployment [run 44848315301](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44848315301): passed.
+- The clean consumer audit reports **216 passed, 0 failed**, including all 29 isolated bundles and four mixed load orders.
 
 Historical evidence (these runs are not a substitute for rerunning after changes):
 - Static component contract audit: **424 checks passed, 0 failed** on `dea5484f5beae9d34a34515b614acd0255938278`.
@@ -110,13 +121,11 @@ Historical evidence (these runs are not a substitute for rerunning after changes
 
 Still required:
 - [ ] Verify exact attribute defaults, coercion, normalization, reflection, connection-time configuration and update timing for every component.
-- [ ] Verify property descriptors/accessors, method parameter defaults and return values, and programmatic event behavior.
+- [ ] Verify runtime property values/side effects, method parameter defaults and return values, and programmatic event behavior.
 - [ ] Verify event payload values, event ordering, bubbling/composed behavior and dispatch conditions through implementation and browser evidence.
 - [ ] Verify every documented keyboard path and pointer/touch interaction, not only one happy path.
 - [ ] Verify form values, native constraint validation, disabled fieldset, reset and state-restore behavior for every applicable component in supported browsers.
 - [ ] Review styling hooks, responsive limits, WebGL fallback, audio behavior and reduced-motion statements against source and observed rendering.
-- [ ] Check mixed bundle order, shared-runtime reuse, and collision behavior beyond simple all-bundle loading.
-- [ ] Test all 29 registry entries in a clean consumer project.
 - [ ] Complete and record a manual review of all 29 component API guides.
 
 Exit gate:
