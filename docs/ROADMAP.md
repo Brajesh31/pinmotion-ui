@@ -98,3 +98,10 @@ This is the high-level project development tracker. For the stricter, complete p
 
 ### Phase 6. Distribution and stable release
 **Status: Not started.** Clean-consumer registry installation, release governance and formal release approval remain open.
+
+
+## Expanded component-by-component release programme
+
+Follow [RELEASE-READINESS-PROGRAMME.md](RELEASE-READINESS-PROGRAMME.md) for the sequential implementation plan. The 29 bundles are split into small, independently gated batches, starting with the original four controls and then continuing through mechanical and utility groups. Track each component in [COMPONENT-AUDIT-MATRIX.md](quality/COMPONENT-AUDIT-MATRIX.md), use [COMPONENT-AUDIT-TEMPLATE.md](quality/COMPONENT-AUDIT-TEMPLATE.md) for evidence, and follow [WORKFLOW-PLAN.md](WORKFLOW-PLAN.md) for CI, visual, security, package and release automation. Pending rows remain pending until implementation and evidence exist.
+
+For cross-chat continuity and mandatory repository editing instructions, read [IMPORTANT-START-HERE.md](../IMPORTANT-START-HERE.md) before continuing work.
