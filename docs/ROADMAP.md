@@ -107,3 +107,10 @@ The detailed delivery scope for restoring the original reference components, aud
 The visual/behavioral defect ledger is [quality/DEFECT-REGISTER.md](quality/DEFECT-REGISTER.md), and the screenshot approval ledger is [quality/VISUAL-BASELINE.md](quality/VISUAL-BASELINE.md).
 
 The 15-phase programme is a target plan, not a statement that phases are complete. Preserve the reported original four components, identify them from history and approved references, and restore them before broad utility expansion. The public npm package remains a target until the tarball and clean-consumer gates pass.
+
+
+## Component-by-component release programme
+
+Follow the [release-readiness programme](RELEASE-READINESS-PROGRAMME.md), not a one-shot 29-component rewrite. The original four are handled individually in Phases 1A–1D; each subsequent component family is audited in a small batch with its own source fixes, tests, screenshots, README/API update, skill update and CI evidence.
+
+Track each component in [the component audit matrix](quality/COMPONENT-AUDIT-MATRIX.md). Implement CI/security/package/release automation according to the staged [workflow plan](WORKFLOW-PLAN.md). No batch or phase can be called complete without its exit evidence.
