@@ -8,6 +8,7 @@
   update(){if(!this.panel)return;this.message.textContent=this.getAttribute('message')||'Notification';this.panel.dataset.variant=this.getAttribute('variant')||'info';}
   show(message,duration){this.message.textContent=message||this.getAttribute('message')||'Notification';this.panel.dataset.variant=this.getAttribute('variant')||'info';this.panel.hidden=false;clearTimeout(this.timer);const ms=duration===undefined?Number(this.getAttribute('duration')||3500):Number(duration);if(ms>0)this.timer=setTimeout(()=>this.dismiss(),ms);this.emit('show',{message:this.message.textContent})}
   dismiss(){if(!this.panel||this.panel.hidden)return;this.panel.hidden=true;clearTimeout(this.timer);this.emit('dismiss',{})}
+  disconnectedCallback(){clearTimeout(this.timer);this.timer=0;super.disconnectedCallback()}
   attributeChangedCallback(){if(this.ready)this.update()}
  }
  if(!customElements.get('pinball-toast'))customElements.define('pinball-toast',PinballToast);
