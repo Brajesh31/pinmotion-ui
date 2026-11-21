@@ -5,7 +5,7 @@
 
 | Component | Bundle / custom element | Programme batch | Code | Visual | API/events | Forms | Keyboard/touch | Lifecycle | Accessibility | README/demo/skill | Final evidence |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| Toggle | `toggle/toggle.js` / `pinball-toggle` | 1A, original four (verify history) | Pending | Pending | Pending | Pending | Pending | Pending | Pending | Pending | Pending |
+| Toggle | `toggle/toggle.js` / `pinball-toggle` | 1A, provisional original four | Partial, PM-005 and PM-006 fixed in main | Baseline captured at 3 widths; full state review pending | Partial, browser API/event checks pass | Partial, FormData / fieldset / restore tested | Partial, Space / Enter / drag tested | Pending, disconnect/reconnect and cleanup | Partial, shadow accessible-name paths tested; screen reader pending | README, demo, spec and skill updated | Pending, 1A not complete |
 | Slider | `slider/slider.js` / `pinball-slider` | 1B, original four (verify history) | Pending | Pending | Pending | Pending | Pending | Pending | Pending | Pending | Pending |
 | Plunger | `plunger/plunger.js` / `pinball-plunger` | 1C, original four (verify history) | Pending | Pending | Pending | N/A or documented | Pending | Pending | Pending | Pending | Pending |
 | Stepper | `stepper/stepper.js` / `pinball-stepper` | 1D, original four (verify history) | Pending | Pending | Pending | Pending | Pending | Pending | Pending | Pending | Pending |
