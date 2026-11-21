@@ -541,7 +541,10 @@ class PinballToggle extends K.Base {
     if (on === this.on) { this.wake(); return; }
     this.on = on; this.toggleAttribute('checked', on); this.btn?.setAttribute('aria-checked', String(on));
     if (this.ready) this.syncForm();
-    if (K.calm) { this.s = on ? 1 : 0; this.v = 0; }
+    if (K.calm) {
+      this.s = on ? 1 : 0; this.v = 0; this.lit = on; this.lamp = on ? 1 : 0; this.dip = 0;
+      this.bump?.snap(0);
+    }
     else if (kick && this.ready) { this.v += (on ? 1 : -1) * K.feel.kick; this.fx.kick(); }
     this.tocks = 9;   // no knocking until it has hit the far wall
     if (user) { this.emit('change', { checked: on }); this.dispatchEvent(new Event('input', { bubbles: true, composed: true })); }

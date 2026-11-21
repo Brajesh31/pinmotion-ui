@@ -32,7 +32,7 @@ Evidence archive: [Phase 0 visual artifact 14699149118](https://github.com/Braje
 | On state, desktop | 1440 × 1000 | Captured; ball at right end and amber lamp visible |
 | Gallery card, desktop/tablet/mobile | Full-page gallery captures | Present in all captures; deeper parity review pending |
 
-Remaining visual work: keyboard focus, hover, disabled/invalid, reduced-motion, WebGL unavailable/context loss, asset failure and isolated/gallery pixel-level parity.
+Remaining visual work: keyboard focus, hover, disabled/invalid, WebGL unavailable/context loss, asset failure and isolated/gallery pixel-level parity. Reduced-motion state synchronization was found defective, fixed in the pending commit described below, and must not be marked verified until CI passes.
 
 ## 3. Public API contract
 
@@ -65,6 +65,11 @@ Regression coverage: detached checked getter; detached checked setter and toggle
 Before the fix, host aria-label and aria-labelledby did not become the accessible name of the inner button with role=switch. Fixed in commit 4261f5e3d4ed34926a177a08cf51307b031b904b. The resolver now follows aria-labelledby, aria-label, label, then Toggle fallback.
 
 Regression coverage: explicit aria-label, external aria-labelledby and label fallback. All three passed in Validate run [44885328475](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44885328475).
+
+
+### PM-007: reduced-motion lamp and spring state
+
+The reduced-motion branch previously moved the ball and zeroed its velocity without synchronizing the lamp's logical/visual state or snapping the body spring. The new fix sets the ball position, lamp state, and spring to their final values. Browser regression checks both on and off transitions while prefers-reduced-motion is active. CI verification is pending.
 
 ## 5. Interaction, forms and browser evidence
 
@@ -99,7 +104,7 @@ Current successful Validate run: [44885328475](https://github.com/Brajesh31/pinm
 - [ ] Test label/ARIA name updates after connection or document the static-name limitation as a deliberate API contract.
 - [ ] Test WebGL unavailable, shader/asset failure and context loss. README currently explains that shader visuals are missing without WebGL; confirm whether that fallback is acceptable.
 - [ ] Verify audio initialization and the first user-interaction policy with audible output; screenshot evidence is not audio evidence.
-- [ ] Capture focus, hover, disabled, reduced-motion, and all visual rendering modes.
+- [ ] Capture focus, hover, disabled, and all visual rendering modes. Reduced-motion functional verification is pending for PM-007; a dedicated screenshot remains pending.
 - [ ] Finish full component visual/API/lifecycle/a11y review and close Phase 0 ambiguities before advancing to Slider.
 
 **Disposition:** Toggle has two confirmed defects fixed and passing regression tests, and its primary artwork is present at the three reference widths. It is not yet a fully audited or release-ready component.

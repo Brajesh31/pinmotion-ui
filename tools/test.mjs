@@ -244,6 +244,16 @@ check('toggle: Space turns it off and it leaves the form', (await prop('toggle',
 await focus('toggle','button'); await key('Enter',13); await sleep(120);
 check('toggle: Enter activates the native checkbox button', (await prop('toggle','checked'))===false && (await formValue('toggle'))===null, await prop('toggle','checked'));
 
+// Toggle must snap both the ball and lamp to the logical state when motion is reduced.
+await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] }); await sleep(60);
+await ev("document.querySelector('pinball-toggle').checked = true"); await sleep(50);
+const calmOn = JSON.parse(await ev("JSON.stringify({calm:PinballKit.calm,checked:document.querySelector('pinball-toggle').checked,position:document.querySelector('pinball-toggle').s,lit:document.querySelector('pinball-toggle').lit,lamp:document.querySelector('pinball-toggle').lamp})"));
+check('toggle: reduced motion turns the switch and lamp fully on', calmOn.calm && calmOn.checked && calmOn.position === 1 && calmOn.lit === true && calmOn.lamp === 1, JSON.stringify(calmOn));
+await ev("document.querySelector('pinball-toggle').checked = false"); await sleep(50);
+const calmOff = JSON.parse(await ev("JSON.stringify({checked:document.querySelector('pinball-toggle').checked,position:document.querySelector('pinball-toggle').s,lit:document.querySelector('pinball-toggle').lit,lamp:document.querySelector('pinball-toggle').lamp})"));
+check('toggle: reduced motion turns the switch and lamp fully off', !calmOff.checked && calmOff.position === 0 && calmOff.lit === false && calmOff.lamp === 0, JSON.stringify(calmOff));
+await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'no-preference' }] }); await sleep(50);
+
 // slider: drag, then keys
 { const [x0, y] = await at(S('slider', '.track'), 0.42, 0.5); const [x1] = await at(S('slider', '.track'), 0.8, 0.5); await drag(x0, y, x1, y, 12); await sleep(300);
   check('slider: a drag moves it up, with input and change', (await prop('slider', 'value')) > 60 && (await fired('slider input')) > 2 && (await fired('slider change')) === 1, `${await prop('slider', 'value')} / ${await fired('slider input')} input`); }

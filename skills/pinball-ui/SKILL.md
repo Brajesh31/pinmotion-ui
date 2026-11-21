@@ -84,6 +84,7 @@ Copy the control's file into the project's static folder (or `npx shadcn add Bra
 - Use it with a keyboard and at phone width; check nothing scrolls sideways (the canvases reach outside the element for shadows and glow).
 - Create each control while detached, set its public properties and attributes, then append it; verify that state, ARIA and FormData are correct and no setter throws.
 - For controls rendered in Shadow DOM, forward the host's accessible name to the actual interactive element. Resolve `aria-labelledby` references from the same root, then fall back to `aria-label` and the component label; test all three paths in a real browser.
+- When reduced motion is active, snap all visible state to its logical destination, including lamps and secondary springs; test both turning on and off after emulating the media preference.
 - A new canvas is 300 by 150 until it is sized: check both width and height before skipping a resize.
 - Where a texture coordinate jumps (a rod with a piece left out of its middle), read both sides and pick one, or a hairline appears.
 - GLSL ES 1 reserves some words you might reach for: `cast` is one.

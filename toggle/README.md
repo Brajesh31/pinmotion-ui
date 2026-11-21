@@ -85,7 +85,7 @@ The shared chrome ball and lamps use WebGL. Set the instance's `silent` attribut
 
 ## ♿ Motion and accessibility
 
-The shared runtime honours `prefers-reduced-motion` by moving the ball directly to the final state. The lamp still reflects the checked state.
+The shared runtime honours `prefers-reduced-motion` by moving the ball directly to the final state, updating the lamp immediately, and cancelling residual body spring movement.
 
 The interactive control lives in an open Shadow DOM and uses the semantic role and focus behavior described above. Set a useful `label`, or provide `aria-label` / `aria-labelledby` before connection. The shadow switch button receives the referenced text for `aria-labelledby`, or the explicit `aria-label`, as its accessible name. The mandatory Validate CI workflow runs the headless Chromium interaction suite, including gallery and standalone component checks. This automated browser coverage is not a substitute for a dedicated screen-reader audit.
 
