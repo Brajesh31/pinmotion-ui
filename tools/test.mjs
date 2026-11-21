@@ -252,6 +252,11 @@ check('WebGL is drawing (the toggle canvas has pixels)', (await ev(`(() => { con
   check('toggle: computed AX name includes host aria-label', explicitAX?.role === 'switch' && explicitAX.name === 'Emergency override' && explicitAX.ignored !== true, JSON.stringify(explicitAX));
   check('toggle: computed AX name resolves all aria-labelledby ID references', referencedAX?.role === 'switch' && referencedAX.name === 'Maintenance mode' && referencedAX.ignored !== true, JSON.stringify(referencedAX));
   check('toggle: computed AX name uses label fallback', fallbackAX?.role === 'switch' && fallbackAX.name === 'Push alerts' && fallbackAX.ignored !== true, JSON.stringify(fallbackAX));
+  // The label resolver must also work when the component lives in an enclosing ShadowRoot.
+  await ev("(() => { const host=document.createElement('div'); const root=host.attachShadow({mode:'open'}); const label=document.createElement('span'); label.id='pinmotion-nested-toggle-label'; label.textContent='Quiet mode'; const control=document.createElement('pinball-toggle'); control.setAttribute('aria-labelledby',label.id); root.append(label,control); document.body.append(host); window.__pinmotionNestedToggle={host,control}; })()");
+  const nestedName = await ev("__pinmotionNestedToggle.control.shadowRoot.querySelector('button').getAttribute('aria-label')");
+  check('toggle: aria-labelledby resolves from an enclosing shadow root',nestedName === 'Quiet mode',nestedName);
+  await ev('__pinmotionNestedToggle.host.remove()');
   await ev('__pinmotionAX.root.remove()');
 }
 
@@ -271,6 +276,8 @@ await tap('toggle', 'button');
 check('toggle: a tap turns it on, with change', (await prop('toggle', 'checked')) === true && (await fired('toggle change')) === 1, await prop('toggle', 'checked'));
 check('toggle: its form value is on', (await formValue('toggle')) === 'on', await formValue('toggle'));
 await focus('toggle', 'button'); await key(' ', 32); await sleep(200);
+const keyboardFocus = JSON.parse(await ev("JSON.stringify({hostFocused:document.activeElement===document.querySelector('pinball-toggle'),buttonFocused:document.querySelector('pinball-toggle').shadowRoot.activeElement===document.querySelector('pinball-toggle').shadowRoot.querySelector('button'),visible:document.querySelector('pinball-toggle').shadowRoot.querySelector('button').matches(':focus-visible'),outline:getComputedStyle(document.querySelector('pinball-toggle').shadowRoot.querySelector('button')).outlineStyle})"));
+check('toggle: keyboard activation leaves a visible focus indicator on the inner switch',keyboardFocus.hostFocused && keyboardFocus.buttonFocused && keyboardFocus.visible && keyboardFocus.outline !== 'none',JSON.stringify(keyboardFocus));
 check('toggle: Space turns it off and it leaves the form', (await prop('toggle', 'checked')) === false && (await formValue('toggle')) === null, `${await prop('toggle', 'checked')} / form ${await formValue('toggle')}`);
 { const [x, y] = await at(S('toggle', 'button'), 0.2, 0.5); const [x1] = await at(S('toggle', 'button'), 0.9, 0.5); await drag(x, y, x1, y, 10); await sleep(600);
   check('toggle: dragging the ball across turns it on', (await prop('toggle', 'checked')) === true, await prop('toggle', 'checked')); }
@@ -731,6 +738,14 @@ check('color picker: hex value and readout stay synchronized', await prop('color
 // disabled
 await ev(`${E('toggle')}.setAttribute('disabled', '')`); await sleep(50);
 check('disabled: the toggle is inert', (await ev(`${E('toggle')}.inert`)) === true);
+const disabledState = await prop('toggle','checked');
+const disabledEvents = await fired('toggle change');
+await tap('toggle','button');
+await ev('document.activeElement.blur?.()');
+await focus('toggle','button'); await key(' ',32);
+check('disabled: pointer and keyboard input leave checked state and events unchanged',
+  await prop('toggle','checked') === disabledState && await fired('toggle change') === disabledEvents,
+  JSON.stringify({checked:await prop('toggle','checked'),disabledState,events:await fired('toggle change'),disabledEvents}));
 await ev(`${E('toggle')}.removeAttribute('disabled')`);
 
 await sleep(1500);
