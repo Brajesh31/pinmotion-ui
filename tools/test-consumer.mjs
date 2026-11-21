@@ -86,7 +86,7 @@ check('registry has exactly the 29 canonical component entries',
   registry.items.length + ' registry items / ' + allItems.length + ' copied');
 
 const htmlPage = (scripts, tags, mixed = false) => {
-  const contractScript = !mixed && ((scripts[0]?.properties?.length || 0) + (scripts[0]?.methods?.length || 0) > 0)
+  const contractScript = !mixed && ((scripts[0]?.properties?.length || 0) + (scripts[0]?.methods?.length || 0) + (scripts[0]?.observedAttributes?.length || 0) > 0)
     ? '<script>window.__contractProperties=' + JSON.stringify(scripts[0].properties || []) + ';window.__contractMethods=' + JSON.stringify(scripts[0].methods || []) + ';window.__contractObservedAttributes=' + JSON.stringify((scripts[0].observedAttributes || []).map(name => ({tag:scripts[0].tags[0],name}))) + ';</script>'
     : '';
   const snapshots = mixed
