@@ -72,7 +72,8 @@ export const DEFAULT_CONTRACT_PROBES = Object.freeze({
     const e = document.querySelector('pinball-radio-group');
     return [
       result('default radio options are standard,pro,team', e.options.map(x => x.value).join(',') === 'standard,pro,team', e.options.map(x => x.value).join(',')),
-      result('first radio option is selected by default', e.value === 'standard', e.value)
+      result('first radio option is selected by default', e.value === 'standard', e.value),
+      result('radiogroup is programmatically labelled by its visible label', e.group?.getAttribute('aria-labelledby') === 'label' && e.root.querySelector('#label')?.textContent === 'Choose one', JSON.stringify({labelledby:e.group?.getAttribute('aria-labelledby'),label:e.root.querySelector('#label')?.textContent}))
     ];
   },
   segmented: () => {
@@ -105,7 +106,8 @@ export const DEFAULT_CONTRACT_PROBES = Object.freeze({
     const e = document.querySelector('pinball-tabs');
     return [
       result('default labels are Overview,Details,History', e.labels.join(',') === 'Overview,Details,History', e.labels.join(',')),
-      result('active tab defaults to index 0', e.activeIndex === 0, e.activeIndex)
+      result('active tab defaults to index 0', e.activeIndex === 0, e.activeIndex),
+      result('tablist has the default accessible name', e.root.querySelector('[role=tablist]')?.getAttribute('aria-label') === 'Tabs', e.root.querySelector('[role=tablist]')?.getAttribute('aria-label'))
     ];
   },
   accordion: () => {
@@ -113,7 +115,8 @@ export const DEFAULT_CONTRACT_PROBES = Object.freeze({
     return [
       result('default labels are Playfield,Scoring,Sound', e.labels.join(',') === 'Playfield,Scoring,Sound', e.labels.join(',')),
       result('first section is expanded by default', e.expanded.length === 1 && e.expanded[0] === 0, JSON.stringify(e.expanded)),
-      result('multiple-open mode defaults off', !e.hasAttribute('multiple'), e.hasAttribute('multiple'))
+      result('multiple-open mode defaults off', !e.hasAttribute('multiple'), e.hasAttribute('multiple')),
+      (() => { e.toggle(1,false); const reflected=e.getAttribute('open')==='1' && e.expanded.join(',')==='1'; e.expanded=[0,2]; const constrained=e.expanded.join(',')==='0' && e.getAttribute('open')==='0'; e.setAttribute('multiple',''); e.expanded=[0,2]; const multiple=e.expanded.join(',')==='0,2' && e.getAttribute('open')==='0,2'; e.removeAttribute('multiple'); const normalized=e.expanded.join(',')==='0' && e.getAttribute('open')==='0'; return result('expanded state normalizes and reflects the open attribute',reflected&&constrained&&multiple&&normalized,JSON.stringify({reflected,constrained,multiple,normalized,expanded:e.expanded,open:e.getAttribute('open')})); })()
     ];
   },
   disclosure: () => {
@@ -124,7 +127,8 @@ export const DEFAULT_CONTRACT_PROBES = Object.freeze({
     const e = document.querySelector('pinball-tooltip');
     return [
       result('tooltip has a bubble element', !!e.bubble, !!e.bubble),
-      result('tooltip starts hidden', e.bubble?.hidden === true, e.bubble?.hidden)
+      result('tooltip starts hidden without an open marker', !e.bubble?.hasAttribute('data-open'), e.bubble?.getAttribute('data-open')),
+      result('tooltip hidden state is represented by CSS visibility and opacity', getComputedStyle(e.bubble).visibility === 'hidden' && getComputedStyle(e.bubble).opacity === '0', JSON.stringify({visibility:getComputedStyle(e.bubble).visibility,opacity:getComputedStyle(e.bubble).opacity}))
     ];
   },
   dialog: () => {
@@ -167,7 +171,8 @@ export const DEFAULT_CONTRACT_PROBES = Object.freeze({
       result('text field value defaults to empty', e.value === '', e.value),
       result('native input type defaults to text', e.input?.type === 'text', e.input?.type),
       result('required defaults off', e.input?.required === false, e.input?.required),
-      result('default visible label is Text', e.root.querySelector('label')?.textContent === 'Text', e.root.querySelector('label')?.textContent)
+      result('default visible label is Text', e.root.querySelector('label')?.textContent === 'Text', e.root.querySelector('label')?.textContent),
+      (() => { const form=document.createElement('form'),field=document.createElement('pinball-text-field'); field.setAttribute('name','phase1-text'); field.setAttribute('value','before'); form.append(field); document.body.append(form); const before=new FormData(form).get('phase1-text'); field.setAttribute('value','after'); const after=new FormData(form).get('phase1-text'); form.remove(); return result('live value attribute changes sync the submitted form value',before==='before'&&after==='after',JSON.stringify({before,after})); })()
     ];
   },
   'text-area': () => {
@@ -176,7 +181,8 @@ export const DEFAULT_CONTRACT_PROBES = Object.freeze({
       result('text area value defaults to empty', e.value === '', e.value),
       result('visible row count defaults to 4', e.area?.rows === 4, e.area?.rows),
       result('required defaults off', e.area?.required === false, e.area?.required),
-      result('default visible label is Message', e.root.querySelector('label')?.textContent === 'Message', e.root.querySelector('label')?.textContent)
+      result('default visible label is Message', e.root.querySelector('label')?.textContent === 'Message', e.root.querySelector('label')?.textContent),
+      (() => { const form=document.createElement('form'),area=document.createElement('pinball-text-area'); area.setAttribute('name','phase1-area'); area.setAttribute('maxlength','20'); area.setAttribute('value','before'); form.append(area); document.body.append(form); const before=new FormData(form).get('phase1-area'); area.setAttribute('value','after'); const after=new FormData(form).get('phase1-area'); const count=area.root.querySelector('.counter')?.textContent; form.remove(); return result('live value attribute changes sync form data and character count',before==='before'&&after==='after'&&count==='5 / 20',JSON.stringify({before,after,count})); })()
     ];
   },
   select: () => {

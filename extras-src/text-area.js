@@ -9,7 +9,7 @@
   get value(){return this.area?.value||''} set value(v){if(this.area)this.area.value=String(v);this.syncForm();this.syncValidity();this.updateCount()}
   formValue(){return this.value}
   updateCount(){if(this.$('.counter'))this.$('.counter').textContent=this.hasAttribute('maxlength')?this.value.length+' / '+this.getAttribute('maxlength'):''}
-  attributeChangedCallback(n,o,v){if(!this.ready||o===v)return;if(n==='value'&&this.area)this.area.value=v||'';if(n==='label')this.$('label').textContent=v||'Message';if(n==='placeholder'&&this.area)this.area.placeholder=v||'';if(n==='rows'&&this.area)this.area.rows=Number(v||4);if(n==='maxlength'&&this.area){this.area.maxLength=v===null?-1:Number(v);this.updateCount()}if(n==='required'&&this.area)this.area.required=v!==null;this.syncValidity()}
+  attributeChangedCallback(n,o,v){if(!this.ready||o===v)return;if(n==='value'&&this.area){this.area.value=v||'';this.syncForm();this.updateCount()}if(n==='label')this.$('label').textContent=v||'Message';if(n==='placeholder'&&this.area)this.area.placeholder=v||'';if(n==='rows'&&this.area)this.area.rows=Number(v||4);if(n==='maxlength'&&this.area){this.area.maxLength=v===null?-1:Number(v);this.updateCount()}if(n==='required'&&this.area)this.area.required=v!==null;this.syncValidity()}
  }
  if(!customElements.get('pinball-text-area'))customElements.define('pinball-text-area',PinballTextArea);
 })();
