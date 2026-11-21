@@ -174,7 +174,7 @@ export const DEFAULT_CONTRACT_PROBES = Object.freeze({
   tooltip: () => {
     const e = document.querySelector('pinball-tooltip');
     const initial=getComputedStyle(e.bubble).visibility==='hidden';
-    e.tip.focus();
+    e.tip.dispatchEvent(new FocusEvent('focus'));
     const focusShows=e.bubble?.getAttribute('data-open')==='true';
     e.tip.dispatchEvent(new KeyboardEvent('keydown',{key:'Escape',bubbles:true,cancelable:true}));
     const escapeHides=!e.bubble?.hasAttribute('data-open');
