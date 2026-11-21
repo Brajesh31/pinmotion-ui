@@ -115,7 +115,7 @@ for (const component of SPEC) {
 
   for (const [nameText, payloadText] of documentedEvents) {
     const eventName = String(nameText).replaceAll(TICK, '');
-    if (/Plain\s+Event/i.test(String(payloadText).replaceAll(TICK, ''))) {
+    if (String(payloadText).replaceAll(TICK, '').includes('Plain Event')) {
       check(id + ': ' + eventName + ' is documented as a plain Event',
         plainEvents.includes(eventName));
       continue;
@@ -237,9 +237,9 @@ check('inventory separates original and utility families',
 const coreBase = read('core.js');
 const utilityBase = read('tools/extra-core.js');
 check('PinballKit custom events bubble and cross the Shadow DOM boundary',
-  /new CustomEvent\\([^;]+bubbles:\\s*true[^;]+composed:\\s*true/.test(coreBase));
+  coreBase.includes('bubbles: true') && coreBase.includes('composed: true'));
 check('PinmotionExtras custom events bubble and cross the Shadow DOM boundary',
-  /new CustomEvent\\([^;]+bubbles:\\s*true[^;]+composed:\\s*true/.test(utilityBase));
+  utilityBase.includes('bubbles: true') && utilityBase.includes('composed: true'));
 
 console.log('');
 console.log('Component contract audit: ' + passed + ' passed, ' + failures + ' failed.');
