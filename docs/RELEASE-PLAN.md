@@ -68,8 +68,8 @@ Implemented in the current source:
 - [x] Keep the source generator and checked-in gallery output aligned.
 
 Still required:
-- [x] Latest Validate workflow passes, including the real-browser suite: [run 44842827810](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44842827810), commit `be4211811526d2f2a8f8f046102201e1f5de32b5`.
-- [x] Latest Pages generation/deployment workflow passes: [run 44835256398](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44835256398), attempt 2, commit `be4211811526d2f2a8f8f046102201e1f5de32b5`.
+- [x] Latest Validate workflow passes, including the real-browser suite: [run 44843352695](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44843352695), commit `f34a32e0f7fe9414c20d14e33eedb3e39b4593ed`.
+- [x] Latest Pages generation/deployment workflow passes: [run 44835256398](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44835256398), attempt 2, commit `f34a32e0f7fe9414c20d14e33eedb3e39b4593ed`.
 - [ ] Verify the published gallery in a real browser with a hard refresh and direct URL entry. Automated URL access is not a substitute for this manual check.
 - [x] The mandatory Chromium suite verifies all 29 gallery cards, ready state, all 30 tags, original mechanical interactions and standalone routes on the latest commit.
 - [ ] Complete the visual comparison against the previous approved baseline and close INC-001/INC-002 with linked evidence.
@@ -134,7 +134,7 @@ Existing test baseline in `tools/test.mjs`:
 - [x] Selected utility happy paths for all 22 utility components.
 - [x] Selected form values for Toggle, Slider, Stepper, Drop Targets and selected utility controls.
 - [x] Drain delete, undo, commit and replacement-ball lifecycle.
-- [x] Selected utility dialog/toast/disclosure interactions and all 29 standalone demo route checks.
+- [x] Selected utility dialog/disclosure interactions, Toast auto-dismiss/timer cleanup, and all 29 standalone demo route checks.
 - [x] Mobile-width horizontal overflow assertion in headless Chromium.
 
 Phase 2 coverage to add:
@@ -143,18 +143,19 @@ Phase 2 coverage to add:
 - [ ] Exact event payload values, order, bubbling/composed flags and programmatic dispatch/suppression.
 - [x] Shared form bases implement default-state capture, native reset restoration, serialized state restoration and disabled-fieldset callbacks.
 - [x] Chromium regression coverage added for original and utility controls, including form data participation, native reset, serialized state restoration, and disabled-fieldset exclusion/restoration.
-- [x] Passing evidence: [Validate run 44842827810](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44842827810), commit `be4211811526d2f2a8f8f046102201e1f5de32b5`.
+- [x] Passing evidence: [Validate run 44843352695](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44843352695), commit `f34a32e0f7fe9414c20d14e33eedb3e39b4593ed`.
 - [x] Passing Pages evidence: [Deployment run 44842279023](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44842279023), same commit.
 - [x] Native reset and submitted form values verified for all 14 form-associated controls in Chromium.
 - [x] Disabled-fieldset exclusion/restoration verified for both component bases.
 - [x] Representative serialized state restoration verified for checked and scalar-value controls.
 - [x] Chromium verifies Text Field, Text Area and Date Picker required/type/range validity propagation into `ElementInternals`, plus recovery after correction and host-targeted invalid events. Utility state restoration is also covered.
 - [ ] Full per-control validity/constraint validation and cross-browser state-restore matrix.
-- [ ] Timers, undo/commit, toast auto-dismiss, repeated operations and disconnect/reconnect cleanup.
+- [x] Toast auto-dismiss, timer replacement, disconnect cleanup and reconnect behavior pass in Chromium.
+- [ ] Drain undo/commit timing, other component timers/animations, repeated operations and disconnect/reconnect cleanup.
 - [ ] Solo bundle behavior plus mixed bundle order and full-gallery regression tests.
 - [ ] Fault isolation: one component initialization exception must not prevent unrelated cards rendering and reporting ready.
 - [ ] A coverage ledger showing every documented interaction has a test or explicit manual evidence.
-- [x] Latest Phase 2 CI evidence attached: [Validate run 44842827810](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44842827810), commit `be4211811526d2f2a8f8f046102201e1f5de32b5`.
+- [x] Latest Phase 2 CI evidence attached: [Validate run 44843352695](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44843352695), commit `f34a32e0f7fe9414c20d14e33eedb3e39b4593ed`.
 - [ ] Expand the new smoke assertions into the complete per-component state/input/event/form matrix.
 
 Known implementation gaps are not passes:
@@ -199,7 +200,7 @@ Scope:
 - Verify keyboard interaction, focus order, visible focus, dialogs and live announcements.
 - Test form error messages and validation announcements.
 - [x] Add reduced-motion handling for Plunger spring/ball travel and indeterminate Progress animation.
-- [x] Add Chromium assertions for reduced-motion Progress and Plunger behavior. Evidence: [Validate run 44842827810](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44842827810), commit `be4211811526d2f2a8f8f046102201e1f5de32b5`.
+- [x] Add Chromium assertions for reduced-motion Progress and Plunger behavior. Evidence: [Validate run 44843352695](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44843352695), commit `f34a32e0f7fe9414c20d14e33eedb3e39b4593ed`.
 - [ ] Review reduced-motion behavior for every remaining animated component and verify dynamic preference changes.
 - Test with representative screen readers and browser combinations.
 - Record findings, remediation, retest evidence and known limitations.
