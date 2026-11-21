@@ -19,7 +19,7 @@ Load the standalone script and add the element to your HTML:
 Listen to the documented events and read the current properties:
 
 ```js
-const accordion = document.querySelector('pinball-accordion');\naccordion.addEventListener('change', e => console.log(e.detail.openItems));\naccordion.toggle(1);\n// Set multiple to allow more than one open section.
+const accordion = document.querySelector('pinball-accordion');\naccordion.addEventListener('change', e => console.log(e.detail.openItems));\naccordion.toggle(1, true);\n// Set multiple to allow more than one open section.
 ```
 
 The component bundle is a plain script, not an ES module. It embeds the lightweight helper and this control; it has no external runtime dependencies.
