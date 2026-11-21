@@ -127,7 +127,7 @@
 - [ ] Async transitions, timers, undo/commit and disconnect cleanup are tested.
 - [ ] All 29 bundles pass core behavior tests alone and together.
 - [ ] Fault isolation proves a broken component cannot stop unrelated gallery cards.
-- [x] CI runs the suite and the latest successful run is linked here: [Validate run 44841618203](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44841618203).
+- [x] CI runs the suite and the latest successful run is linked here: [Validate run 44842827810](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44842827810).
 - [ ] No known functional regression remains, or every accepted limitation is documented and approved.
 
 **Phase 2 status: IN PROGRESS.** Existing tests are retained; this phase is not considered complete until the gaps above are closed and CI evidence is attached.
