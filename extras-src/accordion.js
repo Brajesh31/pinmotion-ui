@@ -6,7 +6,7 @@
   render(){return '<div class="machine"><div class="label"></div><div class="items"></div></div>'}
   setup(){
    this.labels=this.parse();
-   const configured=this.hasAttribute('open')?this.getAttribute('open').split(','):[0];
+   const configured=this.hasAttribute('open')?(this.getAttribute('open')===''?[]:this.getAttribute('open').split(',')):[0];
    this.openSet=this.normalizeOpen(configured);
    this.draw();
    this.$('.items').addEventListener('click',e=>{const b=e.target.closest('[data-index]');if(b)this.toggle(Number(b.dataset.index),true)});
@@ -46,7 +46,7 @@
   attributeChangedCallback(n,o,v){
    if(!this.ready||o===v)return;
    if(n==='labels'){this.labels=this.parse();this.openSet=this.normalizeOpen([...this.openSet])}
-   if(n==='open')this.openSet=this.normalizeOpen(v===null?[0]:v.split(','));
+   if(n==='open')this.openSet=this.normalizeOpen(v===null?[0]:(v===''?[]:v.split(',')));
    if(n==='multiple'&&!this.hasAttribute('multiple'))this.openSet=this.normalizeOpen([...this.openSet]);
    const normalized=[...this.openSet].join(',');
    if(n==='open'&&normalized!==(v===null?'0':v)){
