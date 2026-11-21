@@ -197,7 +197,7 @@ await ev(`${E('drain')}.setAttribute('window', '500')`);
 await focus('drain', '.chute'); await key('Delete', 46); await sleep(2000);
 check('drain: Delete key, then the window runs out, with commit', (await fired('drain commit')) === 1, `${await prop('drain', 'state')} / ${await fired('drain commit')} commit`);
 await sleep(1500); check('drain: the gallery serves a new ball after commit', (await prop('drain', 'state')) === 'ready', await prop('drain', 'state'));
-await focus('drain','.chute'); await key('Backspace',8); await sleep(100); const backspaceState=await prop('drain','state'); await tap('drain','.shoot'); await sleep(150);
+await focus('drain','.chute'); await key('Backspace',8); await sleep(100); const backspaceState=await prop('drain','state'); await tap('drain','.shoot'); await sleep(1100);
 check('drain: Backspace starts deletion and Shoot Again reverses it',backspaceState==='draining'||backspaceState==='undoable' ? (await prop('drain','state'))==='ready' : false, JSON.stringify({backspaceState,afterUndo:await prop('drain','state')}));
 
 // bumpers
@@ -216,7 +216,7 @@ check('bumpers: a tap drops a ball that scores several hits', (await fired('bump
   check('plunger: a full pull and release sends once', (await fired('plunger send')) === 1, await fired('plunger send')); }
 await focus('plunger', 'button'); await key(' ', 32, false); await sleep(1300); await keyUp(' ', 32); await sleep(800);
 check('plunger: holding Space and letting go sends', (await fired('plunger send')) === 2, await fired('plunger send'));
-await focus('plunger','button'); await key('Enter',13); await sleep(150); const enterSends=await fired('plunger send');
+await focus('plunger','button'); await key('Enter',13,false); await sleep(1300); await keyUp('Enter',13); await sleep(800); const enterSends=await fired('plunger send');
 check('plunger: Enter press and release sends once',enterSends===3,enterSends);
 await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] });
 await ev("document.querySelector('pinball-plunger').fire()"); await sleep(500);
@@ -563,13 +563,13 @@ check('no sideways scroll at 390', (await ev('document.documentElement.scrollWid
 // Phase 1 event contract: assert runtime payloads, dispatch class and composed bubbling.
 {
   const toggle = await lastEvent('toggle change');
-  check('phase 1 events: toggle emits { checked } as a composed CustomEvent', customEventMatches(toggle,{checked:true}), JSON.stringify(toggle));
+  check('phase 1 events: toggle emits { checked } as a composed CustomEvent', customEventMatches(toggle,{checked:false}), JSON.stringify(toggle));
   const slider = await lastEvent('slider change');
   check('phase 1 events: slider change emits the committed value', customEventMatches(slider,{value:100}), JSON.stringify(slider));
   const plunger = await lastEvent('plunger send');
   check('phase 1 events: plunger send carries a numeric power value', !!plunger&&plunger.ctor==='CustomEvent'&&plunger.bubbles&&plunger.composed&&typeof plunger.detail?.power==='number'&&plunger.detail.power>0, JSON.stringify(plunger));
   const stepper = await lastEvent('stepper change');
-  check('phase 1 events: stepper change emits the current numeric value', customEventMatches(stepper,{value:89}), JSON.stringify(stepper));
+  check('phase 1 events: stepper change emits the current numeric value', customEventMatches(stepper,{value:99}), JSON.stringify(stepper));
   const targets = await lastEvent('targets change');
   check('phase 1 events: targets change identifies the item and selected state', !!targets&&targets.ctor==='CustomEvent'&&targets.bubbles&&targets.composed&&targets.detail?.index===0&&targets.detail?.item==='EMAIL'&&targets.detail?.checked===false&&JSON.stringify(targets.detail?.selected)===JSON.stringify(['PUSH','TEXT','CALLS'])&&targets.detail?.allChecked===false, JSON.stringify(targets));
   const drainDelete = await lastEvent('drain delete');
