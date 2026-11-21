@@ -51,7 +51,7 @@ const contractMemberPlans = (component) => {
   const observedAttributes = (component.api?.attributes || []).flatMap(([names, type, defaultValue, observation]) => {
     const mode = String(observation || '').toLowerCase();
     if (!mode.includes('observed') || mode.includes('shared base')) return [];
-    return parseNames(names);
+    return parseNames(names).map((name) => ({ name, type: String(type || '') }));
   });
   return { properties, methods, observedAttributes };
 };
@@ -260,10 +260,23 @@ try {
       check(item.id + ': runtime public method ' + method.name, method.ok, JSON.stringify(method));
     }
 
-    const observedResults = JSON.parse(await evaluate('JSON.stringify((window.__contractObservedAttributes||[]).map(plan => {const definition=customElements.get(plan.tag);const actual=definition?.observedAttributes||[];return {tag:plan.tag,name:plan.name,registered:!!definition,observed:actual.includes(plan.name),actual};}))'));
+    const observedResults = JSON.parse(await evaluate('JSON.stringify((window.__contractObservedAttributes||[]).map(plan => {const definition=customElements.get(plan.tag);const actual=definition?.observedAttributes||[];return {tag:plan.tag,name:plan.name,type:plan.type,registered:!!definition,observed:actual.includes(plan.name),actual};}))'));
     for (const observed of observedResults) {
       check(item.id + ': runtime observedAttributes includes ' + observed.name,
         observed.registered && observed.observed, JSON.stringify(observed));
+    }
+    const callbackResults = JSON.parse(await evaluate('JSON.stringify((window.__contractObservedAttributes||[]).map(plan => {' +
+      'const host=document.querySelector(plan.tag);const definition=customElements.get(plan.tag);const prototype=definition?.prototype;' +
+      'const original=prototype?.attributeChangedCallback;const own=prototype?Object.getOwnPropertyDescriptor(prototype,"attributeChangedCallback"):null;' +
+      'if(typeof original!=="function")return {tag:plan.tag,name:plan.name,hasCallback:false,hits:0,ok:false};' +
+      'let hits=0;prototype.attributeChangedCallback=function(name,oldValue,newValue){if(name===plan.name)hits++;return original.call(this,name,oldValue,newValue);};' +
+      'const type=plan.type.toLowerCase();const value=type.includes("boolean")?"":type.includes("number")||type.includes("integer")?"1":type.includes("array")||type.includes("json")?"[]":"phase1-audit";' +
+      'try{host.setAttribute(plan.name,value);}catch(error){}' +
+      'if(own)Object.defineProperty(prototype,"attributeChangedCallback",own);else delete prototype.attributeChangedCallback;' +
+      'return {tag:plan.tag,name:plan.name,hasCallback:true,hits,ok:hits>0};}))'));
+    for (const callback of callbackResults) {
+      check(item.id + ': browser delivers attributeChangedCallback for ' + callback.name,
+        callback.ok, JSON.stringify(callback));
     }
   }
 
