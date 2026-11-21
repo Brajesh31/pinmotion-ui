@@ -8,6 +8,7 @@ import { createServer } from 'node:net';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 const URL_ = process.argv[2] || 'http://localhost:8000/gallery/';
+const BASE_PATH = new URL(URL_).pathname.replace(/\/gallery\/?$/, '/');
 const PORT = await new Promise((res) => { const s = createServer(); s.listen(0, '127.0.0.1', () => { const p = s.address().port; s.close(() => res(p)); }); });
 const PROFILE = mkdtempSync(join(tmpdir(), 'pb-'));
 const chromeOutput = [];
@@ -70,13 +71,19 @@ try {
   throw new Error(`${error.message}\\nRecent Chrome output:\\n${chromeOutput.slice(-25).join('\\n')}`);
 }
 let id = 0; const pending = new Map(); const logs = [];
-ws.addEventListener('message', (e) => { const m = JSON.parse(e.data); if (m.id && pending.has(m.id)) { pending.get(m.id)(m); pending.delete(m.id); } if (m.method === 'Runtime.exceptionThrown') logs.push('EXC ' + (m.params.exceptionDetails.exception?.description || m.params.exceptionDetails.text)); });
+ws.addEventListener('message', (e) => { const m = JSON.parse(e.data); if (m.id && pending.has(m.id)) { pending.get(m.id)(m); pending.delete(m.id); } if (m.method === 'Runtime.exceptionThrown') logs.push('EXC ' + (m.params.exceptionDetails.exception?.description || m.params.exceptionDetails.text));
+  if (m.method === 'Log.entryAdded' && m.params.entry.level === 'error' && !/favicon\.ico/i.test(m.params.entry.text)) logs.push('CONSOLE ' + m.params.entry.text); });
 const send = (method, params = {}) => new Promise((res, rej) => { const i = ++id; pending.set(i, (m) => (m.error ? rej(new Error(`${method}: ${m.error.message}`)) : res(m.result))); ws.send(JSON.stringify({ id: i, method, params })); });
 const ev = async (expr) => { const r = await send('Runtime.evaluate', { expression: expr, returnByValue: true }); if (r.exceptionDetails) logs.push('EVAL ' + (r.exceptionDetails.exception?.description || r.exceptionDetails.text) + ' in ' + expr.slice(0, 80)); return r.result.value; };
 await send('Runtime.enable');
+await send('Log.enable');
+await send('Network.enable');
+await send('Network.setCacheDisabled', { cacheDisabled: true });
 await send('Emulation.setDeviceMetricsOverride', { width: 390, height: 900, deviceScaleFactor: 2, mobile: true });
 await send('Emulation.setTouchEmulationEnabled', { enabled: true });
 await send('Page.enable'); await send('Page.navigate', { url: URL_ }); await sleep(4000);
+// Simulate a hard refresh with the browser cache disabled before recording first-load evidence.
+await send('Page.reload', { ignoreCache: true }); await sleep(4000);
 const expectedTags = SPEC.flatMap((component) => component.api?.tags || [`<${component.tag}>`]).map((tag) => tag.slice(1, -1));
 const galleryBootReport = JSON.parse(await ev(`(() => {
   const grid = document.getElementById('grid');
@@ -523,14 +530,15 @@ await sleep(1500);
 check('no sideways scroll at 390', (await ev('document.documentElement.scrollWidth')) <= 390, await ev('document.documentElement.scrollWidth'));
 // Load every demo in a fresh page context to verify its standalone bundle.
 for (const component of SPEC) {
-  const url = URL_.replace(/\/gallery\/?$/, '/' + component.id + '/');
+  const url = `${new URL(URL_).origin}${BASE_PATH}${component.id}/`;
+  const expectedPath = `${BASE_PATH}${component.id}/`;
   const expectedTags = (component.api?.tags || ['<' + component.tag + '>']).map((tag) => tag.slice(1, -1));
   await send('Page.navigate', { url });
   let standaloneReady = false;
   for (let attempt = 0; attempt < 50; attempt++) {
     try {
       standaloneReady = await ev('document.readyState === "complete" && window.location.pathname === ' +
-        JSON.stringify('/' + component.id + '/') + ' && ' +
+        JSON.stringify(expectedPath) + ' && ' +
         JSON.stringify(expectedTags) + '.every((tag) => !!customElements.get(tag)) && !!document.querySelector(' + JSON.stringify(component.tag) + ')');
     } catch {}
     if (standaloneReady) break;

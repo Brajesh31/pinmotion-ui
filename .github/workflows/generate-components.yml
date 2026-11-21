@@ -70,3 +70,24 @@ jobs:
         uses: actions/deploy-pages@v5
         with:
           artifact_name: github-pages-${{ github.run_attempt }}
+      - name: Set up Chrome for published-site verification
+        id: setup-live-chrome
+        uses: browser-actions/setup-chrome@v2.2.0
+      - name: Verify the published GitHub Pages site
+        shell: bash
+        env:
+          CHROME: ${{ steps.setup-live-chrome.outputs.chrome-path }}
+          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+        run: |
+          set -euo pipefail
+          test -n "$PAGE_URL"
+          BASE_URL="${PAGE_URL%/}"
+          curl --retry 8 --retry-all-errors --retry-delay 5 --max-time 30 --fail --silent --show-error "$BASE_URL/" | grep -qi "Pinball UI"
+          curl --retry 8 --retry-all-errors --retry-delay 5 --max-time 30 --fail --silent --show-error "$BASE_URL/gallery/" | grep -q "gallery-status"
+          curl --retry 8 --retry-all-errors --retry-delay 5 --max-time 30 --fail --silent --show-error "$BASE_URL/registry.json" | python3 -c 'import json,sys; d=json.load(sys.stdin); assert len(d["items"]) == 29'
+          COMPONENTS="$(node --input-type=module -e "import('./tools/spec.mjs').then(({SPEC}) => process.stdout.write(SPEC.map((component) => component.id).join(' ')))")"
+          for component in $COMPONENTS; do
+            curl --retry 5 --retry-all-errors --retry-delay 3 --max-time 30 --fail --silent --show-error "$BASE_URL/$component/" >/dev/null
+            curl --retry 5 --retry-all-errors --retry-delay 3 --max-time 30 --fail --silent --show-error "$BASE_URL/$component/$component.js" >/dev/null
+          done
+          node tools/test.mjs "$BASE_URL/gallery/"
