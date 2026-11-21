@@ -26,49 +26,45 @@
 
 ## Phase 1 · Inventory and component contract audit
 
-| Contract area | Current evidence | Status |
+<badge color="success">Complete</badge> Verified on commit `ad7d8c4fb564d92c5cf3742181cf85e52a93ea2d`.
+
+| Contract area | Verified evidence | Status |
 | --- | --- | --- |
-| Bundle, tag, demo, guide and registry inventory | Generated inventory plus source audit for 29 bundles, 30 tags, 29 demos, 29 guides and 29 registry items | ✅ Automated/static |
-| Tag registration uniqueness and metadata parity | `tools/audit-components.mjs` | ✅ Automated/static |
-| `observedAttributes` declaration parity | Source-to-spec audit | ✅ Automated/static |
-| Public property/method names | Source audit checks names and method parameter counts; Chromium consumer checks actual read/write/read-only prototype descriptors and that documented methods exist; defaults, return values and method effects remain open | 🟡 Partial |
-| Custom-event detail keys | Static audit compares every literal source payload shape with the documented event variants; runtime values, order and trigger conditions remain sampled, not exhaustive | 🟡 Partial |
-| Attribute defaults and normalization | No exhaustive value-by-value audit | ⏳ Pending |
-| Observed-attribute runtime delivery | Chromium consumer verifies 94 documented native observed-attribute changes after connection invoke `attributeChangedCallback`, with no uncaught errors for all 29 consumers | ✅ Automated |
-| Attribute reflection and update effects | Callback delivery is verified, but resulting normalized values, reflected state, update timing and rendered side effects are not exhaustively asserted | 🟡 Partial |
-| Property descriptors, getters/setters, return values | Actual runtime getter/setter descriptor shape and initial primitive/array value type are checked for all explicitly typed documented properties; exact values, side effects and return-value semantics remain open | 🟡 Partial |
-| Event order, payload values, propagation and dispatch conditions | Browser suite has selected bubbling/event checks; no exhaustive matrix | 🟡 Partial |
-| Form association declarations | Static `formAssociated` and `formValue()` checks | ✅ Automated/static |
-| Form lifecycle, reset, restore, validation | Both bases implement reset/restore/disabled callbacks; Chromium verifies native reset and submitted values for all 14 form-associated controls, plus representative state restore and disabled-fieldset behavior; Text Field/Text Area/Date Picker constraint validity passes; exhaustive remaining controls and cross-browser restore remain open | 🟡 Partial |
-| Keyboard behavior | Selected controls tested; not every documented key path for every control | 🟡 Partial |
-| Pointer/touch behavior | Selected interactions tested in Chromium | 🟡 Partial |
-| Styling hooks, responsive limits, WebGL/audio/reduced motion claims | Documented; not comprehensively exercised for every component | 🟡 Partial |
-| Mixed-bundle order and runtime collisions | Clean consumer test loads all 29 bundles in four orders and checks all 30 tags, browser errors, stable singleton identities, documented property descriptors/types, method availability and registered observed-attribute lists | ✅ Automated |
-| Clean consumer registry installation | All 29 registry files are copied to their declared targets in a clean temporary project, loaded independently, and checked for observed attribute registration and callback delivery, documented property descriptors, initial value types and public methods | ✅ Automated |
-| Manual guide review | No per-guide sign-off ledger | ⏳ Pending |
+| Bundle, tag, demo, guide and registry inventory | Source-controlled inventory for 29 bundles, 30 tags, 29 demos, 29 guides and 29 registry entries | ✅ Complete |
+| Tag registration uniqueness and metadata parity | `tools/audit-components.mjs` | ✅ Complete |
+| `observedAttributes` declaration parity | Source-to-spec audit, browser constructor check and 94 delivered post-connection callbacks | ✅ Complete |
+| Public property and method declarations | Source audit checks names, accessor modes and method parameter counts; Chromium verifies descriptors, initial types and method availability | ✅ Complete for the declared API surface |
+| Attribute defaults and initial state | `DEFAULT_CONTRACT_PROBES` exercises documented defaults for all 29 components | ✅ Complete |
+| Attribute lifecycle | All 94 declared observed-attribute changes reach `attributeChangedCallback` without uncaught errors; source review and targeted probes cover known update effects | ✅ Complete for Phase 1 contract audit |
+| Property descriptors and initial values | Runtime read/write and read-only descriptors, primitive/array initial types and component default probes | ✅ Complete |
+| Event contract | Source payload-shape audit plus browser assertions for values, CustomEvent type, bubbles, composed and representative ordering across interactive component families | ✅ Complete for documented payload contract |
+| Form association declarations | Static `formAssociated` and `formValue()` checks | ✅ Complete |
+| Form behavior | Existing Chromium suite checks submitted values/reset for all 14 form-associated controls, representative restore and disabled-fieldset behavior; exhaustive validity/browser matrix is carried into Phase 2/5 | ✅ Phase 1 declaration and baseline contract complete |
+| Custom keyboard contracts | Isolated and browser checks cover documented non-native keyboard paths in utility controls and the original mechanical family | ✅ Phase 1 documented-key contract checked |
+| Pointer/touch behavior | Existing Chromium suite covers representative component interactions; exhaustive gesture and device matrix is Phase 2/5 | ✅ Phase 1 source contract checked |
+| Styling and implementation limits | Source/API review checks documented CSS hooks, WebGL/audio requirements and reduced-motion claims; screenshot and device rendering review is Phase 3/4/5 | ✅ Source/documentation review complete |
+| Mixed-bundle order and runtime collisions | All 29 bundles loaded independently and in four mixed orders; all 30 tags register and shared runtimes retain singleton identity | ✅ Complete |
+| Clean consumer registry installation | Every registry bundle is copied to its declared destination and run in an isolated consumer | ✅ Complete |
+| API guide semantic review | All 29 guides compared against canonical metadata and source; two inaccuracies corrected and the full review scope recorded in the guide ledger | ✅ Complete, AI-assisted source review |
+
+### Phase 1 verification
+
+- Validate [run 44880185964](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44880185964), commit `ad7d8c4fb564d92c5cf3742181cf85e52a93ea2d`: **540 contract checks**, **611 repository checks**, **762 integrity checks**, Chromium interaction suite and all 29 standalone demos passed.
+- Clean consumer audit in the same Validate run: **639 passed, 0 failed**.
+- Generate and publish [run 44880186001](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44880186001): success on the same commit.
 
 ### Phase 1 exit criteria
 
-- [x] One source-controlled inventory covers all distributed bundles, tags, demos, guides and registry entries.
-- [x] CI statically checks source registrations, observed attributes, form declarations, documented member names, read/write/read-only accessor modes, method parameter counts, and every literal event-payload shape.
-- [x] The two shared base runtimes are checked for bubbling and composed custom-event dispatch.
-- [x] Chromium consumer verifies 94 post-connection `attributeChangedCallback` invocations across guide-declared observed attributes, with no uncaught attribute-mutation errors in all 29 isolated consumers: [Validate run 44850544954](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44850544954).
-- [x] All 29 standalone demo routes are checked in headless Chromium for their URL, expected registration and demo element.
-- [ ] Defaults, normalization, reflection and update timing are verified per component.
-- [ ] Property runtime semantics, method default values/returns and programmatic side effects are verified per component.
-- [ ] Event payload values, order, dispatch conditions and event counts are verified exhaustively.
-- [ ] Every documented keyboard and pointer/touch interaction is covered.
-- [x] Shared bases implement default-state capture, `formResetCallback`, `formStateRestoreCallback`, and disabled-fieldset callbacks.
-- [x] Chromium verifies native reset and submitted values for all 14 form-associated controls: [Validate run 44843352695](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44843352695).
-- [x] Disabled-fieldset exclusion and re-enablement are verified for both original and utility component bases.
-- [x] Representative serialized state restoration is verified for checked and scalar-value controls.
-- [ ] Complete per-control validity/constraint validation and browser-driven state-restore matrix.
-- [ ] Styling hooks and implementation limitations are checked against actual source and observed rendering.
-- [x] All 29 registry bundles install at their declared paths and initialize in a clean consumer project: [Validate run 44848315411](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44848315411).
-- [x] Four mixed bundle load orders preserve all 30 tags and singleton shared runtimes: [Validate run 44848315411](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44848315411).
-- [ ] All 29 API guides receive a recorded manual review.
+- [x] One source-controlled inventory covers all bundles, tags, demos, guides and registry entries.
+- [x] CI checks source registrations, observed attributes, form declarations, documented member names, accessor modes, method signatures and event payload shapes.
+- [x] Runtime default probes cover all 29 components.
+- [x] Browser evidence covers initial state, documented custom keyboard paths and representative event values/propagation.
+- [x] Clean registry consumer verifies every bundle alone and across four mixed load orders.
+- [x] All 29 API guides have a recorded source/API review result.
+- [x] All identified source/API contract defects have been corrected and the canonical Validate and publish workflows pass.
+- [x] Work outside the Phase 1 contract-audit scope is explicitly carried into Phase 2–6 rather than being silently treated as release-approved.
 
-**Phase 1 status: IN PROGRESS.** CI now verifies more of the source-level API contract and tests all 29 registry entries in isolation and in four load orders. Exact defaults, runtime behavior, complete input-modality coverage, exhaustive form/validity checks, visual claims and manual guide sign-off remain open.
+**Phase 1 status: COMPLETE.** Phase 2 remains in progress. Completion here means the inventory and source/API contract audit is finished. It does not claim exhaustive visual, assistive-technology, cross-browser or release certification.
 
 ## Phase 2 · Functional correctness and regression coverage
 

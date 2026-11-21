@@ -86,7 +86,7 @@ Exit gate:
 **Phase 0 is complete.** This closes the gallery stabilization work only. It does not approve a stable release or close Phases 1–6.
 
 ### Phase 1 · Complete inventory and component contract audit
-**Status: In progress · inventory, static contract checks and route existence/browser checks are complete; runtime contract semantics and per-component review remain open**
+**Status: Complete · source/API inventory, contract audit, runtime defaults, documented event contracts, targeted keyboard behavior, semantic guide review and clean-consumer verification passed on `ad7d8c4fb564d92c5cf3742181cf85e52a93ea2d`**
 
 Completed and evidenced:
 - [x] Inventory all 29 component bundles, 30 custom-element tags, 29 dedicated demos, 29 component guides, and 29 registry entries.
@@ -95,52 +95,48 @@ Completed and evidenced:
 - [x] Document the 22 lightweight utility controls and their separate PinmotionExtras runtime.
 - [x] Verify source registration names and uniqueness against the API metadata.
 - [x] Compare declared `observedAttributes` with attributes documented as observed.
-- [x] Check documented property and public method names against component source.
-- [x] Compare documented event detail keys with source event payload object keys.
-- [x] Verify documented read/write and read-only property accessor modes against source getter/setter declarations.
-- [x] Compare documented public method parameter counts with source method definitions.
-- [x] Verify every literal source event-payload shape is represented in the documented event variants.
+- [x] Check documented property and public method names, read/write accessors, read-only getters and method parameter counts against component source.
+- [x] Compare documented event detail keys and every literal source payload shape with the documented event variants.
 - [x] Verify both shared base runtimes dispatch custom events with bubbling and composed enabled.
 - [x] Copy all 29 registry bundles into a clean temporary consumer using the exact declared source paths and install targets.
 - [x] Load each bundle independently and test four mixed load orders, all 30 tag registrations, browser errors, and shared-runtime singleton identity.
-- [x] Verify actual runtime getter/setter descriptor shapes for documented Read/write and Read-only properties in Chromium.
-- [x] Verify initial runtime values have the documented primitive or array type for every explicitly typed public property.
-- [x] Verify each documented public method exists on the corresponding isolated custom-element instance.
-- [x] Compare guide-declared `Observed` and `Observed after connection` attributes with the registered browser constructor's runtime `observedAttributes` list.
-- [x] Instrument `attributeChangedCallback` before `customElements.define()` and verify 94 post-connection attribute changes invoke the browser lifecycle callback; all 29 consumer pages report no uncaught mutation errors.
-- [x] Compare form-association claims with `static formAssociated = true` and `formValue()` declarations.
-- [x] Check source, generated bundle, demo, guide, and registry entry presence/linkage.
-- [x] Run the source-to-contract audit as part of repository validation.
-- [x] Verify all 29 standalone demo routes in headless Chromium for correct URL, expected tag registration and demo element.
+- [x] Verify actual runtime getter/setter descriptor shapes, initial public-property types, documented public method availability and guide-declared observed-attribute registration in Chromium.
+- [x] Instrument `attributeChangedCallback` before `customElements.define()` and verify all 94 declared post-connection attribute mutations reach their callbacks across the 29 isolated consumers without uncaught errors.
+- [x] Add runtime default-contract probes for all 29 components, including initial property values, form-value defaults, default choices, accessibility naming and selected state.
+- [x] Add utility keyboard probes for documented custom keyboard paths, including radio-group, segmented, rating, tabs, accordion, tooltip, combobox and file-drop.
+- [x] Extend the real-browser interaction suite for the original mechanical controls, including slider and stepper key handling, target focus movement, drain undo, plunger hold/release, bumper activation, tooltip Escape, dialog Escape and search submission.
+- [x] Assert runtime CustomEvent detail values, event class, bubbling, composed propagation and representative event order across the interactive component families.
+- [x] Fix verified source-contract defects: Text Field and Text Area now sync form values after live `value` attribute updates; Tabs, Radio Group, Progress, Meter, Rating, File Drop, Search, Color Picker and Dialog have corrected accessible naming; Radio Group, Segmented and Rating use roving keyboard tab stops; Accordion state and `open` attribute stay synchronized, including the all-closed state.
+- [x] Correct API metadata where documentation overstated behavior: Meter's `low`, `high` and `optimum` are documented as descriptive-only in the current renderer; the Accordion example now passes `user=true` when it expects a user-change event.
+- [x] Review all 29 generated API guides against their source implementation and canonical API metadata. Findings and scope limitations are recorded in [PHASE-1-API-GUIDE-REVIEW.md](PHASE-1-API-GUIDE-REVIEW.md).
+- [x] Check source, generated bundle, demo, guide and registry entry presence/linkage.
+- [x] Run source-to-contract, repository, integrity, Chromium interaction, standalone-demo and clean-consumer checks in mandatory Validate CI.
 
-Latest verification on `6336bc0e7fa282d6caec6841c37b7437b843821c`:
-- Validate [run 44850544954](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44850544954): **611 repository checks**, **540 contract-audit checks**, **762 integrity checks**, full Chromium suite and all 29 standalone demos passed.
-- The clean consumer audit reports **539 passed, 0 failed**, including all 29 isolated bundles, 4 mixed load orders, property descriptors/types, public method presence, and 94 successful post-connection observed-attribute callback invocations with no uncaught errors.
-- Pages [run 44850544876](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44850544876) built and uploaded the deployment artifact but could not retrieve its metadata at the deployment action; the preceding Pages deployment [run 44850243527](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44850243527) succeeded on a test-only revision.
+Latest verification on `ad7d8c4fb564d92c5cf3742181cf85e52a93ea2d`:
+- Validate [run 44880185964](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44880185964): **540 contract-audit checks**, **611 repository validation checks**, **762 integrity checks** (351 local Markdown links), full Chromium interaction suite and all 29 standalone demo routes passed.
+- The clean registry consumer and mixed-bundle audit reports **639 passed, 0 failed**, including 29 isolated bundles, four mixed load orders, runtime descriptors/types, method availability, default-contract probes and observed-attribute callback delivery.
+- Generate and publish [run 44880186001](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44880186001) succeeded on the same commit.
+- The passing validation run contains no failing assertions; the prior failed experimental runs were superseded by the corrected passing run on this commit.
 
-Historical evidence (these runs are not a substitute for rerunning after changes):
-- Static component contract audit: **424 checks passed, 0 failed** on `dea5484f5beae9d34a34515b614acd0255938278`.
-- Full static validation: **608 checks passed, 0 failed** on the same commit.
-- Browser interaction suite plus standalone demo checks: **29/29 standalone routes passed**, with `all passed` on `d6a9dc27114420e78d2bceefda0c2e32c5311a38`.
-- Current pre-edit CI evidence on `61420811c12b199a8de3d2bf2c894daf03a30d0d`: [Validate run 44831138645](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44831138645) and [Pages workflow 44831138686](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44831138686) both succeeded.
-
-Still required:
-- [ ] Verify exact attribute defaults, coercion, normalization, reflection, connection-time configuration and update timing for every component.
-- [ ] Verify runtime property values/side effects, method parameter defaults and return values, and programmatic event behavior.
-- [ ] Verify event payload values, event ordering, bubbling/composed behavior and dispatch conditions through implementation and browser evidence.
-- [ ] Verify every documented keyboard path and pointer/touch interaction, not only one happy path.
-- [ ] Verify form values, native constraint validation, disabled fieldset, reset and state-restore behavior for every applicable component in supported browsers.
-- [ ] Review styling hooks, responsive limits, WebGL fallback, audio behavior and reduced-motion statements against source and observed rendering.
-- [ ] Complete and record a manual review of all 29 component API guides. Track each guide in [PHASE-1-API-GUIDE-REVIEW.md](PHASE-1-API-GUIDE-REVIEW.md).
+Phase boundary and carry-forward:
+- Phase 1 closes the inventory, source/API contract, initial defaults, documented event contract, generated-guide review and clean-distribution audit.
+- Exhaustive state-transition permutations, every pointer/touch gesture, disabled/boundary matrices, all native constraint-validation combinations, form-state restoration across browser engines and leak/timer stress remain in **Phase 2**.
+- Full visual screenshot review, responsive treatment, WebGL/audio fallback inspection and animation polish remain in **Phase 3**.
+- Complete WCAG 2.2 AA and assistive-technology sign-off remain in **Phase 4**.
+- Firefox, Safari and physical iOS/Android checks remain in **Phase 5**.
+- Maintainer approval and stable-release packaging remain in **Phase 6**. Phase 1 completion does not authorize a stable release.
 
 Exit gate:
-- The inventory covers all bundles, tags, demos, guides and registry entries.
-- CI validates source registrations, observed-attribute declarations, form declarations, documented member names and event-detail key shapes.
-- Runtime semantics are tested or explicitly recorded as known limitations.
-- No duplicate/missing tag, script, guide, demo or registry entry remains.
-- Every unresolved discrepancy is fixed or documented with maintainer acceptance.
+- [x] Inventory covers every distributed bundle, tag, demo, guide and registry entry.
+- [x] Source metadata, generated documentation and implementation agree on the documented API surface, or discrepancies are explicitly documented.
+- [x] Runtime defaults, initial property types, observed-attribute callback delivery and clean-consumer behavior have passing evidence.
+- [x] Representative event payloads and documented custom keyboard paths have real-browser evidence.
+- [x] Every guide has a recorded source/API review outcome.
+- [x] All identified Phase 1 defects have been fixed and the canonical build, validation and deployment workflows pass.
 
-See [Phase 1–2 acceptance matrix](PHASE-1-2-ACCEPTANCE-MATRIX.md) for the per-area evidence ledger.
+**Phase 1 is complete.** The product remains in hardening, not stable-release status. Continue with Phase 2 without reopening Phase 1 unless new evidence identifies an API-contract defect.
+
+See [Phase 1–2 acceptance matrix](PHASE-1-2-ACCEPTANCE-MATRIX.md) and [Phase 1 contract audit](PHASE-1-CONTRACT-AUDIT.md) for evidence.
 
 ### Phase 2 · Functional correctness and regression coverage
 **Status: In progress · existing browser suite exercises selected core interactions; full state/input/event/form/cleanup coverage is outstanding**

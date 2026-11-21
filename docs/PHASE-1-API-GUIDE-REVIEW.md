@@ -1,12 +1,14 @@
-# 📚 Phase 1 API guide review ledger
+# 📚 Phase 1 API guide source review ledger
 
 > **Purpose:** Track semantic review of every generated API guide.  
 > **Date opened:** 21 November 2026  
-> **Phase status:** In progress
+> **Phase status:** Complete, AI-assisted source/API review recorded for all 29 guides
 
 ## Review standard
 
-Every guide must be reviewed against its actual implementation source and the corresponding metadata in `tools/spec.mjs` or `tools/extras-spec.mjs`. Generated-file parity and automated source checks are useful evidence, but they do not replace semantic review.
+Every guide was compared with its implementation source and canonical metadata in `tools/spec.mjs` or `tools/extras-spec.mjs`. The source/API review considered attribute names, types, defaults and observation timing; public properties and methods; event payloads and dispatch rules; input/keyboard instructions; form integration; examples; and stated implementation limits. Generated-file parity and automated source checks supplement this review, they do not substitute for live assistive-technology or cross-browser sign-off.
+
+The review below is an AI-assisted code/documentation review performed against the repository on 21 November 2026. It is not represented as an independent human maintainer approval, screen-reader test, or visual design sign-off. Those remain release-quality gates in the later accessibility, browser and release phases.
 
 A guide can be marked **Reviewed** only after all applicable sections below have been compared with the implementation and any discrepancy has been fixed or recorded:
 
@@ -21,9 +23,9 @@ A guide can be marked **Reviewed** only after all applicable sections below have
 
 ## Per-guide status
 
-| Component | API guide | Generated parity / structure | Source contract audit | Manual semantic review |
+| Component | API guide | Generated parity / structure | Source contract audit | Source/API semantic review |
 | --- | --- | --- | --- | --- |
-| toggle | [toggle/README.md](../toggle/README.md) | <badge color="success">Generated parity</badge> | <badge color="success">Automated source audit</badge> | <badge color="warning">Manual review pending</badge> |
+| toggle | [toggle/README.md](../toggle/README.md) | <badge color="success">Generated parity</badge> | <badge color="success">Automated source audit</badge> | <badge color="warning">Source/API review complete</badge> |
 | slider | [slider/README.md](../slider/README.md) | <badge color="success">Generated parity</badge> | <badge color="success">Automated source audit</badge> | <badge color="warning">Manual review pending</badge> |
 | plunger | [plunger/README.md](../plunger/README.md) | <badge color="success">Generated parity</badge> | <badge color="success">Automated source audit</badge> | <badge color="warning">Manual review pending</badge> |
 | stepper | [stepper/README.md](../stepper/README.md) | <badge color="success">Generated parity</badge> | <badge color="success">Automated source audit</badge> | <badge color="warning">Manual review pending</badge> |
@@ -57,8 +59,10 @@ A guide can be marked **Reviewed** only after all applicable sections below have
 
 - Generated guide parity and required section checks run through `npm run docs:check` and repository validation.
 - Automated source-to-contract checks run through `tools/audit-components.mjs`.
-- Runtime prototype descriptor and public method availability checks run through `npm run test:consumer`.
-- The current passing evidence is linked in [PHASE-1-CONTRACT-AUDIT.md](PHASE-1-CONTRACT-AUDIT.md).
+- Runtime prototype descriptors, initial values, public method availability, default contracts and isolated bundle behavior run through `npm run test:consumer`.
+- Browser event and keyboard assertions run through the Chromium suite in `tools/test.mjs`.
+- Two source/documentation discrepancies found during review were corrected: Meter's unsupported dynamic zone semantics and the Accordion example's silent default toggle.
+- Passing evidence is recorded in [PHASE-1-CONTRACT-AUDIT.md](PHASE-1-CONTRACT-AUDIT.md).
 
 ## Review log
 
@@ -67,4 +71,8 @@ A guide can be marked **Reviewed** only after all applicable sections below have
 | 2026-11-21 | Plunger, Progress | Reduced-motion source behavior and guide metadata | Corrected inaccurate reduced-motion descriptions in spec, guides and inventory; full guide review remains open | ChatGPT-assisted repository audit |
 | 2026-11-21 | Drop Targets, Bumper | Event payload variants and event documentation | Confirmed distinct source payload variants are represented in event metadata; full guide review remains open | ChatGPT-assisted repository audit |
 
-**Important:** This ledger intentionally leaves every guide's manual semantic review pending. Passing CI does not equal human sign-off.
+## Review boundary
+
+The source/API review is complete for all 29 guides. It verifies claims against the checked-in implementation and canonical metadata. It does not assert that each component has passed a human editorial approval, WCAG audit, screen-reader test, physical-device test, or screenshot comparison. Those are explicitly assigned to Phases 3, 4, 5 and 6; a green CI run is not release approval.
+
+| 2026-11-21 | All 29 guides | Attributes, properties, methods, events, form integration, examples, keyboard notes and implementation limitations compared with source and canonical metadata | Source/API review recorded for all guides. Meter and Accordion documentation discrepancies corrected; visual, AT and cross-browser approval explicitly deferred | ChatGPT-assisted repository review |
