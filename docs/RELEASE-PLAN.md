@@ -143,9 +143,12 @@ Phase 2 coverage to add:
 - [ ] Exact event payload values, order, bubbling/composed flags and programmatic dispatch/suppression.
 - [x] Shared form bases implement default-state capture, native reset restoration, serialized state restoration and disabled-fieldset callbacks.
 - [x] Chromium regression coverage added for original and utility controls, including form data participation, native reset, serialized state restoration, and disabled-fieldset exclusion/restoration.
-- [x] Passing evidence: [Validate run 44839251769](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44839251769), commit `8a5e80e95866c317ab473fca08bcc7cc4cd5d1dc`.
-- [x] Passing Pages evidence: [Deployment run 44839251772](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44839251772), same commit.
-- [ ] Full per-control validity, successful submission, disabled-fieldset, reset and browser-driven state-restore matrix.
+- [x] Passing evidence: [Validate run 44841618203](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44841618203), commit `1d6eaf3ac358d7c19d5e4a3eacae29e683af1cbe`.
+- [x] Passing Pages evidence: [Deployment run 44841618229](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44841618229), same commit.
+- [x] Native reset and submitted form values verified for all 14 form-associated controls in Chromium.
+- [x] Disabled-fieldset exclusion/restoration verified for both component bases.
+- [x] Representative serialized state restoration verified for checked and scalar-value controls.
+- [ ] Full per-control validity/constraint validation and cross-browser state-restore matrix.
 - [ ] Timers, undo/commit, toast auto-dismiss, repeated operations and disconnect/reconnect cleanup.
 - [ ] Solo bundle behavior plus mixed bundle order and full-gallery regression tests.
 - [ ] Fault isolation: one component initialization exception must not prevent unrelated cards rendering and reporting ready.
@@ -154,7 +157,7 @@ Phase 2 coverage to add:
 - [ ] Expand the new smoke assertions into the complete per-component state/input/event/form matrix.
 
 Known implementation gaps are not passes:
-- Both component bases now implement `formResetCallback`, `formStateRestoreCallback`, and disabled-fieldset callbacks. Representative Chromium tests cover reset, serialized state restoration, and disabled-fieldset participation; full per-control and cross-browser verification remains open.
+- Both component bases now implement `formResetCallback`, `formStateRestoreCallback`, and disabled-fieldset callbacks. Chromium now verifies reset and submitted values for all 14 form-associated controls, representative serialized state restoration, and disabled-fieldset participation in both component families. Per-control validity and cross-browser verification remain open.
 - Drop Targets' `bonus` event is tied to a normal-motion impact callback; consumers should use `change.detail.allChecked` for state logic.
 
 Exit gate:
@@ -233,7 +236,7 @@ Exit gate:
 
 ## 4. Known issues and stop-ship policy
 
-- Full per-control form lifecycle and cross-browser verification remains open despite the shared callback implementation and representative Chromium coverage.
+- Per-control validity/constraint validation and cross-browser state-restoration coverage remain open; native reset is covered for all 14 form-associated controls.
 - Drop Targets' `bonus` event is not emitted in reduced-motion mode; rely on its change-state payload for application logic.
 - Full WCAG 2.2 AA review and NVDA, VoiceOver and TalkBack testing remain outstanding.
 - Firefox, Safari, physical phones/tablets and screen readers are not represented by current automated browser evidence.
