@@ -90,7 +90,13 @@ function getGL() {
     const quad = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, quad);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
     gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
-    glc.addEventListener('webglcontextlost', (e) => { e.preventDefault(); gl = null; });
+    glc.addEventListener('webglcontextlost', (e) => {
+      e.preventDefault();
+      gl = null;
+      // Wake connected controls even if their animation loops are idle, so fallback
+      // renderers run immediately instead of waiting for a later user interaction.
+      for (const frame of frames) frame.wake?.();
+    });
   }
   return gl;
 }
@@ -345,7 +351,10 @@ class Base extends HTMLElement {
       // disabled takes it out of the tab order and out of reach of a screen reader's press, not only the pointer's
       const off = () => { this.inert = this.hasAttribute('disabled') || !!this._formDisabled; this.syncForm(); }; off(); new MutationObserver(off).observe(this, { attributes: true, attributeFilter: ['disabled'] });
     }
-    this.dirty = true; this.tickFn ||= (dt) => this.frame(dt); frames.add(this.tickFn); start();
+    this.dirty = true;
+    this.tickFn ||= (dt) => this.frame(dt);
+    this.tickFn.wake = () => { this.dirty = true; start(); };
+    frames.add(this.tickFn); start();
   }
   disconnectedCallback() { frames.delete(this.tickFn); }
   $(s) { return this.root.querySelector(s); }
