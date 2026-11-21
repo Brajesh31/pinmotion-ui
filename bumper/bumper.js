@@ -96,6 +96,9 @@ function getGL() {
       // Wake connected controls even if their animation loops are idle, so fallback
       // renderers run immediately instead of waiting for a later user interaction.
       for (const frame of frames) frame.wake?.();
+      // The Toggle owns the original-art 2D fallback for this shared WebGL renderer.
+      // Wake it explicitly as well, so its fallback can start even if the frame set is empty.
+      document.querySelectorAll('pinball-toggle').forEach((toggle) => toggle.wake?.());
     });
   }
   return gl;
