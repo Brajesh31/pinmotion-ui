@@ -74,7 +74,7 @@ This standalone file embeds the compact Pinmotion Extras base and this component
 
 The indeterminate fill moves with a CSS animation. A `prefers-reduced-motion` media query disables the animation and transform while retaining the indeterminate progress state.
 
-The interactive control lives in an open Shadow DOM and uses the semantic role and focus behavior described above. Set a useful `label`, or provide `aria-label` / `aria-labelledby` before connection. The repository's optional automated interaction script uses headless Chromium; it is not a substitute for a screen-reader audit.
+The interactive control lives in an open Shadow DOM and uses the semantic role and focus behavior described above. Set a useful `label`, or provide `aria-label` / `aria-labelledby` before connection. The mandatory Validate CI workflow runs the headless Chromium interaction suite, including gallery and standalone component checks. This automated browser coverage is not a substitute for a dedicated screen-reader audit.
 
 ## 🎯 Mechanical behavior
 
