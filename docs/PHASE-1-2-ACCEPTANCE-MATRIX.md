@@ -1,7 +1,7 @@
 # 🧪 Phase 1–2 acceptance matrix
 
 > **Purpose:** Evidence ledger for the contract audit (Phase 1) and functional regression coverage (Phase 2).
-> **Baseline reviewed:** `main` at `7dc212bc2bf2dada2804b6313bc6740b65a83495` (21 November 2026).
+> **Baseline reviewed:** `main` at `50703cfa246250851b05b86c0aa87a1ca86c9231` (21 November 2026).
 > **Rule:** A check is complete only when an executable test or dated manual evidence exists. Source presence and a successful build are not behavioral proof.
 
 ## Latest CI evidence
@@ -34,7 +34,7 @@
 | Public property/method names | Source audit checks names and method parameter counts; Chromium consumer checks actual read/write/read-only prototype descriptors and that documented methods exist; defaults, return values and method effects remain open | 🟡 Partial |
 | Custom-event detail keys | Static audit compares every literal source payload shape with the documented event variants; runtime values, order and trigger conditions remain sampled, not exhaustive | 🟡 Partial |
 | Attribute defaults and normalization | No exhaustive value-by-value audit | ⏳ Pending |
-| Attribute reflection and update timing | Not exhaustively tested | ⏳ Pending |
+| Attribute reflection and update timing | Browser consumer confirms the registered constructor exposes every guide-declared `Observed` / `Observed after connection` attribute; callback timing, reflection and post-connection effects remain open | 🟡 Partial |
 | Property descriptors, getters/setters, return values | Actual runtime getter/setter descriptor shape and initial primitive/array value type are checked for all explicitly typed documented properties; exact values, side effects and return-value semantics remain open | 🟡 Partial |
 | Event order, payload values, propagation and dispatch conditions | Browser suite has selected bubbling/event checks; no exhaustive matrix | 🟡 Partial |
 | Form association declarations | Static `formAssociated` and `formValue()` checks | ✅ Automated/static |
@@ -42,8 +42,8 @@
 | Keyboard behavior | Selected controls tested; not every documented key path for every control | 🟡 Partial |
 | Pointer/touch behavior | Selected interactions tested in Chromium | 🟡 Partial |
 | Styling hooks, responsive limits, WebGL/audio/reduced motion claims | Documented; not comprehensively exercised for every component | 🟡 Partial |
-| Mixed-bundle order and runtime collisions | Clean consumer test loads all 29 bundles in four orders and checks all 30 tags, browser errors, stable singleton identities, documented property descriptors/types and public method availability | ✅ Automated |
-| Clean consumer registry installation | All 29 registry files are copied to their declared targets in a clean temporary project, loaded independently, and checked for documented property descriptors, initial value types and public methods | ✅ Automated |
+| Mixed-bundle order and runtime collisions | Clean consumer test loads all 29 bundles in four orders and checks all 30 tags, browser errors, stable singleton identities, documented property descriptors/types, method availability and registered observed-attribute lists | ✅ Automated |
+| Clean consumer registry installation | All 29 registry files are copied to their declared targets in a clean temporary project, loaded independently, and checked for observed attributes, documented property descriptors, initial value types and public methods | ✅ Automated |
 | Manual guide review | No per-guide sign-off ledger | ⏳ Pending |
 
 ### Phase 1 exit criteria

@@ -1,7 +1,7 @@
 # 🔎 Phase 1 contract audit evidence
 
 > **Status:** Phase 1 remains in progress  
-> **Verified code/test commit:** `7dc212bc2bf2dada2804b6313bc6740b65a83495`  
+> **Verified code/test commit:** `50703cfa246250851b05b86c0aa87a1ca86c9231`  
 > **Date:** 21 November 2026  
 > **Branch:** `main`
 
@@ -14,9 +14,9 @@ The latest completed Validate run on the verified commit passed:
 - **762 integrity checks, 0 failures**, including 351 local Markdown links.
 - The full Chromium interaction suite ended with `all passed`.
 - All 29 standalone demo routes passed in fresh browser navigations.
-- The clean registry consumer test reported **322 passed, 0 failed**.
+- The clean registry consumer test reported **416 passed, 0 failed**.
 
-Evidence: [Validate run 44849296217](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44849296217). The Pages generation/deployment workflow also succeeded: [run 44849296191](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44849296191).
+Evidence: [Validate run 44849685089](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44849685089). The Pages generation/deployment workflow also succeeded: [run 44849685059](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44849685059).
 
 ## 2. What the source-to-contract audit now checks
 
@@ -46,6 +46,7 @@ Each bundle is loaded independently and checked for:
 - actual JavaScript prototype descriptors for every documented read/write and read-only property;
 - the initial runtime type for every documented boolean, number, integer, string or array property;
 - actual method presence on the corresponding custom-element instance for every documented public method;
+- the registered constructor's `observedAttributes` list contains every API attribute documented as `Observed` or `Observed after connection`, excluding attributes handled by a shared-base `MutationObserver`.
 - uncaught script or runtime errors.
 
 The full set is then loaded in four orders:
@@ -55,7 +56,7 @@ The full set is then loaded in four orders:
 3. Interleaved original and utility bundles.
 4. Reverse order of all 29 bundles.
 
-Every order registered all 30 custom-element tags without browser errors and retained one stable object instance for each shared runtime. The four order checks, per-bundle checks, runtime property-descriptor checks, initial property-type checks and public method existence checks are included in the **322 passed, 0 failed** result.
+Every order registered all 30 custom-element tags without browser errors and retained one stable object instance for each shared runtime. The four order checks, per-bundle checks, runtime property-descriptor checks, initial property-type checks, public method existence checks and constructor-level observed-attribute checks are included in the **416 passed, 0 failed** result.
 
 ## 4. API corrections made during source review
 
@@ -70,7 +71,7 @@ The Phase 1 audit pass also confirmed the documented bumper single-hit and clust
 
 Phase 1 is **not complete**. The following gaps remain open:
 
-- Exact initial values and defaults, type coercion, clamping, normalization and attribute reflection for every component.
+- Exact initial values and defaults, type coercion, clamping, normalization, attribute callback timing and reflection for every component.
 - Connection-time configuration and attribute update timing.
 - Runtime property values, method parameter default values, return values and public side effects.
 - Exact event values and event counts/order for all interaction paths, including dispatch conditions and default prevention.
