@@ -234,7 +234,7 @@ The detailed sequential delivery plan is maintained in [RELEASE-READINESS-PROGRA
 
 ## 🧪 Phase acceptance and regression evidence
 
-The current hardening work is tracked independently from implementation inventory. Phase 1 (component contract audit) and Phase 2 (functional correctness/regression coverage) remain in progress until their behavioral acceptance criteria have evidence. See the [Phase 1–2 acceptance matrix](docs/PHASE-1-2-ACCEPTANCE-MATRIX.md), [Phase 2 test plan](docs/PHASE-2-TEST-PLAN.md), and [controlling release plan](docs/RELEASE-PLAN.md).
+The historical source/API contract audit (Phase 1) is recorded as complete, while functional regression (Phase 2) remains in progress. The new [release-readiness programme](docs/RELEASE-READINESS-PROGRAMME.md) adds stricter sequential, per-component visual and behavioral gates before stable publication. See the [Phase 1–2 acceptance matrix](docs/PHASE-1-2-ACCEPTANCE-MATRIX.md), [Phase 2 test plan](docs/PHASE-2-TEST-PLAN.md), and [controlling release plan](docs/RELEASE-PLAN.md).
 
 ## 🧭 Roadmap and delivery status
 
