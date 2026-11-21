@@ -94,3 +94,18 @@ The latest screenshot archive was generated from the published site by [workflow
 The latest Chromium validation [44888652944](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44888652944) also confirms these functional states for Toggle: computed accessibility names, visible keyboard focus, disabled pointer/keyboard suppression, form reset, reduced-motion on/off state synchronization, pointer cancellation and disconnect/reconnect cleanup. The tests do not replace the pending screenshots of focus, disabled and reduced-motion states, or the manual screen-reader/WebGL/audio checks.
 
 The visual baseline is still **in progress**, not approved.
+
+
+## 2026-11-21 Toggle state-capture update
+
+Latest published-site capture run: [44889582125](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44889582125). Latest archive: [artifact 14700793459](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44889582125/artifacts/14700793459), generated for source commit `e01bd8c267838c1ecd1a3f4ce0276ff576c27de5`.
+
+The archive now includes 29 PNGs: the responsive gallery, all seven original mechanical demos at desktop/tablet/mobile, the original Toggle off/on and Slider-75 captures, plus these three new Toggle states:
+
+- `toggle-focus-visible-desktop.png`, the inner switch's keyboard-focus outline is visible.
+- `toggle-disabled-on-desktop.png`, the original on-state artwork is retained and muted by the disabled state.
+- `toggle-reduced-motion-on-desktop.png`, the ball and lamp are at their final on position without travel animation.
+
+The three new images were opened and reviewed. Functional checks for focus-visible, disabled pointer/keyboard suppression and reduced-motion state synchronization also pass in Chromium. This does not complete hover-state review, WebGL-unavailable/context-loss behavior, audio verification, manual screen-reader testing or overall baseline approval.
+
+Validate run [44889582076](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44889582076) passed on the same commit: 540 contract checks, 611 repository checks, 788 integrity checks across 377 links, and 639 clean-consumer/mixed-load checks.

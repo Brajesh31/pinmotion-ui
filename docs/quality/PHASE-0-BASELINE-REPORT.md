@@ -110,3 +110,17 @@ Two more Toggle defects are now reproduced, fixed and verified:
 The newest browser run additionally proves the computed accessibility tree for host aria-label, multiple aria-labelledby IDs, a label in an enclosing ShadowRoot and the label fallback; native form reset; visible keyboard focus; disabled pointer and keyboard suppression; and the complete pointer lifecycle suite. These are Chromium automation results, not manual assistive-technology certification.
 
 **Phase 0 remains open.** The original-four subset remains historically unproven, the broad PM-001/002/003 reports still lack component-specific reproduction steps, and WebGL-unavailable/context-loss and audible-output behavior remain to be checked. Do not advance the component sequence or mark Toggle complete until its remaining manual visual, screen-reader and runtime fallback gates are evidenced.
+
+
+## 8. Additional Toggle visual-state evidence
+
+The latest screenshot workflow [44889582125](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44889582125) passed for commit `e01bd8c267838c1ecd1a3f4ce0276ff576c27de5`. Refreshed archive: [artifact 14700793459](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44889582125/artifacts/14700793459), containing 29 PNGs.
+
+The new Toggle captures are:
+- Focus-visible: inner switch shows the keyboard focus outline.
+- Disabled-on: original artwork stays intact and the control is visibly muted.
+- Reduced-motion-on: the ball and lamp appear directly at the final on position.
+
+All three images were manually opened and visually reviewed. Latest Validate run [44889582076](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44889582076) also passed: 540 contract checks, 611 repository checks, 788 integrity checks (377 links), and 639 clean-consumer/mixed-load checks, all green.
+
+This is stronger state evidence, not baseline approval. Hover, alternate modes, WebGL failure/context loss, audible output, and manual screen-reader checks remain open.
