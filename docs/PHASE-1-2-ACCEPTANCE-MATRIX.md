@@ -50,7 +50,7 @@
 - [ ] Event payload values, order, bubbling/composed behavior and trigger conditions are verified.
 - [ ] Every documented keyboard and pointer/touch interaction is covered.
 - [x] Shared bases implement default-state capture, `formResetCallback`, `formStateRestoreCallback`, and disabled-fieldset callbacks.
-- [x] Chromium verifies native reset and submitted values for all 14 form-associated controls: [Validate run 44842827810](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44842827810).
+- [x] Chromium verifies native reset and submitted values for all 14 form-associated controls: [Validate run 44843352695](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44843352695).
 - [x] Disabled-fieldset exclusion and re-enablement are verified for both original and utility component bases.
 - [x] Representative serialized state restoration is verified for checked and scalar-value controls.
 - [ ] Complete per-control validity/constraint validation and browser-driven state-restore matrix.
@@ -84,7 +84,7 @@
 | Disclosure | Native summary toggle and event |
 | Tooltip | Focus reveals description |
 | Dialog | Programmatic open/close and events |
-| Toast | Programmatic show/dismiss and events |
+| Toast | Programmatic show/dismiss, timed auto-dismiss, timer replacement, disconnect cleanup and reconnect |
 | Breadcrumbs | Current-page marker |
 | Pagination | Pointer selection and change |
 | Search | Programmatic input and submit event |
@@ -108,7 +108,7 @@
 | Input modalities | Pointer/touch and keyboard paths for every documented component | 🟡 Partial |
 | Event contract | Exact payload, count, order, bubbles, composed and default prevention where relevant | 🟡 Partial |
 | Forms | All 14 controls reset correctly; representative state restore and both-base fieldset behavior pass; per-control validity and cross-browser restore remain | 🟡 Partial |
-| Async/timers | Drain undo/commit and Toast auto-dismiss including disconnect/cleanup | 🟡 Partial |
+| Async/timers | Toast auto-dismiss, replacement, disconnect cleanup and reconnect pass; Drain undo/commit and other component cleanup remain | 🟡 Partial |
 | Full gallery isolation | A component exception must produce diagnostics without preventing unaffected cards from becoming ready | ⏳ Pending |
 | Standalone vs gallery parity | Core interactions in each solo bundle and full-gallery load | 🟡 Partial |
 | Leak/cleanup | Disconnect during animation/timer, re-connect and confirm no duplicate listeners or stale timers | ⏳ Pending |
