@@ -155,6 +155,8 @@ await focus('toggle', 'button'); await key(' ', 32); await sleep(200);
 check('toggle: Space turns it off and it leaves the form', (await prop('toggle', 'checked')) === false && (await formValue('toggle')) === null, `${await prop('toggle', 'checked')} / form ${await formValue('toggle')}`);
 { const [x, y] = await at(S('toggle', 'button'), 0.2, 0.5); const [x1] = await at(S('toggle', 'button'), 0.9, 0.5); await drag(x, y, x1, y, 10); await sleep(600);
   check('toggle: dragging the ball across turns it on', (await prop('toggle', 'checked')) === true, await prop('toggle', 'checked')); }
+await focus('toggle','button'); await key('Enter',13); await sleep(120);
+check('toggle: Enter activates the native checkbox button', (await prop('toggle','checked'))===false && (await formValue('toggle'))===null, await prop('toggle','checked'));
 
 // slider: drag, then keys
 { const [x0, y] = await at(S('slider', '.track'), 0.42, 0.5); const [x1] = await at(S('slider', '.track'), 0.8, 0.5); await drag(x0, y, x1, y, 12); await sleep(300);
@@ -162,6 +164,9 @@ check('toggle: Space turns it off and it leaves the form', (await prop('toggle',
 await focus('slider', '.track'); await key('Home', 36); await key('ArrowRight', 39); await sleep(100);
 check('slider: Home then arrow right reads 1', (await prop('slider', 'value')) === 1 && (await formValue('slider')) === '1', `${await prop('slider', 'value')} / form ${await formValue('slider')}`);
 await key('End', 35); check('slider: End goes to 100', (await prop('slider', 'value')) === 100, await prop('slider', 'value'));
+await key('ArrowLeft',37); const leftValue=await prop('slider','value'); await key('ArrowUp',38); const upValue=await prop('slider','value');
+await key('PageDown',34); const pageDownValue=await prop('slider','value'); await key('PageUp',33); const pageUpValue=await prop('slider','value'); await key('Home',36); const homeValue=await prop('slider','value'); await key('End',35); const endValue=await prop('slider','value');
+check('slider: ArrowLeft, ArrowUp, PageDown, PageUp, Home and End follow the documented range',leftValue===99&&upValue===100&&pageDownValue===90&&pageUpValue===100&&homeValue===0&&endValue===100,JSON.stringify({leftValue,upValue,pageDownValue,pageUpValue,homeValue,endValue}));
 
 // stepper
 await tap('stepper', '.plus'); await sleep(150);
@@ -170,6 +175,8 @@ await tap('stepper', '.minus'); await tap('stepper', '.minus'); await sleep(150)
 check('stepper: minus twice takes two', (await prop('stepper', 'value')) === 3, await prop('stepper', 'value'));
 await focus('stepper', '.ctrl'); await key('End', 35); await sleep(150); check('stepper: End goes to 99', (await prop('stepper', 'value')) === 99, await prop('stepper', 'value'));
 await key('PageDown', 34); await sleep(150); check('stepper: Page Down takes ten', (await prop('stepper', 'value')) === 89, await prop('stepper', 'value'));
+await key('ArrowUp',38); const upStepper=await prop('stepper','value'); await key('ArrowDown',40); const downStepper=await prop('stepper','value'); await key('Home',36); const homeStepper=await prop('stepper','value'); await key('End',35); const endStepper=await prop('stepper','value');
+check('stepper: ArrowUp, ArrowDown, Home and End follow the spinbutton contract',upStepper===90&&downStepper===89&&homeStepper===0&&endStepper===99,JSON.stringify({upStepper,downStepper,homeStepper,endStepper}));
 
 // drop targets (the gallery starts with 0 and 2 ticked)
 await tap('targets', '.slot[data-i="1"]'); await sleep(700);
@@ -178,6 +185,8 @@ await focus('targets', '.slot[data-i="3"]'); await key(' ', 32); await sleep(120
 check('targets: Space on the last one ticks it and fires bonus', (await prop('targets', 'selected')).length === 4 && (await fired('targets bonus')) === 1, `${await prop('targets', 'selected')} / ${await fired('targets bonus')} bonus`);
 await tap('targets', '.slot[data-i="0"]'); await sleep(300);
 check('targets: a tap unticks EMAIL', (await prop('targets', 'checked'))[0] === false, JSON.stringify(await prop('targets', 'checked')));
+await focus('targets','.slot[data-i="1"]'); await key('ArrowRight',39); const targetRight=await ev(`${E('targets')}.shadowRoot.activeElement?.dataset.i`); await key('ArrowLeft',37); const targetLeft=await ev(`${E('targets')}.shadowRoot.activeElement?.dataset.i`);
+check('targets: ArrowRight and ArrowLeft move focus without changing selection',String(targetRight)==='2'&&String(targetLeft)==='1'&&(await prop('targets','selected')).join(',')==='PUSH,TEXT,CALLS',JSON.stringify({targetRight,targetLeft,selected:await prop('targets','selected')}));
 
 // drain: delete, undo, then delete and let it run out
 await tap('drain', '.chute'); await sleep(900);
@@ -188,10 +197,14 @@ await ev(`${E('drain')}.setAttribute('window', '500')`);
 await focus('drain', '.chute'); await key('Delete', 46); await sleep(2000);
 check('drain: Delete key, then the window runs out, with commit', (await fired('drain commit')) === 1, `${await prop('drain', 'state')} / ${await fired('drain commit')} commit`);
 await sleep(1500); check('drain: the gallery serves a new ball after commit', (await prop('drain', 'state')) === 'ready', await prop('drain', 'state'));
+await focus('drain','.chute'); await key('Backspace',8); await sleep(100); const backspaceState=await prop('drain','state'); await tap('drain','.shoot'); await sleep(150);
+check('drain: Backspace starts deletion and Shoot Again reverses it',backspaceState==='draining'||backspaceState==='undoable' ? (await prop('drain','state'))==='ready' : false, JSON.stringify({backspaceState,afterUndo:await prop('drain','state')}));
 
 // bumpers
 await tap('bumper', 'button'); await tap('bumper', 'button'); await sleep(100);
 check('bumper: two taps, two hits, a combo', (await fired('bumper hit')) === 2 && (await prop('bumper', 'combo')) === 2 && (await prop('bumper', 'score')) === 2, `${await fired('bumper hit')} hits, combo ${await prop('bumper', 'combo')}`);
+await focus('bumper','button'); await key('Enter',13); await key(' ',32); const bumperKeyHits=await fired('bumper hit');
+check('bumper: Enter and Space activate the focused bumper',bumperKeyHits===4&&await prop('bumper','score')===4,`${bumperKeyHits} hits / score ${await prop('bumper','score')}`);
 await tap('bumpers', '.cluster'); await sleep(3500);
 check('bumpers: a tap drops a ball that scores several hits', (await fired('bumpers hit')) >= 3 && (await prop('bumpers', 'score')) > 300, `${await fired('bumpers hit')} hits, score ${await prop('bumpers', 'score')}`);
 
@@ -203,6 +216,8 @@ check('bumpers: a tap drops a ball that scores several hits', (await fired('bump
   check('plunger: a full pull and release sends once', (await fired('plunger send')) === 1, await fired('plunger send')); }
 await focus('plunger', 'button'); await key(' ', 32, false); await sleep(1300); await keyUp(' ', 32); await sleep(800);
 check('plunger: holding Space and letting go sends', (await fired('plunger send')) === 2, await fired('plunger send'));
+await focus('plunger','button'); await key('Enter',13); await sleep(150); const enterSends=await fired('plunger send');
+check('plunger: Enter press and release sends once',enterSends===3,enterSends);
 await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] });
 await ev("document.querySelector('pinball-plunger').fire()"); await sleep(500);
 check('plunger: reduced-motion programmatic full pull still sends without ball travel', (await fired('plunger send')) === 3 && (await prop('plunger', 'ball')) === 'none' && (await prop('plunger', 'px')) === 0, `${await fired('plunger send')} sends / ball ${await prop('plunger', 'ball')}`);
@@ -258,12 +273,16 @@ check('disclosure: summary toggles the native disclosure', await prop('disclosur
 
 await focus('tooltip','.tip');
 check('tooltip: keyboard focus displays the description', await ev("document.querySelector('pinball-tooltip').shadowRoot.querySelector('.bubble').getAttribute('data-open')") === 'true');
+await key('Escape',27); await sleep(50);
+check('tooltip: Escape hides the description',await ev("document.querySelector('pinball-tooltip').shadowRoot.querySelector('.bubble').hasAttribute('data-open')")===false);
 
 await ev("document.querySelector('pinball-dialog').showModal()");
 check('dialog: showModal opens the native dialog', await prop('dialog','open') === true && await fired('dialog open') === 1);
 await ev("document.querySelector('pinball-dialog').close()");
 await sleep(100);
 check('dialog: close closes the native dialog', await prop('dialog','open') === false && await fired('dialog close') === 1);
+await ev("document.querySelector('pinball-dialog').showModal()"); await key('Escape',27); await sleep(150);
+check('dialog: Escape emits cancel then closes the dialog',await fired('dialog cancel')===1&&await prop('dialog','open')===false&&await fired('dialog close')===2);
 
 await ev("document.querySelector('pinball-toast').show('Browser test toast', 0)");
 check('toast: show reveals the status message', await ev("document.querySelector('pinball-toast').shadowRoot.querySelector('.shell').hidden") === false && await fired('toast show') === 1);
@@ -296,7 +315,7 @@ check('breadcrumbs: final item is marked as the current page', await ev("documen
 await tap('pagination','button[data-page="5"]');
 check('pagination: selecting a page updates the page property', await prop('pagination','page') === 5 && await fired('pagination change') === 1, await prop('pagination','page'));
 
-await ev("(() => { const e=document.querySelector('pinball-search'); const i=e.shadowRoot.querySelector('input'); i.value='pinball'; i.dispatchEvent(new Event('input',{bubbles:true})); e.shadowRoot.querySelector('form').requestSubmit(); })()");
+await ev("(() => { const e=document.querySelector('pinball-search'); const i=e.shadowRoot.querySelector('input'); i.value='pinball'; i.dispatchEvent(new Event('input',{bubbles:true})); i.focus(); })()"); await key('Enter',13);
 check('search: submit emits the search event', await fired('search search') === 1);
 
 // Text, selection, file and native input controls.
@@ -577,9 +596,9 @@ check('no sideways scroll at 390', (await ev('document.documentElement.scrollWid
   const dialogOpen = await lastEvent('dialog open'), dialogClose = await lastEvent('dialog close');
   check('phase 1 events: dialog open and close emit empty details in order', customEventMatches(dialogOpen,{})&&customEventMatches(dialogClose,{})&&dialogOpen.order<dialogClose.order, JSON.stringify({dialogOpen,dialogClose}));
   const toastShow = await lastEvent('toast show'), toastDismiss = await lastEvent('toast dismiss');
-  check('phase 1 events: toast reports the displayed message and dismisses', !!toastShow&&toastShow.detail?.message==='Persistent message'&&customEventMatches(toastDismiss,{})&&toastShow.order<toastDismiss.order, JSON.stringify({toastShow,toastDismiss}));
+  check('phase 1 events: toast reports the displayed message and dismisses', !!toastShow&&toastShow.detail?.message==='Reconnected toast'&&customEventMatches(toastDismiss,{})&&toastShow.order<toastDismiss.order, JSON.stringify({toastShow,toastDismiss}));
   const pagination = await lastEvent('pagination change');
-  check('phase 1 events: pagination change emits page and page count', customEventMatches(pagination,{page:5,pages:10}), JSON.stringify(pagination));
+  check('phase 1 events: pagination change emits page and page count', customEventMatches(pagination,{page:5,pages:12}), JSON.stringify(pagination));
   const searchInput = await lastEvent('search input'), searchSubmit = await lastEvent('search search');
   check('phase 1 events: search preserves live input and trims submitted query', customEventMatches(searchInput,{value:'pinball'})&&customEventMatches(searchSubmit,{value:'pinball'}), JSON.stringify({searchInput,searchSubmit}));
   const textInput = await lastEvent('text-field input'), textChange = await lastEvent('text-field change');
