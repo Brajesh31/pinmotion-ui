@@ -2,6 +2,8 @@
 
 > 🚦 **Release status: NO-GO · Not released.** The stable release is locked until every mandatory phase and item in the [release plan](docs/RELEASE-PLAN.md) and [release checklist](docs/RELEASE-CHECKLIST.md) passes. The GitHub Pages site is a development preview, not a stable release.
 
+> ⚠️ **IMPORTANT FOR CONTINUING WORK IN A NEW CHAT:** Read [IMPORTANT-START-HERE.md](IMPORTANT-START-HERE.md) before making any changes. It contains the project handoff, phase order and required instruction to edit files directly on `main`. **Do not create branches or pull requests.**
+
 Twenty-nine standalone interface bundles: seven original controls rebuilt as pinball-machine mechanisms, plus 22 lightweight utility components. Each bundle registers custom elements and has no external runtime package dependencies.
 
 ![Pinball UI control collection](gallery/title.jpg)
