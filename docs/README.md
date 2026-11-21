@@ -4,6 +4,11 @@ This directory documents the repository as it exists today. It is an implementat
 
 ## 🧭 Start here
 
+## ⚠️ Important continuation file
+
+**Always read [IMPORTANT-START-HERE.md](../IMPORTANT-START-HERE.md) before continuing work in a new ChatGPT conversation.** It contains the continuation command, canonical phase order, current repository handoff and explicit instruction to edit files directly on `main` without creating branches or pull requests.
+
+
 | Document | What it explains |
 | --- | --- |
 | [Roadmap and phase tracker](ROADMAP.md) | Product foundations and delivery phase summary |\n| [Release plan](RELEASE-PLAN.md) | Full pre-release phases, known issue register, no-go policy and stable release gate |\n| [Release checklist](RELEASE-CHECKLIST.md) | Evidence-based final go/no-go checklist for a frozen release candidate |\n| [Architecture](architecture.md) | Static site structure, standalone bundles, shared runtime, rendering, animation, sound, and custom-element lifecycle |
