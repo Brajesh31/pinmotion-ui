@@ -331,3 +331,11 @@ Every progress update must use this structure:
 | Next phase | The next batch only |
 
 Do not say "complete" without evidence. Do not skip ahead because a phase is taking longer than expected. A failing batch is fixed first.
+
+
+## Programme navigation
+
+- Per-component status: [Component audit matrix](quality/COMPONENT-AUDIT-MATRIX.md)
+- CI/CD and GitHub Actions: [Workflow plan](WORKFLOW-PLAN.md)
+- Reported defects: [Defect register](quality/DEFECT-REGISTER.md)
+- Visual acceptance: [Visual baseline](quality/VISUAL-BASELINE.md)
