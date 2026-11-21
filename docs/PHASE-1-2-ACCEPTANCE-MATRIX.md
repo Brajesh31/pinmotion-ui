@@ -1,21 +1,21 @@
 # 🧪 Phase 1–2 acceptance matrix
 
 > **Purpose:** Evidence ledger for the contract audit (Phase 1) and functional regression coverage (Phase 2).
-> **Baseline reviewed:** `main` at `50703cfa246250851b05b86c0aa87a1ca86c9231` (21 November 2026).
+> **Baseline reviewed:** `main` at `6336bc0e7fa282d6caec6841c37b7437b843821c` (21 November 2026).
 > **Rule:** A check is complete only when an executable test or dated manual evidence exists. Source presence and a successful build are not behavioral proof.
 
 ## Latest CI evidence
 
-- **Validate:** [run 44849296217](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44849296217) passed on `7dc212bc2bf2dada2804b6313bc6740b65a83495`.
-- **GitHub Pages generation/deployment:** [run 44849296191](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44849296191) passed on the same commit.
+- **Validate:** [run 44850544954](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44850544954) passed on `6336bc0e7fa282d6caec6841c37b7437b843821c`.
+- **Pages generation/deployment:** [run 44850544876](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44850544876) built and uploaded the Pages artifact, but deployment failed when GitHub Actions could not retrieve artifact metadata. The last successful Pages deployment is [run 44850243527](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44850243527) on the immediately preceding test-only revision; no component/application files changed between those revisions.
 - Repository validation: **611 checks passed, 0 failed**.
 - Expanded source-to-contract audit: **540 checks passed, 0 failed**.
 - Integrity audit: **762 checks passed, 0 failed**, including 351 local Markdown links.
 - Full Chromium interaction and standalone-route suite: **all passed**, including 29/29 standalone demos.
-- Clean registry consumer test: **322 checks passed, 0 failed**. All 29 registry bundles passed in isolation and all four mixed load orders passed, with all 30 custom-element tags registered, no browser script errors, and stable singleton identities for `PinballKit` and `PinmotionExtras`.
-- Runtime consumer checks verified documented read/write/read-only descriptor shapes, documented method availability, and the initial runtime type for every explicit boolean, number, string or array property type.
-- The successful consumer test uses the actual `registry.json` paths/targets in a clean temporary project. It does not claim npm package publication or cross-browser support.
-- This evidence closes the clean-consumer and mixed-load-order rows only. It does not close the broader runtime semantics, complete keyboard/pointer, manual API guide review, or real-device criteria.
+- Clean registry consumer test: **539 checks passed, 0 failed**. All 29 registry bundles passed in isolation and all four mixed load orders passed, with all 30 custom-element tags registered, no browser script errors, and stable singleton identities for `PinballKit` and `PinmotionExtras`.
+- Runtime consumer checks verified documented property descriptors, initial primitive/array types, public method availability, **94** post-connection `attributeChangedCallback` invocations across documented observed attributes, and no uncaught errors from attribute mutations in all 29 component consumers.
+- The consumer test uses the actual `registry.json` paths/targets in a clean temporary project. It does not claim npm package publication or cross-browser support.
+- Exact defaults, attribute normalization/reflection effects, exhaustive event/input behavior and manual API guide review remain open.
 
 ## Evidence labels
 
@@ -34,7 +34,8 @@
 | Public property/method names | Source audit checks names and method parameter counts; Chromium consumer checks actual read/write/read-only prototype descriptors and that documented methods exist; defaults, return values and method effects remain open | 🟡 Partial |
 | Custom-event detail keys | Static audit compares every literal source payload shape with the documented event variants; runtime values, order and trigger conditions remain sampled, not exhaustive | 🟡 Partial |
 | Attribute defaults and normalization | No exhaustive value-by-value audit | ⏳ Pending |
-| Attribute reflection and update timing | Browser consumer confirms the registered constructor exposes every guide-declared `Observed` / `Observed after connection` attribute; callback timing, reflection and post-connection effects remain open | 🟡 Partial |
+| Observed-attribute runtime delivery | Chromium consumer verifies 94 documented native observed-attribute changes after connection invoke `attributeChangedCallback`, with no uncaught errors for all 29 consumers | ✅ Automated |
+| Attribute reflection and update effects | Callback delivery is verified, but resulting normalized values, reflected state, update timing and rendered side effects are not exhaustively asserted | 🟡 Partial |
 | Property descriptors, getters/setters, return values | Actual runtime getter/setter descriptor shape and initial primitive/array value type are checked for all explicitly typed documented properties; exact values, side effects and return-value semantics remain open | 🟡 Partial |
 | Event order, payload values, propagation and dispatch conditions | Browser suite has selected bubbling/event checks; no exhaustive matrix | 🟡 Partial |
 | Form association declarations | Static `formAssociated` and `formValue()` checks | ✅ Automated/static |
@@ -43,7 +44,7 @@
 | Pointer/touch behavior | Selected interactions tested in Chromium | 🟡 Partial |
 | Styling hooks, responsive limits, WebGL/audio/reduced motion claims | Documented; not comprehensively exercised for every component | 🟡 Partial |
 | Mixed-bundle order and runtime collisions | Clean consumer test loads all 29 bundles in four orders and checks all 30 tags, browser errors, stable singleton identities, documented property descriptors/types, method availability and registered observed-attribute lists | ✅ Automated |
-| Clean consumer registry installation | All 29 registry files are copied to their declared targets in a clean temporary project, loaded independently, and checked for observed attributes, documented property descriptors, initial value types and public methods | ✅ Automated |
+| Clean consumer registry installation | All 29 registry files are copied to their declared targets in a clean temporary project, loaded independently, and checked for observed attribute registration and callback delivery, documented property descriptors, initial value types and public methods | ✅ Automated |
 | Manual guide review | No per-guide sign-off ledger | ⏳ Pending |
 
 ### Phase 1 exit criteria
@@ -51,6 +52,7 @@
 - [x] One source-controlled inventory covers all distributed bundles, tags, demos, guides and registry entries.
 - [x] CI statically checks source registrations, observed attributes, form declarations, documented member names, read/write/read-only accessor modes, method parameter counts, and every literal event-payload shape.
 - [x] The two shared base runtimes are checked for bubbling and composed custom-event dispatch.
+- [x] Chromium consumer verifies 94 post-connection `attributeChangedCallback` invocations across guide-declared observed attributes, with no uncaught attribute-mutation errors in all 29 isolated consumers: [Validate run 44850544954](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44850544954).
 - [x] All 29 standalone demo routes are checked in headless Chromium for their URL, expected registration and demo element.
 - [ ] Defaults, normalization, reflection and update timing are verified per component.
 - [ ] Property runtime semantics, method default values/returns and programmatic side effects are verified per component.

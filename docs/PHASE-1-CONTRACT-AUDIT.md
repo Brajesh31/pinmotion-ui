@@ -1,7 +1,7 @@
 # 🔎 Phase 1 contract audit evidence
 
 > **Status:** Phase 1 remains in progress  
-> **Verified code/test commit:** `50703cfa246250851b05b86c0aa87a1ca86c9231`  
+> **Verified code/test commit:** `6336bc0e7fa282d6caec6841c37b7437b843821c`  
 > **Date:** 21 November 2026  
 > **Branch:** `main`
 
@@ -14,9 +14,10 @@ The latest completed Validate run on the verified commit passed:
 - **762 integrity checks, 0 failures**, including 351 local Markdown links.
 - The full Chromium interaction suite ended with `all passed`.
 - All 29 standalone demo routes passed in fresh browser navigations.
-- The clean registry consumer test reported **416 passed, 0 failed**.
+- The clean registry consumer test reported **539 passed, 0 failed**.
+- All **94** guide-declared native observed-attribute changes were delivered to `attributeChangedCallback` after connection; all 29 isolated component consumers reported no uncaught errors from those mutations.
 
-Evidence: [Validate run 44849685089](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44849685089). The Pages generation/deployment workflow also succeeded: [run 44849685059](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44849685059).
+Evidence: [Validate run 44850544954](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44850544954). The Pages artifact was built and uploaded, but [run 44850544876](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44850544876) failed while GitHub Actions fetched artifact metadata during deployment. The preceding Pages deployment [run 44850243527](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44850243527) succeeded on a test-only revision.
 
 ## 2. What the source-to-contract audit now checks
 
@@ -56,7 +57,7 @@ The full set is then loaded in four orders:
 3. Interleaved original and utility bundles.
 4. Reverse order of all 29 bundles.
 
-Every order registered all 30 custom-element tags without browser errors and retained one stable object instance for each shared runtime. The four order checks, per-bundle checks, runtime property-descriptor checks, initial property-type checks, public method existence checks and constructor-level observed-attribute checks are included in the **416 passed, 0 failed** result.
+Every order registered all 30 custom-element tags without browser errors and retained one stable object instance for each shared runtime. The four order checks, per-bundle checks, runtime property-descriptor checks, initial property-type checks, public method existence checks, constructor-level observed-attribute checks, and 94 post-connection attribute callback invocations are included in the **539 passed, 0 failed** result.
 
 ## 4. API corrections made during source review
 
@@ -71,7 +72,7 @@ The Phase 1 audit pass also confirmed the documented bumper single-hit and clust
 
 Phase 1 is **not complete**. The following gaps remain open:
 
-- Exact initial values and defaults, type coercion, clamping, normalization, attribute callback timing and reflection for every component.
+- Exact initial values and defaults, type coercion, clamping, normalization, attribute callback effects, reflection and rendering side effects for every component.
 - Connection-time configuration and attribute update timing.
 - Runtime property values, method parameter default values, return values and public side effects.
 - Exact event values and event counts/order for all interaction paths, including dispatch conditions and default prevention.
@@ -80,7 +81,7 @@ Phase 1 is **not complete**. The following gaps remain open:
 - Full review of styling hooks, responsive limits, renderer/audio fallbacks and reduced-motion behavior against observed rendering.
 - Manual source-to-guide review and sign-off for all 29 API guides, tracked in [PHASE-1-API-GUIDE-REVIEW.md](PHASE-1-API-GUIDE-REVIEW.md).
 
-The automated source audit and runtime consumer checks close the static contract, runtime descriptor/type/method-availability, and clean distribution-install rows. They do not prove exact default values, setter side effects, method returns, comprehensive event/input behavior, or manual guide review.
+The automated source audit and runtime consumer checks close the static contract, runtime descriptor/type/method availability, observed-attribute registration and callback-delivery, and clean distribution-install rows. They do not prove the correctness of each callback's resulting value normalization, reflection, state update or rendered side effect. Exact defaults, setter side effects, method returns, comprehensive event/input behavior, or manual guide review remain open.
 
 ## 6. Change boundary
 
