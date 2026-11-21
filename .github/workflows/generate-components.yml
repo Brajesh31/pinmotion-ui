@@ -94,3 +94,23 @@ jobs:
             curl --retry 5 --retry-all-errors --retry-delay 3 --max-time 30 --fail --silent --show-error "$BASE_URL/$component/$component.js" >/dev/null
           done
           PINMOTION_LIVE_SMOKE=1 node tools/test.mjs "$BASE_URL/gallery/"
+      - name: Capture published gallery at desktop and mobile widths
+        shell: bash
+        env:
+          CHROME: ${{ steps.setup-live-chrome.outputs.chrome-path }}
+          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+        run: |
+          set -euo pipefail
+          BASE_URL="${PAGE_URL%/}"
+          READY_JS='new Promise(resolve => { let tries = 0; const poll = () => { const cards = [...document.querySelectorAll("#grid .item")]; if (cards.length === 29 && cards.every(card => card.dataset.loadState === "ready")) resolve(); else if (++tries >= 100) resolve(); else setTimeout(poll, 100); }; poll(); })'
+          JS="$READY_JS" WAIT=750 node tools/shot.mjs "$BASE_URL/gallery/" "$RUNNER_TEMP/pinmotion-gallery-desktop" 1440 1000 1
+          MOBILE=1 JS="$READY_JS" WAIT=750 node tools/shot.mjs "$BASE_URL/gallery/" "$RUNNER_TEMP/pinmotion-gallery-mobile" 390 844 2
+      - name: Upload Phase 0 visual evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase-0-gallery-visual-evidence
+          path: |
+            ${{ runner.temp }}/pinmotion-gallery-desktop.png
+            ${{ runner.temp }}/pinmotion-gallery-mobile.png
+          if-no-files-found: error
+          retention-days: 30
