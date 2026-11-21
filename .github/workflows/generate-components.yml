@@ -93,4 +93,4 @@ jobs:
             curl --retry 5 --retry-all-errors --retry-delay 3 --max-time 30 --fail --silent --show-error "$BASE_URL/$component/" >/dev/null
             curl --retry 5 --retry-all-errors --retry-delay 3 --max-time 30 --fail --silent --show-error "$BASE_URL/$component/$component.js" >/dev/null
           done
-          node tools/test.mjs "$BASE_URL/gallery/"
+          PINMOTION_LIVE_SMOKE=1 node tools/test.mjs "$BASE_URL/gallery/"

@@ -131,6 +131,17 @@ check('gallery: boot state clears instead of remaining on Loading', galleryBootR
 check('gallery: all component cards initialize successfully', galleryBootReport.allCardsReady, galleryBootReport.status);
 check('gallery: all 30 custom element tags register', galleryBootReport.registeredTags === 30, galleryBootReport.registeredTags);
 
+if (process.env.PINMOTION_LIVE_SMOKE === '1') {
+  await sleep(1200);
+  const liveWidth = await ev('document.documentElement.scrollWidth');
+  check('published gallery: no horizontal overflow at 390px', liveWidth <= 390, liveWidth);
+  if (logs.length) { console.log(logs.join('\\n')); fails += logs.length; }
+  ws.close(); chrome.kill(); await sleep(300);
+  try { rmSync(PROFILE, { recursive: true, force: true }); } catch {}
+  console.log(fails ? `${fails} failed` : 'Phase 0 published-gallery smoke passed');
+  process.exit(fails ? 1 : 0);
+}
+
 check('all seven files built their elements', (await ev(`['toggle', 'slider', 'plunger', 'stepper', 'targets', 'drain', 'bumpers', 'bumper'].every((t) => { const e = document.querySelector('pinball-' + t); return e && e.shadowRoot && e.shadowRoot.querySelector('canvas'); })`)) === true);
 check('WebGL is drawing (the toggle canvas has pixels)', (await ev(`(() => { const c = ${S('toggle', 'canvas')}; const d = c.getContext('2d').getImageData(0, 0, c.width, c.height).data; let n = 0; for (let i = 3; i < d.length; i += 4) n += d[i] > 0; return n; })()`)) > 1000);
 
