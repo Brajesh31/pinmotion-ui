@@ -247,9 +247,10 @@ check('toggle: Enter activates the native checkbox button', (await prop('toggle'
 
 // Toggle must snap both the ball and lamp to the logical state when motion is reduced.
 await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] }); await sleep(60);
+await ev("document.querySelector('pinball-toggle').bump.v = 4");
 await ev("document.querySelector('pinball-toggle').checked = true"); await sleep(50);
-const calmOn = JSON.parse(await ev("JSON.stringify({calm:PinballKit.calm,checked:document.querySelector('pinball-toggle').checked,position:document.querySelector('pinball-toggle').s,lit:document.querySelector('pinball-toggle').lit,lamp:document.querySelector('pinball-toggle').lamp})"));
-check('toggle: reduced motion turns the switch and lamp fully on', calmOn.calm && calmOn.checked && calmOn.position === 1 && calmOn.lit === true && calmOn.lamp === 1, JSON.stringify(calmOn));
+const calmOn = JSON.parse(await ev("JSON.stringify({calm:PinballKit.calm,checked:document.querySelector('pinball-toggle').checked,position:document.querySelector('pinball-toggle').s,lit:document.querySelector('pinball-toggle').lit,lamp:document.querySelector('pinball-toggle').lamp,springIdle:document.querySelector('pinball-toggle').bump.idle})"));
+check('toggle: reduced motion turns the switch, lamp and spring fully on', calmOn.calm && calmOn.checked && calmOn.position === 1 && calmOn.lit === true && calmOn.lamp === 1 && calmOn.springIdle, JSON.stringify(calmOn));
 await ev("document.querySelector('pinball-toggle').checked = false"); await sleep(50);
 const calmOff = JSON.parse(await ev("JSON.stringify({checked:document.querySelector('pinball-toggle').checked,position:document.querySelector('pinball-toggle').s,lit:document.querySelector('pinball-toggle').lit,lamp:document.querySelector('pinball-toggle').lamp})"));
 check('toggle: reduced motion turns the switch and lamp fully off', !calmOff.checked && calmOff.position === 0 && calmOff.lit === false && calmOff.lamp === 0, JSON.stringify(calmOff));
