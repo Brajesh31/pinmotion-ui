@@ -66,7 +66,7 @@ The Validate GitHub Actions workflow installs Chrome and runs this suite as a ma
 - whether the WebGL output has non-transparent pixels;
 - pointer/touch interaction and keyboard behavior;
 - the documented event emissions;
-- form values for Toggle, Slider, Stepper, and Drop targets;
+- form values and native reset behavior for all 14 form-associated controls across the original and utility component families;
 - Drain delete, undo, and commit lifecycle;
 - Bumper and bumper-cluster hit scoring;
 - the Plunger short-pull and full-pull behavior;
@@ -108,7 +108,8 @@ Do not describe the project as cross-browser certified based on the current chec
 - Screen-reader behavior is not documented as tested.
 - Sound playback has not been verified on a physical phone.
 - The browser suite is a mandatory Validate workflow step. A passing Chrome run is not evidence of Safari, Firefox, real-device, or screen-reader support.
-- Successful form-value submission is covered for selected controls, but `form.reset()` behavior is not tested and is currently unsupported because neither form-associated component base implements `formResetCallback` (QA-004).
-- Disabled-fieldset behavior is not tested for the original four form controls; the PinballKit base lacks `formDisabledCallback` (QA-005).
+- Native `form.reset()` and submitted values are covered for all 14 form-associated controls in Chromium. Serialized state restoration is covered with representative checked and scalar-value controls.
+- Disabled-fieldset exclusion and re-enablement are covered for both component bases. Per-control constraint validation and cross-browser form lifecycle behavior remain open. See [Phase 2 test plan](PHASE-2-TEST-PLAN.md) and [acceptance matrix](PHASE-1-2-ACCEPTANCE-MATRIX.md).
+- Latest passing form lifecycle evidence: [Validate run 44841618203](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44841618203), commit `1d6eaf3ac358d7c19d5e4a3eacae29e683af1cbe`.
 
 These gaps are tracked as explicit validation work, not assumed passes.
