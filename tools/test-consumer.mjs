@@ -89,6 +89,18 @@ const htmlPage = (scripts, tags, mixed = false) => {
   const contractScript = !mixed && ((scripts[0]?.properties?.length || 0) + (scripts[0]?.methods?.length || 0) + (scripts[0]?.observedAttributes?.length || 0) > 0)
     ? '<script>window.__contractProperties=' + JSON.stringify(scripts[0].properties || []) + ';window.__contractMethods=' + JSON.stringify(scripts[0].methods || []) + ';window.__contractObservedAttributes=' + JSON.stringify((scripts[0].observedAttributes || []).map(attribute => ({tag:scripts[0].tags[0],...attribute}))) + ';</script>'
     : '';
+  const callbackProbeScript = !mixed && (scripts[0]?.observedAttributes?.length || 0) > 0
+    ? '<script>window.__attributeCallbackHits={};window.__observedCallbackTargets=' +
+      JSON.stringify((scripts[0].observedAttributes || []).map(attribute => ({ tag: scripts[0].tags[0], name: attribute.name }))) +
+      ';const nativeDefine=customElements.define.bind(customElements);' +
+      'customElements.define=function(tag,Constructor,options){' +
+      'if(window.__observedCallbackTargets.some(target=>target.tag===tag)&&typeof Constructor.prototype.attributeChangedCallback==="function"){' +
+      'const original=Constructor.prototype.attributeChangedCallback;' +
+      'Constructor.prototype.attributeChangedCallback=function(attribute,oldValue,newValue){' +
+      'const key=tag+":"+attribute;window.__attributeCallbackHits[key]=(window.__attributeCallbackHits[key]||0)+1;' +
+      'return original.call(this,attribute,oldValue,newValue);};}' +
+      'return nativeDefine(tag,Constructor,options);};</script>'
+    : '';
   const snapshots = mixed
     ? '<script>window.__loaded=[];window.__errors=[];window.__runtimeObjects=new WeakMap();window.__nextRuntimeId=0;window.__runtimeId=value=>{if(!value||(typeof value!=="object"&&typeof value!=="function"))return null;if(!window.__runtimeObjects.has(value))window.__runtimeObjects.set(value,++window.__nextRuntimeId);return window.__runtimeObjects.get(value)};addEventListener("error",e=>window.__errors.push(e.message||"script error"));addEventListener("unhandledrejection",e=>window.__errors.push(String(e.reason)));</script>'
     : '<script>window.__errors=[];addEventListener("error",e=>window.__errors.push(e.message||"script error"));addEventListener("unhandledrejection",e=>window.__errors.push(String(e.reason)));</script>';
@@ -98,7 +110,7 @@ const htmlPage = (scripts, tags, mixed = false) => {
     '></script>'
   ).join('\n');
   return '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Pinmotion clean consumer</title></head><body>' +
-    tags.map(toElement).join('\n') + snapshots + contractScript + scriptTags + '</body></html>';
+    tags.map(toElement).join('\n') + snapshots + contractScript + callbackProbeScript + scriptTags + '</body></html>';
 };
 
 for (const item of allItems) {
@@ -265,19 +277,20 @@ try {
       check(item.id + ': runtime observedAttributes includes ' + observed.name,
         observed.registered && observed.observed, JSON.stringify(observed));
     }
-    const callbackResults = JSON.parse(await evaluate('JSON.stringify((window.__contractObservedAttributes||[]).map(plan => {' +
-      'const host=document.querySelector(plan.tag);const definition=customElements.get(plan.tag);const prototype=definition?.prototype;' +
-      'const original=prototype?.attributeChangedCallback;const own=prototype?Object.getOwnPropertyDescriptor(prototype,"attributeChangedCallback"):null;' +
-      'if(typeof original!=="function")return {tag:plan.tag,name:plan.name,hasCallback:false,hits:0,ok:false};' +
-      'let hits=0;prototype.attributeChangedCallback=function(name,oldValue,newValue){if(name===plan.name)hits++;return original.call(this,name,oldValue,newValue);};' +
+    const callbackExpression = 'JSON.stringify((window.__contractObservedAttributes||[]).map(plan => {' +
+      'const host=document.querySelector(plan.tag);const key=plan.tag+":"+plan.name;' +
+      'const before=window.__attributeCallbackHits?.[key]||0;' +
       'const type=plan.type.toLowerCase();const value=type.includes("boolean")?"":type.includes("number")||type.includes("integer")?"1":type.includes("array")||type.includes("json")?"[]":"phase1-audit";' +
       'try{host.setAttribute(plan.name,value);}catch(error){}' +
-      'if(own)Object.defineProperty(prototype,"attributeChangedCallback",own);else delete prototype.attributeChangedCallback;' +
-      'return {tag:plan.tag,name:plan.name,hasCallback:true,hits,ok:hits>0};}))'));
+      'const hits=(window.__attributeCallbackHits?.[key]||0)-before;' +
+      'return {tag:plan.tag,name:plan.name,hasInstrumentation:!!window.__attributeCallbackHits,hits,ok:hits>0};}))';
+    const callbackResults = JSON.parse(await evaluate(callbackExpression));
     for (const callback of callbackResults) {
       check(item.id + ': browser delivers attributeChangedCallback for ' + callback.name,
         callback.ok, JSON.stringify(callback));
     }
+    const callbackErrors = JSON.parse(await evaluate('JSON.stringify(window.__errors||[])'));
+    check(item.id + ': observed-attribute mutations produce no uncaught errors', callbackErrors.length === 0, JSON.stringify(callbackErrors));
   }
 
   for (const [name] of orders) {
