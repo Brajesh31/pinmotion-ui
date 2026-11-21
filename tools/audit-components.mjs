@@ -132,6 +132,29 @@ for (const component of SPEC) {
       '; source=' + candidates.map((event) => event.keys.join(',')).join(' | '));
   }
 
+  const documentedShapes = new Map();
+  for (const [nameText, payloadText] of documentedEvents) {
+    const eventName = String(nameText).replaceAll(TICK, '');
+    if (/Plain\\s+Event/i.test(String(payloadText).replaceAll(TICK, ''))) continue;
+    let keys = namesFromPayload(payloadText);
+    if (/empty detail/i.test(payloadText)) keys = [];
+    if (keys === null) continue;
+    if (!documentedShapes.has(eventName)) documentedShapes.set(eventName, []);
+    documentedShapes.get(eventName).push([...keys].sort().join(','));
+  }
+  const sourceShapes = new Map();
+  for (const event of emitted) {
+    if (!sourceShapes.has(event.name)) sourceShapes.set(event.name, []);
+    sourceShapes.get(event.name).push([...event.keys].sort().join(','));
+  }
+  for (const [eventName, shapes] of sourceShapes) {
+    const docs = documentedShapes.get(eventName) || [];
+    const missing = [...new Set(shapes)].filter((shape) => !docs.includes(shape));
+    check(id + ': all source payload variants for ' + eventName + ' are documented',
+      missing.length === 0,
+      'undocumented=' + missing.join(' | ') + '; documented=' + docs.join(' | '));
+  }
+
   const documentedProperties = (api.properties || [])
     .flatMap(([names]) => String(names).replaceAll(TICK, '').split(',').map((name) => name.trim()))
     .filter(Boolean);
@@ -139,6 +162,23 @@ for (const component of SPEC) {
   check(id + ': documented property names occur in source',
     missingProperties.length === 0,
     missingProperties.join(', ') || '');
+
+  for (const [names, type, access] of api.properties || []) {
+    for (const name of String(names).replaceAll(TICK, '').split(',').map((item) => item.trim()).filter(Boolean)) {
+      const getter = new RegExp('\\bget\\s+' + name + '\\s*\\(').test(source);
+      const setter = new RegExp('\\bset\\s+' + name + '\\s*\\(').test(source);
+      const mode = String(access || '').toLowerCase();
+      if (mode.includes('read/write')) {
+        check(id + ': ' + name + ' read/write property has getter and setter', getter && setter,
+          'getter=' + getter + '; setter=' + setter);
+      } else if (mode.includes('read-only getter') || mode === 'read-only') {
+        check(id + ': ' + name + ' read-only property has getter only', getter && !setter,
+          'getter=' + getter + '; setter=' + setter);
+      } else {
+        check(id + ': ' + name + ' documented state is present in source', source.includes(name));
+      }
+    }
+  }
 
   const documentedMethods = (api.methods || [])
     .map(([signature]) => String(signature).replaceAll(TICK, '').split('(')[0].trim())
@@ -148,6 +188,19 @@ for (const component of SPEC) {
   check(id + ': documented method names occur in source',
     missingMethods.length === 0,
     missingMethods.join(', ') || '');
+
+  for (const [signature] of api.methods || []) {
+    const clean = String(signature).replaceAll(TICK, '');
+    const name = clean.split('(')[0].trim();
+    const args = clean.includes('(') ? clean.slice(clean.indexOf('(') + 1, clean.lastIndexOf(')')).trim() : '';
+    const expectedCount = args ? args.split(',').length : 0;
+    const definition = new RegExp('(?:^|[;{}])\\s*(?:async\\s+)?' + name + '\\s*\\(([^)]*)\\)\\s*\\{').exec(source);
+    const actualArgs = definition ? definition[1].trim() : null;
+    const actualCount = actualArgs === null ? -1 : (actualArgs ? actualArgs.split(',').length : 0);
+    check(id + ': ' + name + ' source method parameter count matches its signature',
+      actualCount === expectedCount,
+      'documented=' + expectedCount + '; source=' + (actualCount < 0 ? 'definition not found' : actualCount));
+  }
 
   const guide = read(guidePath);
   check(id + ': generated guide contains API sections',
@@ -180,6 +233,13 @@ check('generated inventory exists and lists every bundle',
 check('inventory separates original and utility families',
   inventory.includes('Original mechanical controls (7)') &&
   inventory.includes('Lightweight utility controls (22)'));
+
+const coreBase = read('core.js');
+const utilityBase = read('tools/extra-core.js');
+check('PinballKit custom events bubble and cross the Shadow DOM boundary',
+  /new CustomEvent\\([^;]+bubbles:\\s*true[^;]+composed:\\s*true/.test(coreBase));
+check('PinmotionExtras custom events bubble and cross the Shadow DOM boundary',
+  /new CustomEvent\\([^;]+bubbles:\\s*true[^;]+composed:\\s*true/.test(utilityBase));
 
 console.log('');
 console.log('Component contract audit: ' + passed + ' passed, ' + failures + ' failed.');
