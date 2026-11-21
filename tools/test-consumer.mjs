@@ -62,11 +62,11 @@ check('registry has exactly the 29 canonical component entries',
 
 const htmlPage = (scripts, tags, mixed = false) => {
   const snapshots = mixed
-    ? '<script>window.__loaded=[];window.__errors=[];addEventListener("error",e=>window.__errors.push(e.message||"script error"));addEventListener("unhandledrejection",e=>window.__errors.push(String(e.reason)));</script>'
+    ? '<script>window.__loaded=[];window.__errors=[];window.__runtimeObjects=new WeakMap();window.__nextRuntimeId=0;window.__runtimeId=value=>{if(!value||(typeof value!=="object"&&typeof value!=="function"))return null;if(!window.__runtimeObjects.has(value))window.__runtimeObjects.set(value,++window.__nextRuntimeId);return window.__runtimeObjects.get(value)};addEventListener("error",e=>window.__errors.push(e.message||"script error"));addEventListener("unhandledrejection",e=>window.__errors.push(String(e.reason)));</script>'
     : '<script>window.__errors=[];addEventListener("error",e=>window.__errors.push(e.message||"script error"));addEventListener("unhandledrejection",e=>window.__errors.push(String(e.reason)));</script>';
   const scriptTags = scripts.map((item) =>
     '<script src="' + item.url + '"' +
-    (mixed ? " onload='window.__loaded.push({id:" + JSON.stringify(item.id) + ",pinball:window.PinballKit||null,extras:window.PinmotionExtras||null})'" : '') +
+    (mixed ? " onload='window.__loaded.push({id:" + JSON.stringify(item.id) + ",pinballId:window.__runtimeId(window.PinballKit),extrasId:window.__runtimeId(window.PinmotionExtras)})'" : '') +
     '></script>'
   ).join('\n');
   return '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Pinmotion clean consumer</title></head><body>' +
@@ -207,11 +207,12 @@ try {
       'document.readyState === "complete" && ' + JSON.stringify(allTags) +
       '.every(tag => !!customElements.get(tag) && !!document.querySelector(tag)?.shadowRoot) && window.__loaded?.length === 29');
     check('mixed load order ' + name + ': all 30 custom elements register and connect', ok);
-    const state = JSON.parse(await evaluate('JSON.stringify({errors:window.__errors||[],loaded:(window.__loaded||[]).length,pinball:!!window.PinballKit,extras:!!window.PinmotionExtras,pinballRefs:(window.__loaded||[]).filter(x=>x.pinball).map(x=>x.pinball),extrasRefs:(window.__loaded||[]).filter(x=>x.extras).map(x=>x.extras)})'));
+    const state = JSON.parse(await evaluate('JSON.stringify({errors:window.__errors||[],loaded:(window.__loaded||[]).length,pinball:!!window.PinballKit,extras:!!window.PinmotionExtras,pinballIds:(window.__loaded||[]).map(x=>x.pinballId).filter(x=>x!==null),extrasIds:(window.__loaded||[]).map(x=>x.extrasId).filter(x=>x!==null)})'));
     const refsStable = (refs) => refs.length > 0 && refs.every((value) => value === refs[0]);
     check('mixed load order ' + name + ': no script/runtime errors', state.errors.length === 0, JSON.stringify(state.errors));
     check('mixed load order ' + name + ': both shared runtimes remain singletons',
-      state.pinball && state.extras && refsStable(state.pinballRefs) && refsStable(state.extrasRefs));
+      state.pinball && state.extras && refsStable(state.pinballIds) && refsStable(state.extrasIds),
+      JSON.stringify({pinballIds:state.pinballIds,extrasIds:state.extrasIds}));
   }
 } finally {
   try { ws.close(); } catch {}
