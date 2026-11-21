@@ -282,8 +282,11 @@ check('toggle: Enter activates the native checkbox button', (await prop('toggle'
     after.connected && after.checked === false && after.held === false && after.pressed === false && after.position === 0 && after.velocity === 0 && after.changes === 0,
     JSON.stringify(after));
   await ev('__pinmotionDisconnectDrag.button.click()');
-  const afterClick=JSON.parse(await ev('JSON.stringify({checked:__pinmotionDisconnectDrag.element.checked,changes:__pinmotionDisconnectDrag.getChanges()})'));
-  check('toggle: pointer interaction still works after disconnect/reconnect',afterClick.checked===true && afterClick.changes===1,JSON.stringify(afterClick));
+  const afterActivation=JSON.parse(await ev('JSON.stringify({checked:__pinmotionDisconnectDrag.element.checked,changes:__pinmotionDisconnectDrag.getChanges()})'));
+  check('toggle: pointer interaction still works after disconnect/reconnect',afterActivation.checked===true && afterActivation.changes===1,JSON.stringify(afterActivation));
+  await ev('__pinmotionDisconnectDrag.button.click()');
+  const afterDeactivation=JSON.parse(await ev('JSON.stringify({checked:__pinmotionDisconnectDrag.element.checked,changes:__pinmotionDisconnectDrag.getChanges()})'));
+  check('toggle: post-reconnect deactivation emits the expected final event',afterDeactivation.checked===false && afterDeactivation.changes===2,JSON.stringify(afterDeactivation));
   await ev('__pinmotionDisconnectDrag.wrapper.remove()');
 }
 
