@@ -245,6 +245,48 @@ check('toggle: Space turns it off and it leaves the form', (await prop('toggle',
 await focus('toggle','button'); await key('Enter',13); await sleep(120);
 check('toggle: Enter activates the native checkbox button', (await prop('toggle','checked'))===false && (await formValue('toggle'))===null, await prop('toggle','checked'));
 
+// Toggle pointer cancellation must roll a drag back rather than commit it.
+{
+  const point = JSON.parse(await ev('(() => { const wrapper=document.createElement("div"); wrapper.style.cssText="position:fixed;left:12px;top:12px;z-index:999999"; const element=document.createElement("pinball-toggle"); element.setAttribute("aria-label","Pointer cancel test"); element.style.setProperty("--pb-size","60px"); let changes=0; element.addEventListener("change",()=>changes++); wrapper.append(element); document.body.append(wrapper); const button=element.shadowRoot.querySelector("button"); window.__pinmotionPointerCancel={wrapper,element,button,getChanges:()=>changes}; const rect=button.getBoundingClientRect(); return JSON.stringify({x0:rect.left+rect.width*.2,x1:rect.left+rect.width*.9,y:rect.top+rect.height*.5}); })()'));
+  await send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:point.x0,y:point.y}]});
+  await sleep(80);
+  await send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:point.x1,y:point.y}]});
+  await sleep(80);
+  const before=JSON.parse(await ev('JSON.stringify({on:__pinmotionPointerCancel.element.checked,held:__pinmotionPointerCancel.element.held,pressed:__pinmotionPointerCancel.element.pressed,position:__pinmotionPointerCancel.element.s})'));
+  check('toggle: touch drag enters held state before cancellation', before.held === true && before.on === false, JSON.stringify(before));
+  await send('Input.dispatchTouchEvent',{type:'touchCancel',touchPoints:[]});
+  await sleep(100);
+  const after=JSON.parse(await ev('JSON.stringify({on:__pinmotionPointerCancel.element.checked,held:__pinmotionPointerCancel.element.held,pressed:__pinmotionPointerCancel.element.pressed,position:__pinmotionPointerCancel.element.s,velocity:__pinmotionPointerCancel.element.v,changes:__pinmotionPointerCancel.getChanges()})'));
+  check('toggle: pointercancel restores the prior logical state without change events',
+    after.on === false && after.held === false && after.pressed === false && after.position === 0 && after.velocity === 0 && after.changes === 0,
+    JSON.stringify(after));
+  await ev('__pinmotionPointerCancel.wrapper.remove()');
+}
+
+// Removing a toggle during a captured drag must synchronously reset transient input state.
+{
+  const point = JSON.parse(await ev('(() => { const wrapper=document.createElement("div"); wrapper.style.cssText="position:fixed;left:12px;top:12px;z-index:999999"; const element=document.createElement("pinball-toggle"); element.setAttribute("aria-label","Disconnect drag test"); element.style.setProperty("--pb-size","60px"); let changes=0; element.addEventListener("change",()=>changes++); wrapper.append(element); document.body.append(wrapper); const button=element.shadowRoot.querySelector("button"); window.__pinmotionDisconnectDrag={wrapper,element,button,getChanges:()=>changes}; const rect=button.getBoundingClientRect(); return JSON.stringify({x0:rect.left+rect.width*.2,x1:rect.left+rect.width*.9,y:rect.top+rect.height*.5}); })()'));
+  await send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:point.x0,y:point.y}]});
+  await sleep(80);
+  await send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:point.x1,y:point.y}]});
+  await sleep(80);
+  const before=JSON.parse(await ev('JSON.stringify({held:__pinmotionDisconnectDrag.element.held,position:__pinmotionDisconnectDrag.element.s})'));
+  check('toggle: disconnect regression begins during a held drag', before.held === true, JSON.stringify(before));
+  await ev('__pinmotionDisconnectDrag.wrapper.remove()');
+  await sleep(80);
+  await send('Input.dispatchTouchEvent',{type:'touchCancel',touchPoints:[]});
+  await ev('document.body.append(__pinmotionDisconnectDrag.wrapper)');
+  await sleep(120);
+  const after=JSON.parse(await ev('JSON.stringify({connected:__pinmotionDisconnectDrag.element.isConnected,checked:__pinmotionDisconnectDrag.element.checked,held:__pinmotionDisconnectDrag.element.held,pressed:__pinmotionDisconnectDrag.element.pressed,position:__pinmotionDisconnectDrag.element.s,velocity:__pinmotionDisconnectDrag.element.v,changes:__pinmotionDisconnectDrag.getChanges()})'));
+  check('toggle: disconnect/reconnect clears drag state and preserves the logical position',
+    after.connected && after.checked === false && after.held === false && after.pressed === false && after.position === 0 && after.velocity === 0 && after.changes === 0,
+    JSON.stringify(after));
+  await ev('__pinmotionDisconnectDrag.button.click()');
+  const afterClick=JSON.parse(await ev('JSON.stringify({checked:__pinmotionDisconnectDrag.element.checked,changes:__pinmotionDisconnectDrag.getChanges()})'));
+  check('toggle: pointer interaction still works after disconnect/reconnect',afterClick.checked===true && afterClick.changes===1,JSON.stringify(afterClick));
+  await ev('__pinmotionDisconnectDrag.wrapper.remove()');
+}
+
 // Toggle must snap both the ball and lamp to the logical state when motion is reduced.
 await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] }); await sleep(60);
 await ev("document.querySelector('pinball-toggle').bump.v = 4");

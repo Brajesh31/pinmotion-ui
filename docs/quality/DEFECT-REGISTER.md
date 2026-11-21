@@ -18,6 +18,7 @@ No P0 defect has been independently confirmed in this planning update. Record se
 | PM-005 | Toggle pre-connection API | `checked` and `toggle()` could access the internal button before `setup()` created it; `checked` also returned `undefined` before connection | Detached-element property/method regression test, then verify connected ARIA state, FormData and event suppression | Fixed and verified in Chromium CI, commit `7ff7e014`; Validate run 44884388345 |
 | PM-006 | Toggle Shadow DOM accessible name | Host aria-label / aria-labelledby was not forwarded to the inner button with role=switch | Browser checks for aria-label, external aria-labelledby and label fallback | Fixed in 4261f5e; Validate run 44885328475 passes all three name checks |
 | PM-007 | Toggle reduced-motion lamp state | Reduced-motion updates snapped the ball but left the lamp at its previous state and could retain residual spring motion | Emulate prefers-reduced-motion and assert both on/off ball, lamp and spring state | Fix committed in main; Validate run pending |
+| PM-008 | Toggle pointer cancellation / disconnection | `pointercancel` used the successful pointer-up path and could commit a cancelled drag; disconnect during pointer capture could leave stale held/pressed state on reinsertion | Real touch drag followed by touchCancel; remove/reinsert during captured drag; assert rollback, no change event and post-reconnect activation | Fix committed in main; Validate run pending |
 
 ## Rules
 

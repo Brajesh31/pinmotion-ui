@@ -101,6 +101,7 @@ The interactive control lives in an open Shadow DOM and uses the semantic role a
 
 - The visual `mode` attribute switches rendering style only. Do not use it as application state.
 - Programmatic `.checked` changes and `toggle()` update the form value and rendering but deliberately do not emit `change` or `input`.
+- A cancelled pointer or lost pointer capture rolls an unfinished drag back to the last checked state without firing `change` or `input`. Removing the element during a drag clears transient pressed/held state before it is reconnected.
 - Set `checked` or call `toggle()` before appending the element to seed its initial state; the reflected `checked` attribute is applied when the element connects.
 - The `input` event is not a `CustomEvent` and has no `detail`; use `change.detail.checked` when you need a payload.
 - The `label`, `aria-label`, and `aria-labelledby` naming inputs are read on connection rather than observed live. Set them before the element is inserted. `aria-labelledby` is resolved against the element's current document or shadow root.

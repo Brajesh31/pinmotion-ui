@@ -522,8 +522,24 @@ class PinballToggle extends K.Base {
       }
       this.wake();
     };
-    this.btn.addEventListener('pointerup', up); this.btn.addEventListener('pointercancel', up);
+    const cancel = (wake = true) => {
+      if (!down) return;
+      down = null; this.pressed = false; this.held = false; this.swallow = false;
+      this.s = this.on ? 1 : 0; this.v = 0;
+      this.lit = this.on; this.lamp = this.on ? 1 : 0; this.dip = 0;
+      this.bump?.snap(0);
+      if (wake) this.wake(); else this.dirty = true;
+    };
+    this.cancelPointerInteraction = cancel;
+    this.btn.addEventListener('pointerup', up);
+    this.btn.addEventListener('pointercancel', cancel);
+    this.btn.addEventListener('lostpointercapture', cancel);
     this.btn.addEventListener('click', () => { if (this.swallow) { this.swallow = false; return; } this.set(!this.on, true, true); });
+  }
+
+  disconnectedCallback() {
+    this.cancelPointerInteraction?.(false);
+    super.disconnectedCallback();
   }
 
   attributeChangedCallback(name, was, value) {

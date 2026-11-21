@@ -110,7 +110,8 @@ export const SPEC = [
         "Programmatic `.checked` changes and `toggle()` update the form value and rendering but deliberately do not emit `change` or `input`.",
         "Set `checked` or call `toggle()` before appending the element to seed its initial state; the reflected `checked` attribute is applied when the element connects.",
         "The shadow switch button receives its accessible name from `aria-labelledby` (resolved from the same document or shadow root), then `aria-label`, then `label`; set the naming attributes before connection.",
-        "When `prefers-reduced-motion: reduce` is active, the ball, lamp and body spring snap to the final checked state without travel animation."
+        "When `prefers-reduced-motion: reduce` is active, the ball, lamp and body spring snap to the final checked state without travel animation.",
+        "A cancelled pointer or lost pointer capture rolls an unfinished drag back to the last checked state without firing change/input. Disconnecting during a drag clears transient pressed/held state before the element is reconnected."
       ],
       "happens": [
         [

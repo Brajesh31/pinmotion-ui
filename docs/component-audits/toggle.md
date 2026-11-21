@@ -71,6 +71,10 @@ Regression coverage: explicit aria-label, external aria-labelledby and label fal
 
 The reduced-motion branch previously moved the ball and zeroed its velocity without synchronizing the lamp's logical/visual state or snapping the body spring. The new fix sets the ball position, lamp state, and spring to their final values. Browser regression checks both on and off transitions while prefers-reduced-motion is active. CI verification is pending.
 
+### PM-008: pointer cancellation and disconnect cleanup
+
+The successful pointer-up path must not run for pointercancel or lostpointercapture. The new lifecycle regression uses real CDP touch input to drag, cancel, and to remove/reinsert the host during a captured drag. It asserts rollback to the checked state, cleared transient flags, no synthetic change event, and successful activation after reconnection. CI verification is pending.
+
 ## 5. Interaction, forms and browser evidence
 
 Validated in headless Chromium 158.0.8127.36 at a 390 CSS px interaction viewport:
@@ -97,7 +101,7 @@ Current successful Validate run: [44885328475](https://github.com/Brajesh31/pinm
 
 ## 7. Outstanding acceptance work
 
-- [ ] Disconnect/reconnect during animation, drag and pending callbacks; verify scheduler/listener/observer cleanup.
+- [ ] Disconnect/reconnect during animation and pending callbacks; verify scheduler/listener/observer cleanup. Pointer-drag disconnect cleanup has a new regression pending CI.
 - [ ] Verify focus behavior with keyboard and screen reader, including VoiceOver/NVDA or equivalent manual review.
 - [ ] Verify disabled interaction behavior under mouse, touch, keyboard and programmatic activation.
 - [ ] Test the label mapping through the computed browser accessibility tree, including multiple ID references and nested shadow-root references.
@@ -107,4 +111,4 @@ Current successful Validate run: [44885328475](https://github.com/Brajesh31/pinm
 - [ ] Capture focus, hover, disabled, and all visual rendering modes. Reduced-motion functional verification is pending for PM-007; a dedicated screenshot remains pending.
 - [ ] Finish full component visual/API/lifecycle/a11y review and close Phase 0 ambiguities before advancing to Slider.
 
-**Disposition:** Toggle has two confirmed defects fixed and passing regression tests, and its primary artwork is present at the three reference widths. It is not yet a fully audited or release-ready component.
+**Disposition:** Toggle has three confirmed defects fixed and passing regression tests, and its primary artwork is present at the three reference widths. It is not yet a fully audited or release-ready component.
