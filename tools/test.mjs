@@ -374,9 +374,9 @@ check('color picker: hex value and readout stay synchronized', await prop('color
      ['rating', 'pinball-rating', { value: '4', max: '5' }],
      ['notes', 'pinball-text-area', { value: 'initial notes' }],
      ['plan', 'pinball-select', { options: 'basic:Basic;pro:Professional;team:Team', value: 'pro' }],
-     ['finish', 'pinball-combobox', { options: 'amber:Amber;chrome:Chrome;ivory:Ivory', value: 'amber' }],
+     ['__pinmotion_test_combobox', 'pinball-combobox', { options: 'amber:Amber;chrome:Chrome;ivory:Ivory', value: 'amber' }],
      ['launch', 'pinball-date-picker', { value: '2026-11-21' }],
-     ['accent', 'pinball-color-picker', { value: '#123456' }]
+     ['__pinmotion_test_color', 'pinball-color-picker', { value: '#123456' }]
    ];
    window.__resetControls = {};
    for (const [name, tag, attrs] of specs) {
@@ -390,10 +390,10 @@ check('color picker: hex value and readout stay synchronized', await prop('color
  await ev(`(() => {
    const c = window.__resetControls;
    c.rating.value = 1; c.notes.value = 'changed notes'; c.plan.value = 'team';
-   c.finish.value = 'chrome'; c.launch.value = '2026-12-01'; c.accent.value = '#abcdef';
+   c.__pinmotion_test_combobox.value = 'chrome'; c.launch.value = '2026-12-01'; c.__pinmotion_test_color.value = '#abcdef';
    document.getElementById('f').reset();
  })()`); await sleep(150);
- const extendedReset = JSON.parse(await ev(`JSON.stringify(Object.fromEntries(Object.entries(window.__resetControls).map(([name, el]) => [name, { value: el.value, formValue: new FormData(document.getElementById('f')).get(name), directFormValue: el.formValue?.(), nameAttr: el.getAttribute('name'), associated: el.form === document.getElementById('f'), internals: !!el.internals } ])))`));
+ const extendedReset = JSON.parse(await ev(`JSON.stringify(Object.fromEntries(Object.entries(window.__resetControls).map(([name, el]) => [name, { value: el.value, formValue: new FormData(document.getElementById('f')).get(name) } ])))`));
  check('phase 2 forms: rating reset restores its default and submitted value',
    extendedReset.rating.value === 4 && extendedReset.rating.formValue === '4', JSON.stringify(extendedReset.rating));
  check('phase 2 forms: text area reset restores its default and submitted value',
@@ -401,11 +401,11 @@ check('color picker: hex value and readout stay synchronized', await prop('color
  check('phase 2 forms: select reset restores its default and submitted value',
    extendedReset.plan.value === 'pro' && extendedReset.plan.formValue === 'pro', JSON.stringify(extendedReset.plan));
  check('phase 2 forms: combobox reset restores its default and submitted value',
-   extendedReset.finish.value === 'amber' && extendedReset.finish.formValue === 'amber', JSON.stringify(extendedReset.finish));
+   extendedReset.__pinmotion_test_combobox.value === 'amber' && extendedReset.__pinmotion_test_combobox.formValue === 'amber', JSON.stringify(extendedReset.__pinmotion_test_combobox));
  check('phase 2 forms: date picker reset restores its default and submitted value',
    extendedReset.launch.value === '2026-11-21' && extendedReset.launch.formValue === '2026-11-21', JSON.stringify(extendedReset.launch));
  check('phase 2 forms: color picker reset restores its default and submitted value',
-   extendedReset.accent.value === '#123456' && extendedReset.accent.formValue === '#123456', JSON.stringify(extendedReset.accent));
+   extendedReset.__pinmotion_test_color.value === '#123456' && extendedReset.__pinmotion_test_color.formValue === '#123456', JSON.stringify(extendedReset.__pinmotion_test_color));
 
  await ev(`document.querySelector('pinball-toggle').formStateRestoreCallback(JSON.stringify({checked:true}), 'restore')`);
  check('phase 2 forms: state restoration restores checked state',
