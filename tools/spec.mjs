@@ -130,6 +130,7 @@ export const SPEC = [
       ],
       "limits": [
         "The `input` event is not a `CustomEvent` and has no `detail`; use `change.detail.checked` when you need a payload.",
+        "When WebGL is unavailable or its context is lost, the original embedded off/on plates and chrome-ball image are rendered through Canvas 2D. The control keeps its pinball artwork and remains interactive; the fallback uses the photographed plate style for all rendering modes.",
         "The `label` attribute is read on connection rather than observed live. Set it before the element is inserted, or provide `aria-label` / `aria-labelledby`."
       ]
     },

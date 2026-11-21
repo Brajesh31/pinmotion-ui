@@ -56,6 +56,7 @@ const requiredFiles = [
   'tools/docs.mjs',
   'tools/spec.mjs',
   'tools/test.mjs',
+  'tools/test-toggle-fallback.mjs',
   'tools/test-consumer.mjs',
   'tools/shot.mjs',
   'tools/serve.mjs',
@@ -151,6 +152,7 @@ check('package has no third-party dependencies', !packageJson.dependencies && !p
 check('package and lockfile names match', packageJson.name === packageLock.name);
 check('package and lockfile versions match', packageJson.version === packageLock.version);
 check('clean registry consumer test is exposed through npm', packageJson.scripts?.['test:consumer'] === 'node tools/test-consumer.mjs');
+check('no-WebGL Toggle fallback test is exposed through npm', packageJson.scripts?.['test:toggle-fallback'] === 'node tools/test-toggle-fallback.mjs http://127.0.0.1:8000/toggle/');
 check('package uses the npm lockfile v3 format', packageLock.lockfileVersion === 3);
 check('package repository metadata matches', packageJson.repository?.url === `https://github.com/${REPO}.git`);
 check('package license is MIT', packageJson.license === 'MIT' && packageLock.packages?.['']?.license === 'MIT');
@@ -166,6 +168,7 @@ const syntaxFiles = [
   'tools/docs.mjs',
   'tools/spec.mjs',
   'tools/test.mjs',
+  'tools/test-toggle-fallback.mjs',
   'tools/test-consumer.mjs',
   'tools/shot.mjs',
   'tools/serve.mjs',

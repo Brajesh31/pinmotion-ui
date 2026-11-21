@@ -81,7 +81,7 @@ The control is form-associated. With `name` set, it submits no value while off. 
 
 Set `--pb-size` to change the control height (36px by default). Set `--pb-page` to a six-digit hex colour matching the page background so the chrome reflections blend into the page. `--pb-focus` changes the visible keyboard-focus outline.
 
-The shared chrome ball and lamps use WebGL. Set the instance's `silent` attribute to mute that element, or set `PinballKit.sound = false` to mute the shared page audio. Audio initializes after the first pointer or keyboard interaction, as browsers require.
+The live chrome-ball reflection uses WebGL. When WebGL is unavailable or its context is lost, the component automatically switches to Canvas 2D and reuses the original embedded off/on pinball plates and chrome-ball artwork. The fallback preserves the photographed design, ball travel, lamp state, form behavior and interactions; it does not provide the live mirror shader or its full reflective shading. Set the instance's `silent` attribute to mute that element, or set `PinballKit.sound = false` to mute the shared page audio. Audio initializes after the first pointer or keyboard interaction, as browsers require.
 
 ## ♿ Motion and accessibility
 
@@ -105,7 +105,7 @@ The interactive control lives in an open Shadow DOM and uses `role="switch"`, `a
 - Set `checked` or call `toggle()` before appending the element to seed its initial state; the reflected `checked` attribute is applied when the element connects.
 - The `input` event is not a `CustomEvent` and has no `detail`; use `change.detail.checked` when you need a payload.
 - The `label`, `aria-label`, and `aria-labelledby` naming inputs are read on connection rather than observed live. Set them before the element is inserted. `aria-labelledby` is resolved against the element's current document or shadow root.
-- **It needs WebGL** for the ball and the lamps. Without it the control is still a working, focusable control, but the shader-drawn visuals are missing.
+- **WebGL enhancement and fallback.** The live reflective-ball shader uses WebGL. If WebGL is unavailable or the context is lost, the control automatically draws the original photographed plates and chrome-ball image with Canvas 2D. The switch remains visible and interactive. The fallback does not reproduce the live mirror shader, but it does not replace the original pinball design with a generic control.
 - **One kind of picture.** It scales with `--pb-size` and stays sharp to about three times its default size, but it does not reflow: the photographed body keeps its shape.
 - **The ball mirrors the page.** Set `--pb-page` to a six-digit hex colour such as `#14161a` so its reflections match; the default is the cream the set was shot on.
 - **The file is large** because photographs and sounds are embedded. Load only the controls a page uses.

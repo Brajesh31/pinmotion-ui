@@ -114,9 +114,18 @@ Latest successful Validate run: [44888652944](https://github.com/Brajesh31/pinmo
 - [x] Verify disabled pointer/touch and keyboard attempts do not change state or emit change events. Programmatic property updates remain supported by contract.
 - [x] Test the label mapping through the computed browser accessibility tree, including multiple ID references and nested shadow-root references.
 - [x] Document that label/ARIA naming inputs are read at connection and are not observed for later changes.
-- [ ] Test WebGL unavailable, shader/asset failure and context loss. README currently explains that shader visuals are missing without WebGL; confirm whether that fallback is acceptable.
+- [ ] Test actual WebGL context loss and asset/shader failure recovery; the WebGL-unavailable Canvas 2D fallback has a dedicated regression pending CI.
 - [ ] Verify audio initialization and the first user-interaction policy with audible output; screenshot evidence is not audio evidence.
 - [ ] Capture hover and alternate rendering states. Focus-visible, disabled-on and reduced-motion-on screenshots are now in artifact 14700793459; reduced-motion functional behavior is also verified.
 - [ ] Finish full component visual/API/lifecycle/a11y review and close Phase 0 ambiguities before advancing to Slider.
 
-**Disposition:** Toggle has four confirmed defects (PM-005–PM-008) fixed with passing browser regressions. Its original pinball artwork is present at the three reference widths. Computed accessible names, keyboard focus, disabled suppression, form reset, reduced motion and pointer cancellation/reconnection are now tested. It is still not fully audited or release-ready because manual screen-reader, WebGL/audio failure, expanded visual-state, broader lifecycle and Phase 0 identification/reproduction gates remain open.
+**Disposition:** Toggle has four confirmed defects (PM-005–PM-008) fixed with passing browser regressions, plus PM-009's Canvas 2D fallback fix awaiting CI. Its original pinball artwork is present at the three reference widths. Computed accessible names, keyboard focus, disabled suppression, form reset, reduced motion and pointer cancellation/reconnection are now tested. It is still not fully audited or release-ready because manual screen-reader, WebGL/audio failure, expanded visual-state, broader lifecycle and Phase 0 identification/reproduction gates remain open.
+
+
+### PM-009: WebGL-unavailable visual loss
+
+The first captured no-WebGL run proved that Toggle remained interactive but its whole pinball visual disappeared. This is a real rendering defect: the old documentation described it as an accepted loss, but it violates the original-design requirement.
+
+Fix committed in main after the initial failing capture. The new path uses the component's original embedded off/on plates and chrome-ball image in Canvas 2D whenever the shader cannot initialize or `PinballKit.paint` cannot draw, including WebGL context-loss cases. It preserves ball position, lamp crossfade, original colors and artwork; only the live reflective shader is absent.
+
+A dedicated no-WebGL Chromium regression is added to Validate. It must confirm WebGL is genuinely unavailable, the 2D canvas has visible pixels, off/on state changes the drawing, interactions still emit change, form submission still works, and no JavaScript exception occurs. CI verification remains pending until this commit's Validate run completes.

@@ -109,3 +109,10 @@ The archive now includes 29 PNGs: the responsive gallery, all seven original mec
 The three new images were opened and reviewed. Functional checks for focus-visible, disabled pointer/keyboard suppression and reduced-motion state synchronization also pass in Chromium. This does not complete hover-state review, WebGL-unavailable/context-loss behavior, audio verification, manual screen-reader testing or overall baseline approval.
 
 Validate run [44889582076](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44889582076) passed on the same commit: 540 contract checks, 611 repository checks, 788 integrity checks across 377 links, and 639 clean-consumer/mixed-load checks.
+
+
+## WebGL-unavailable visual defect and fallback
+
+The published no-WebGL capture from workflow run [44890209238](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44890209238), artifact [14701756868](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44890209238/artifacts/14701756868), showed a blank Toggle canvas. The original pinball plate and chrome ball were missing while the demo's text and sound control remained. This is tracked as PM-009.
+
+A Canvas 2D fallback reusing the original embedded plate and ball assets has been implemented. A dedicated WebGL-disabled browser regression is now added to Validate. Keep the no-WebGL visual gate pending until a new screenshot shows the restored original artwork and the test passes.

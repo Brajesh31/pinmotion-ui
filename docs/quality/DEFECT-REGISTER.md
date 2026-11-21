@@ -27,3 +27,5 @@ No P0 defect has been independently confirmed in this planning update. Record se
 - Capture evidence at 390 CSS px, 768 CSS px and 1440 CSS px unless the component requires additional viewports.
 - Keep one defect per row once reproduction establishes distinct root causes. Link each issue to a regression test and commit.
 - Do not change approved visual behavior without documenting and approving the change.
+
+| PM-009 | Toggle loses original visual without WebGL | When WebGL was forcibly disabled, the control remained interactive but its entire pinball artwork disappeared | Capture no-WebGL state; assert Canvas 2D fallback uses original embedded plate/ball assets, produces visible pixels, follows on/off state and still works with forms | Fix committed; dedicated no-WebGL Validate regression pending |

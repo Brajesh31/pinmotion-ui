@@ -124,3 +124,10 @@ The new Toggle captures are:
 All three images were manually opened and visually reviewed. Latest Validate run [44889582076](https://github.com/Brajesh31/pinmotion-ui/actions/runs/44889582076) also passed: 540 contract checks, 611 repository checks, 788 integrity checks (377 links), and 639 clean-consumer/mixed-load checks, all green.
 
 This is stronger state evidence, not baseline approval. Hover, alternate modes, WebGL failure/context loss, audible output, and manual screen-reader checks remain open.
+
+
+## 9. WebGL-unavailable baseline defect and remediation
+
+The no-WebGL screenshot generated from the published demo on commit `0178dffe6c8be451d641a4313a26c09d910f96f4` showed only the Toggle page's text and controls. The visual plate, lamp and chrome ball were completely absent. This reproduces PM-009 and invalidates the previous accepted limitation that “shader visuals are missing” without WebGL.
+
+The fix uses the original embedded `toggle-off`, `toggle-on`, and `ball` images in a Canvas 2D renderer when WebGL is not available or the WebGL paint step cannot draw. No generic replacement artwork is used. A dedicated no-WebGL browser regression is now part of the mandatory Validate workflow; pending its result, do not mark PM-009 fixed or sign off Toggle.

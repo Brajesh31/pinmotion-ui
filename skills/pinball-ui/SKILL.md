@@ -87,6 +87,7 @@ Copy the control's file into the project's static folder (or `npx shadcn add Bra
 - When reduced motion is active, snap all visible state to its logical destination, including lamps and secondary springs; test both turning on and off after emulating the media preference.
 - Test pointer cancellation and lost pointer capture separately from successful pointer-up. Removing a control mid-drag must clear transient input/animation state, and the control must remain interactive after reinsertion.
 - Inspect the browser's computed accessibility tree for the actual interactive control; raw `aria-*` attributes alone do not prove the computed role/name. Test document and enclosing-ShadowRoot `aria-labelledby` references.
+- Run original mechanical controls with WebGL forcibly disabled and after context loss. Assert a visible non-empty Canvas 2D fallback using the embedded artwork, then verify keyboard/pointer interaction, state and forms still work.
 - For form-associated controls, test native `form.reset()` as well as FormData, disabled fieldsets and state restoration.
 - A new canvas is 300 by 150 until it is sized: check both width and height before skipping a resize.
 - Where a texture coordinate jumps (a rod with a piece left out of its middle), read both sides and pick one, or a hairline appears.
@@ -121,6 +122,8 @@ Required visual language:
 - raised brass/steel action controls with a physical pressed state;
 - warm cream, mechanical ink, steel, amber and restrained red palette;
 - visible focus states and the same readable keyboard/form semantics as the original controls.
+
+The original mechanical controls may enhance their chrome-ball reflections with WebGL, but must retain an original-art Canvas 2D fallback for WebGL-unavailable and context-lost browsers. Use the component's own embedded photographed plates and ball artwork. The fallback must preserve the same pinball identity and interaction, never substitute a generic switch or empty canvas.
 
 The 22 lightweight utility components implement this language through `PinmotionExtras` and the shared `.pinball-deck` skin. They may reuse PinballKit's recorded sound effects only when PinballKit has already been initialized by another bundle. They must not initialize or embed the WebGL/audio runtime solely to achieve the visual look.
 

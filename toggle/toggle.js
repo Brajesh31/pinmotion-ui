@@ -465,7 +465,32 @@ void main(){
   gl_FragColor = uMode < .5 ? sprite(p, f) : ball(p, f);
 }`;
 
-let prog, tex;
+let prog, tex, fallbackArt;
+function loadFallbackArt() {
+  if (fallbackArt) return fallbackArt;
+  const art = fallbackArt = { ready: false, failed: false };
+  let loaded = 0;
+  const complete = () => {
+    loaded++;
+    if (loaded === 3) {
+      art.ready = true;
+      document.querySelectorAll('pinball-toggle').forEach((toggle) => toggle.wake());
+    }
+  };
+  for (const name of ['toggle-off', 'toggle-on', 'ball']) {
+    const image = new Image();
+    image.decoding = 'async';
+    image.onload = complete;
+    image.onerror = () => {
+      art.failed = true;
+      console.error('pinball-toggle 2D fallback asset failed:', name);
+    };
+    art[name] = image;
+    image.src = ART[name];
+  }
+  return art;
+}
+
 function assets() {
   if (prog === undefined) {
     try { prog = K.program(K.glsl.vs, FS); } catch (e) { console.error('pinball-toggle shader:', e.message); prog = null; }
@@ -599,15 +624,69 @@ class PinballToggle extends K.Base {
     return busy;
   }
 
+  drawFallback(w, h) {
+    const art = loadFallbackArt();
+    if (!art.ready || art.failed) return false;
+    const ctx = this.cv.getContext('2d');
+    if (!ctx) return false;
+    const vw = BOX[2] + 2 * PAD, vh = BOX[3] + 2 * PAD;
+    const sx = w / vw, sy = h / vh;
+    const ox = PAD - BOX[0] + this.bump.x, oy = PAD - BOX[1];
+    const plateX = ox * sx, plateY = oy * sy;
+    const plateW = 1344 * sx, plateH = 576 * sy;
+    const lamp = clamp(this.lamp);
+
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.clearRect(0, 0, w, h);
+    ctx.globalAlpha = 1;
+    ctx.drawImage(art['toggle-off'], plateX, plateY, plateW, plateH);
+    if (lamp > 0) {
+      ctx.globalAlpha = lamp;
+      ctx.drawImage(art['toggle-on'], plateX, plateY, plateW, plateH);
+      ctx.globalAlpha = 1;
+    }
+
+    const ballX = (ox + OFF + this.s * TRAVEL) * sx;
+    const ballY = (oy + Y) * sy;
+    const seated = Math.max(0, 1 - Math.min(Math.abs(this.s), Math.abs(this.s - 1)) / SEAT);
+    const radius = R * (1 - 0.025 * seated * seated);
+
+    // Preserve the original ball's soft contact shadow in the no-WebGL path.
+    const shadow = ctx.createRadialGradient(
+      ballX + radius * sx * 0.18, ballY + radius * sy * 0.3, radius * sx * 0.12,
+      ballX + radius * sx * 0.18, ballY + radius * sy * 0.3, radius * sx * 1.12
+    );
+    shadow.addColorStop(0, 'rgba(20, 13, 10, 0.27)');
+    shadow.addColorStop(0.55, 'rgba(20, 13, 10, 0.12)');
+    shadow.addColorStop(1, 'rgba(20, 13, 10, 0)');
+    ctx.fillStyle = shadow;
+    ctx.beginPath();
+    ctx.ellipse(ballX + radius * sx * 0.18, ballY + radius * sy * 0.3, radius * sx * 1.12, radius * sy * 0.82, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.save();
+    ctx.translate(ballX, ballY);
+    ctx.rotate(this.roll);
+    ctx.drawImage(art.ball, -radius * sx, -radius * sy, radius * 2 * sx, radius * 2 * sy);
+    ctx.restore();
+    this.cv.dataset.renderMode = '2d-fallback';
+    this.cv.dataset.fallbackReady = 'true';
+    return true;
+  }
+
   draw() {
-    const p = assets(); if (!p || !tex.off.ready || !tex.on.ready || !tex.ball.ready) return;
+    const p = assets();
     const dpr = Math.min(3, window.devicePixelRatio || 1), w = Math.max(1, Math.round(this.cv.clientWidth * dpr)), h = Math.max(1, Math.round(this.cv.clientHeight * dpr));
     if (!w || !this.cv.clientWidth) return;
     if (this.cv.width !== w || this.cv.height !== h) { this.cv.width = w; this.cv.height = h; }
+    if (!p || !tex?.off?.ready || !tex?.on?.ready || !tex?.ball?.ready) {
+      this.drawFallback(w, h);
+      return;
+    }
     const vw = BOX[2] + 2 * PAD, vh = BOX[3] + 2 * PAD, mode = MODES[this.getAttribute('mode')] ?? 1;
     // the ball sits a hair lower in its seat than on the open floor, so it looks a touch smaller there
     const seated = Math.max(0, 1 - Math.min(Math.abs(this.s), Math.abs(this.s - 1)) / SEAT);
-    K.paint(p, w, h, (g, u) => {
+    const painted = K.paint(p, w, h, (g, u) => {
       g.uniform4f(u.uView, BOX[0] - PAD - this.bump.x, BOX[1] - PAD, vw, vh);
       g.uniform3f(u.uBall, OFF + this.s * TRAVEL, Y, R * (1 - 0.025 * seated * seated));
       g.uniform1f(u.uRoll, this.roll); g.uniform1f(u.uLamp, clamp(this.lamp)); g.uniform1f(u.uMode, mode); g.uniform1f(u.uPx, vw / w);
@@ -615,6 +694,12 @@ class PinballToggle extends K.Base {
       [tex.off, tex.on, tex.ball].forEach((t, i) => { g.activeTexture(g.TEXTURE0 + i); g.bindTexture(g.TEXTURE_2D, t); });
       g.uniform1i(u.uOff, 0); g.uniform1i(u.uOn, 1); g.uniform1i(u.uBallTex, 2);
     }, this.cv);
+    if (painted) {
+      this.cv.dataset.renderMode = 'webgl';
+      this.cv.dataset.fallbackReady = 'false';
+    } else {
+      this.drawFallback(w, h);
+    }
   }
 }
 K.define('pinball-toggle', PinballToggle);

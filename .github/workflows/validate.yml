@@ -64,6 +64,7 @@ jobs:
           fi
 
           npm run test:browser
+          npm run test:toggle-fallback
 
       - name: Verify clean registry consumer installs and mixed bundle load orders
         env:
