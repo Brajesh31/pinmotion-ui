@@ -93,7 +93,7 @@ The shared chrome ball and lamps use WebGL. Set the instance's `silent` attribut
 
 The shared runtime honours `prefers-reduced-motion` by snapping targets and lamps to their final visual state. In this mode the normal impact callback is skipped, so the `bonus` event is currently not emitted; use `change` and `allChecked` for application logic.
 
-The interactive control lives in an open Shadow DOM and uses the semantic role and focus behavior described above. Set a useful `label`, or provide `aria-label` / `aria-labelledby` before connection. The repository's optional automated interaction script uses headless Chromium; it is not a substitute for a screen-reader audit.
+The interactive control lives in an open Shadow DOM and uses the semantic role and focus behavior described above. Set a useful `label`, or provide `aria-label` / `aria-labelledby` before connection. The mandatory Validate CI workflow runs the headless Chromium interaction suite, including gallery and standalone component checks. This automated browser coverage is not a substitute for a dedicated screen-reader audit.
 
 ## 🎯 Mechanical behavior
 
@@ -113,4 +113,4 @@ The interactive control lives in an open Shadow DOM and uses the semantic role a
 - **One kind of picture.** It scales with `--pb-size` and stays sharp to about three times its default size, but it does not reflow: the photographed body keeps its shape.
 - **The ball mirrors the page.** Set `--pb-page` to a six-digit hex colour such as `#14161a` so its reflections match; the default is the cream the set was shot on.
 - **The file is large** because photographs and sounds are embedded. Load only the controls a page uses.
-- **Browser coverage.** The repository includes an optional headless Chromium interaction script with touch and keyboard input at a mobile-width viewport. The regular CI workflow does not run it. Safari, Firefox, physical devices, and screen-reader behavior are not documented as tested.
+- **Browser coverage.** The mandatory Validate CI workflow runs the headless Chromium interaction suite with touch and keyboard input at a mobile-width viewport. Safari, Firefox, physical devices, and screen-reader behavior are not documented as tested.
